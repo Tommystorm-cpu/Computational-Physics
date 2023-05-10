@@ -33,4 +33,4 @@ plt.xlabel("X (AU)")
 plt.ylabel("Y (AU)")
 plt.legend(loc="upper right")
 
-plt.display(fig, target="graph-area", append=False)
+display(fig, target="graph-area", append=False)
