@@ -17,5 +17,5 @@ plt.axline(xy1=(0, 0), slope=m, color="r", label=f'$ y = {m}x$') #plots line of 
 plt.axis([0, x[size-1]*1.1, 0, y[size -1]*1.1]) #defines limits on axis
 plt.plot(x, y, "bs") #plots data as points 
 
-plt.legend()
+plt.legend(loc="upper right")
 plt.show()
