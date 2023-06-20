@@ -3,7 +3,7 @@ import numpy as np
 # Mass in Earth masses, Distance from Sun AU( semi-major axis), eccentricity, orbital inclination/degrees, Radius in earth radii, Rotational period/days, orbital period/years, planet name
 
 object_data = {
-    0: np.array([0.055, 0.387, 0.21, 7, 0.383, 58.646, 0.243 "Mercury"]),
+    0: np.array([0.055, 0.387, 0.21, 7, 0.383, 58.646, 0.243, "Mercury"]),
     1: np.array([0.815, 0.387, 0.21, 3.39, 0.949, 243.018,  0.615, "Venus"]),
     2: np.array([1, 1, 0.02, 0, 1, 0.997, 1, "Earth"]),
     3: np.array([0.107, 1.523, 0.09, 1.85, 0.533, 1.026, 1.881, "Mars"]),
@@ -15,7 +15,7 @@ object_data = {
 }
     
 inner_planets = {
-    0: np.array([0.055, 0.387, 0.21, 7, 0.383, 58.646, 0.243 "Mercury"]),
+    0: np.array([0.055, 0.387, 0.21, 7, 0.383, 58.646, 0.243, "Mercury"]),
     1: np.array([0.815, 0.387, 0.21, 3.39, 0.949, 243.018,  0.615, "Venus"]),
     2: np.array([1, 1, 0.02, 0, 1, 0.997, 1, "Earth"]),
     3: np.array([0.107, 1.523, 0.09, 1.85, 0.533, 1.026, 1.881, "Mars"])
