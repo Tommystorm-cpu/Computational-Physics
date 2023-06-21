@@ -3,48 +3,58 @@ import numpy as np
 import PlanetData as Pd
 import math
 
-plt.ylabel("orbit polar angle /rad")
-plt.xlabel("time /years")
+# number planet to be used (will eventually become and input)
+a = 2
 
-w= []
-y= []
-k= []
-l= []
-#time /years, planet number
-ecc = float(Pd.object_data[8][2]) #eccentricity 
-p = float(Pd.object_data[8][6]) # orbital time
+x1= [] # x and y array for eccentric orbit 
+y1= []
+x2= [] # x and y array for circular orbit
+y2= []
 
+ecc = float(Pd.object_data[a][2]) # eccentricity 
+p = float(Pd.object_data[a][6]) # orbital time
+time = p*3 # calculates time for 3 orbits
+
+# defines function to integrate
 def f(x):           
-    return (1-ecc*math.cos(x))**2    # Define function to integrate
+    return (2*math.pi/p)*(1+ecc*math.cos(x))**-2   
 
-# function, lower limit, upper limit, number of subintervals
-def integration(f, a, b, n,):
-  h = (b - a) / n
-  s = f(a) + f(b)
+# function, upper limit, number of subintervals
+def integration(f, b, n):
+  h = (b ) / n
+  s = f(b)
   for i in range(1, n, 2):
-    s += 4 * f(a + i * h)
+    s += 4 * f(i * h)
   for i in range(2, n-1, 2):
-    s += 2 * f(a + i * h)
+    s += 2 * f(i * h)
   return s * h / 3
-
-a = 0
-n = 10000
-
-for t in range(0, 800):
-    N = (t/p) # number of orbits
+# determines number of subintervals
+n = 1000
+# generates coordinate arrays for eccentric orbits
+t= 0 
+while t <= time:
+    N = (t/p)
     b = 2*math.pi*N
-    w.append(t)
-    result = integration(f, a, b, n)
-    y.append(result)
-
-for t in range(0, 800):
+    x1.append(t)
+    result = ((integration(f, b, n)) *(p*((1-ecc**2)**(3/2) )*(1/(2*math.pi)) ))
+    y1.append(result)
+    t += 0.01
+# generates coordinate arrays for circular orbits 
+t=0
+while t<= time:
     ecc = 0
-    N = (t/p) # number of orbits
+    N = (t/p) 
     b = 2*math.pi*N
-    k.append(t)
-    result = integration(f, a, b, n)
-    l.append(result)
-plt.plot(w, y, "r")
-plt.plot(k, l, "b")
-plt.show()
-
+    x2.append(t)
+    result = ((integration(f, b, n)) *(p*((1-ecc**2)**(3/2))*(1/(2*math.pi)) ))
+    y2.append(result)
+    t += 0.01
+# plots and displays coordinates for both eccentric and circular orbit lines   
+plt.plot(x1, y1, "r", label=f'Epsilon = {Pd.object_data[a][2]}')
+plt.plot(x2, y2, "b",label="Epsilon = 0")
+# labels the axis and gives a title 
+plt.title(f'Orbit angle vs Time for {Pd.object_data[a][7]}')
+plt.ylabel("Orbit polar angle /rad")
+plt.xlabel("Time /years")
+plt.legend()
+plt.show() 
