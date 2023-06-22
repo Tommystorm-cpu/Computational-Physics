@@ -4,7 +4,7 @@ import PlanetData as Pd
 import math
 
 # number planet to be used (will eventually become and input)
-a = 2
+a = 8
 
 x1= [] # x and y array for eccentric orbit 
 y1= []
@@ -14,6 +14,7 @@ y2= []
 ecc = float(Pd.object_data[a][2]) # eccentricity 
 p = float(Pd.object_data[a][6]) # orbital time
 time = p*3 # calculates time for 3 orbits
+increment = float(Pd.object_data[a][8]) # amount time incrememnts (makes pluto not take a whole minute to calculate) 
 
 # defines function to integrate
 def f(x):           
@@ -36,9 +37,9 @@ while t <= time:
     N = (t/p)
     b = 2*math.pi*N
     x1.append(t)
-    result = ((integration(f, b, n)) *(p*((1-ecc**2)**(3/2) )*(1/(2*math.pi)) ))
+    result = ((integration(f, b, n)) *(p*((1-ecc**2))**(3/2 )*(1/(2*math.pi)) ))
     y1.append(result)
-    t += 0.01
+    t += increment
 # generates coordinate arrays for circular orbits 
 t=0
 while t<= time:
@@ -48,7 +49,7 @@ while t<= time:
     x2.append(t)
     result = ((integration(f, b, n)) *(p*((1-ecc**2)**(3/2))*(1/(2*math.pi)) ))
     y2.append(result)
-    t += 0.01
+    t += increment
 # plots and displays coordinates for both eccentric and circular orbit lines   
 plt.plot(x1, y1, "r", label=f'Epsilon = {Pd.object_data[a][2]}')
 plt.plot(x2, y2, "b",label="Epsilon = 0")
