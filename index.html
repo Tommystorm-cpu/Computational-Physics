@@ -1,14 +1,58 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
+<html lang="en">
     <head>
-        <title>Computational Physics</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+        <title>Current Time</title>
+
         <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
         <script defer src="https://pyscript.net/latest/pyscript.js"></script>
     </head>
+
     <body>
-        <py-config> packages = ["matplotlib", "numpy"] </py-config>
-        <h1>Computational Physics Tasks</h1>
-        <p>Task 2</p>
-        <py-script src="Task Files/Task 2/Task_2_Web.py"></py-script>
+        <py-config type="toml"> 
+            packages = ["matplotlib", "numpy"] 
+            
+            [[fetch]]
+            files = ["PlanetData.py"]
+            [[fetch]]
+            from = 'Task Files/Task 2'
+            files = ["./Task_2_Web.py"]
+        </py-config>
+        <py-script>
+            import datetime
+            import Task_2_Web as T2W
+            
+            T2W.cool_function(10)
+            
+            def current_time():
+                now = datetime.datetime.now()
+            
+                # Get paragraph element by id
+                paragraph = Element("current-time")
+
+                # Add current time to the paragraph element
+                paragraph.write(now.strftime("%Y-%m-%d %H:%M:%S"))
+            
+            def load_solar():
+                value = Element("solars").value
+                T2W.plot_orbit("graph-area", value)
+
+        </py-script>
+        
+        <button py-click="current_time()" id="get-time" class="py-button">Get current time</button>
+        <p id="current-time"></p>
+        
+        <label for="solars">Solar:</label>
+        <select class="py-button" id="solars">
+            <option value="Inner">Inner</option>
+            <option value="Outer">Outer</option>
+        </select>
+        
+        <button py-click="load_solar()" id="get-time" class="py-button">Load Graph</button>
         <div id="graph-area"></div>
+        
     </body>
-</DOCTYPE>
+</html>
+
