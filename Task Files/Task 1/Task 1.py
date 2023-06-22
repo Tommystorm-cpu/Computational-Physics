@@ -16,7 +16,6 @@ line = np.polyfit(x, y, 1)   # computes line of best fit in the form y = mx + c
 m = line[0]
 c = line[1]
 plt.axline(xy1=(0, c), slope=m, color="r", label=f'$ y = {m}x$')  # plots line of best fit, assigns gradient as legend
-plt.axis([0, x[size-1]*1.1, 0, y[size-1]*1.1])  # defines limits on axis
 plt.plot(x, y, "bs")  # plots data as points
 
 plt.legend(loc="upper right")
