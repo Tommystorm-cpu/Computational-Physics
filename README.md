@@ -2,3 +2,5 @@
 2023 Computational Physics Entry
 
 exoplanet data spreadsheet https://docs.google.com/spreadsheets/d/1rDMdXnpG9EYTBamKLW-77cLG7BC8NHiSwyi3xbx0Wsg/edit?usp=sharing
+
+Just making a random commit to rebuild github pages, don't mind me
