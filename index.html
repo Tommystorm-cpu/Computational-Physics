@@ -37,7 +37,8 @@
             
             def load_solar():
                 value = Element("solars").value
-                T2W.plot_orbit("graph-area", value)
+                fig = T2W.plot_orbit("graph-area", value)
+                display(fig, target="graph-area", append=False)
 
         </py-script>
         

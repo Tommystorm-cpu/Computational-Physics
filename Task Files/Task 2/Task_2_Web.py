@@ -2,7 +2,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import math
 import PlanetData as Pd
-import pyscript as ps
 
 cool_number = 5
 
@@ -40,4 +39,4 @@ def plot_orbit(target, solar_type):
     plt.ylabel("Y (AU)")
     plt.legend(loc="upper right")
 
-    ps.display(fig, target=target, append=False)
+    return fig
