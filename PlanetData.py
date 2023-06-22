@@ -13,7 +13,7 @@ object_data = {
     5: np.array([95.159, 9.576, 0.06, 2.49, 9.449, 0.444, 29.628, "Saturn", 1]),
     6: np.array([14.5, 19.293, 0.05, 0.77, 4.007, 0.718, 84.747, "Uranus", 1]),
     7: np.array([17.204, 30.246, 0.01, 1.77, 3.883, 0.671, 166.344, "Neptune", 2]),
-    8: np.array([0.003, 39.509, 0.25, 17.5, 0.187, 6.387, 248.348, "Pluto", 2])
+    8: np.array([0.003, 39.509, 0.25, 17.5, 0.187, 6.387, 248.348, "Pluto", 2])         # 0-8 are celestial bodies that orbit sol, 9 and above orbit other stars
 }
     
 inner_planets = {
