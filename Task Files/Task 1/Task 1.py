@@ -17,6 +17,6 @@ m = line[0]
 c = line[1]
 plt.axline(xy1=(0, c), slope=m, color="r", label=f'$ y = {m}x$')  # plots line of best fit, assigns gradient as legend
 plt.plot(x, y, "bs")  # plots data as points
-
+plt.title("Kepler's third law")
 plt.legend(loc="upper right")
 plt.show()
