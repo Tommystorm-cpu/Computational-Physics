@@ -1,6 +1,10 @@
 import matplotlib.pyplot as plt  # imports modules
 import numpy as np
+import os.path
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath("__file__")))))
 import PlanetData as Pd
+
 def task_1():
     plt.ylabel("T/Yr")  # labels axis
     plt.xlabel("(a/AU)^(3/2)")
@@ -21,3 +25,4 @@ def task_1():
     plt.title("Kepler's third law")
     plt.legend(loc="upper right")
     plt.show()
+task_1()
