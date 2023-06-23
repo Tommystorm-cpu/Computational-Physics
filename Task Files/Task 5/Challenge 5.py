@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
-import PlanetData as Pd
+from  import PlanetData as Pd
 import math
 # number planet to be used (will eventually become and input)
 def task_5(a):
@@ -60,4 +60,4 @@ def task_5(a):
     plt.legend()
     plt.show() 
     return fig
-task_5(8)
+task_5(31)
