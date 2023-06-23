@@ -1,6 +1,9 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import math
+import os.path
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath("__file__")))))
 import PlanetData as Pd
 
 fig = plt.figure()
