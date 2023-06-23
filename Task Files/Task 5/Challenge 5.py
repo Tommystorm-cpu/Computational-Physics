@@ -1,6 +1,11 @@
 import matplotlib.pyplot as plt
 import numpy as np
-import Computational_Physics.PlanetData as Pd
+
+import os.path
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath("__file__")))))
+
+import PlanetData as Pd
 import math
 # number planet to be used (will eventually become and input)
 def task_5(a):
