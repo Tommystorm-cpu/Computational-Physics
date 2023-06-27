@@ -65,4 +65,4 @@ def task_5(a):
     plt.legend()
     plt.show() 
     return fig
-task_5(0)
+task_5(43)

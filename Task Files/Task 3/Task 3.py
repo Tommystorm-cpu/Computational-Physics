@@ -13,7 +13,7 @@ fig = plt.figure()
 ax = fig.add_subplot()
 ax.set_aspect('equal', adjustable='box')
 
-solar_system = Pd.GJ_system
+solar_system = Pd.inner_planets
 
 title = ""
 
