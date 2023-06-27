@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+        <title>Current Time</title>
+
+        <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+        <script defer src="https://pyscript.net/latest/pyscript.js"></script>
+    </head>
+
+    <body>
+        <py-config type="toml"> 
+            packages = ["matplotlib", "numpy"] 
+            
+            [[fetch]]
+            files = ["PlanetData.py"]
+            [[fetch]]
+            from = 'Task Files/Task 2'
+            files = ["./Task_2_Web.py"]
+            [[fetch]]
+            from = 'Task Files/Task 3'
+            files = ["./Task_3_Web.py"]
+        </py-config>
+        <py-script>
+            import datetime
+            import Task_2_Web as T2W
+            import Task_3_Web as T3W
+            
+            def current_time():
+                now = datetime.datetime.now()
+            
+                # Get paragraph element by id
+                paragraph = Element("current-time")
+
+                # Add current time to the paragraph element
+                paragraph.write(now.strftime("%Y-%m-%d %H:%M:%S"))
+            
+            def load_solar():
+                value = Element("solars").value
+                fig = T2W.plot_orbit(value)
+                display(fig, target="graph-area", append=False)
+
+        </py-script>
+        
+        <button py-click="current_time()" id="get-time" class="py-button">Get current time</button>
+        <p id="current-time"></p>
+        
+        <label for="solars">Solar:</label>
+        <select class="py-button" id="solars">
+            <option value="Inner">Inner</option>
+            <option value="Outer">Outer</option>
+            <option value="GJ">GJ</option>
+        </select>
+        
+        <button py-click="load_solar()" id="get-time" class="py-button">Load Graph</button>
+        <div id="graph-area"></div>
+        
+    </body>
+</html>
+
