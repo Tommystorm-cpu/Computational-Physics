@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-let scene, camera, renderer, Light, meshPlanet, meshClouds, spline, time;
+let scene, camera, renderer, Light, splines, time, planets;
 
 function init() {
     time = 0;
@@ -44,6 +44,34 @@ function init() {
     const textureCube = loader.load( [ 'right.png', 'left.png', 'top.png', 'bottom.png', 'front.png', 'back.png' ] );
     scene.background = textureCube;
 
+    // Controls
+    const controls = new OrbitControls(camera, renderer.domElement );
+}
+
+function animate() {
+    requestAnimationFrame(animate);
+    planets[0].rotateY(0.01);
+    for (var i = 0; i < planets.length; i++) {
+        positionObject(splines[0], planets[i], time);
+    }
+    time += 0.01;
+    renderer.render(scene, camera);
+}
+
+function onWindowResize() {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
+function positionObject(curve, object, angle){
+    let pos = angle / (2 * Math.PI);
+    pos = pos - Math.floor(pos)
+    const position = curve.getPointAt(pos);
+    object.position.copy(position);
+}
+
+function generate_planet(radius) {
     // Earth
     const textureLoader = new THREE.TextureLoader();
     const materialNormalMap = new THREE.MeshPhongMaterial( {
@@ -60,12 +88,8 @@ function init() {
     } );
     materialNormalMap.map.colorSpace = THREE.SRGBColorSpace;
 
-    const geometry = new THREE.SphereGeometry(100, 100, 50);
-
-    meshPlanet = new THREE.Mesh( geometry, materialNormalMap);
-    meshPlanet.rotation.y = 0;
-    meshPlanet.rotation.z = 0.4;
-    scene.add(meshPlanet);
+    const geometry = new THREE.SphereGeometry(radius, 100, 50);
+    const meshPlanet = new THREE.Mesh( geometry, materialNormalMap);
 
     // Clouds
     const materialClouds = new THREE.MeshLambertMaterial( {
@@ -76,27 +100,35 @@ function init() {
     } );
     materialClouds.map.colorSpace = THREE.SRGBColorSpace;
 
-    meshClouds = new THREE.Mesh( geometry, materialClouds );
+    const meshClouds = new THREE.Mesh( geometry, materialClouds );
     meshClouds.scale.set( 1.005, 1.005, 1.005);
-    meshClouds.rotation.z = 0.4;
-    meshClouds.name = "clouds";
-    scene.add(meshClouds);
 
+    // Group
+    const group = new THREE.Group();
+    group.add(meshPlanet);
+    group.add(meshClouds);
+
+    group.rotation.z = 0.4;
+
+    scene.add(group);
+
+    return group;
+}
+
+function generate_orbit(semi_major, eccen) {
     // Generate spline
     const generated_points = [];
-    const semi_major = 1;
-    const eccen = 0.02;
     const scalar = 500;
 
     for (var angle = 0; angle < 2*Math.PI; angle+=0.01){
         const radius = (semi_major*(1-(Math.pow(eccen, 2))))/(1-eccen*Math.cos(angle))
-        const x_pos = radius * Math.cos(angle) * scalar;
-        const y_pos = radius * Math.sin(angle) * scalar;
+        const x_pos = radius * Math.sin(angle) * scalar;
+        const y_pos = radius * Math.cos(angle) * scalar;
         const vector = new THREE.Vector3(x_pos, 0, y_pos);
         generated_points.push(vector);
     }
     generated_points.push(generated_points[0].clone());
-    spline = new THREE.CatmullRomCurve3(generated_points);
+    const spline = new THREE.CatmullRomCurve3(generated_points);
 
     // Draw Spline
     const points = spline.getPoints(150);
@@ -105,36 +137,13 @@ function init() {
     const curveObject = new THREE.Line(spline_geometry, material);
     scene.add(curveObject);
 
-    // Controls
-    const controls = new OrbitControls(camera, renderer.domElement );
-}
-
-function animate() {
-    requestAnimationFrame(animate);
-    meshPlanet.rotateY(0.003);
-    meshClouds.rotateY(0.0045);
-    positionObject(spline, meshPlanet, time);
-    positionObject(spline, meshClouds, time);
-    time += 0.01;
-    renderer.render(scene, camera);
-}
-
-function onWindowResize() {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-}
-
-function positionObject(spline, object, angle){
-    let pos = angle / (2 * Math.PI);
-    pos = pos - Math.floor(pos)
-    const position = spline.getPointAt(pos);
-    // console.log(position);
-    object.position.copy(position);
+    return spline;
 }
 
 window.addEventListener('resize', onWindowResize, false);
 
 
 init();
+splines = [generate_orbit(1, 0.02)]
+planets = [generate_planet(100)]
 animate();
