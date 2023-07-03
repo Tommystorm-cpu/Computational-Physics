@@ -9,6 +9,13 @@ function init() {
     // Scene
     scene = new THREE.Scene();
 
+    // Renderer
+    renderer = new THREE.WebGLRenderer({ antialias: true});
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap; 
+    document.body.appendChild(renderer.domElement);
+
     // Camera
     camera = new THREE.PerspectiveCamera( 
         75, 
@@ -17,14 +24,17 @@ function init() {
         10000 
     );
     camera.position.z = 1000;
-
+    
     // Light
     Light = new THREE.PointLight(0xffffff, 3);
     Light.position.set(0, 0, 0);
+    Light.castShadow = true;
+    Light.shadow.mapSize.width = 4096;
+    Light.shadow.mapSize.height = 4096;
+    Light.shadow.radius = 50;
     scene.add(Light);
-
-    const pointLightHelper = new THREE.PointLightHelper(Light, 100);
-    // scene.add(pointLightHelper);
+    
+    Light.shadow.camera.far = 1000000;
 
     const ambLight = new THREE.AmbientLight(0xffffff, 0.1)
     scene.add(ambLight)
@@ -32,11 +42,6 @@ function init() {
     // Helper
     const axesHelper = new THREE.AxesHelper(100);
     scene.add(axesHelper);
-
-    // Renderer
-    renderer = new THREE.WebGLRenderer({ antialias: true});
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    document.body.appendChild(renderer.domElement);
 
     // Skybox
     const loader = new THREE.CubeTextureLoader();
@@ -50,11 +55,13 @@ function init() {
 
 function animate() {
     requestAnimationFrame(animate);
-    planets[0].rotateY(0.01);
     for (var i = 0; i < planets.length; i++) {
-        positionObject(splines[0], planets[i], time);
+        planets[i][0].rotateY(0.0005);
+        planets[i][1].rotateY(0.0008);
+        positionObject(splines[i], planets[i][0], time);
+        positionObject(splines[i], planets[i][1], time);
     }
-    time += 0.01;
+    time += 0.0001;
     renderer.render(scene, camera);
 }
 
@@ -72,15 +79,15 @@ function positionObject(curve, object, angle){
 }
 
 function generate_planet(radius) {
-    // Earth
+    // Planet
+    const variant = randInt(1, 10);
     const textureLoader = new THREE.TextureLoader();
     const materialNormalMap = new THREE.MeshPhongMaterial( {
 
         specular: 0x7c7c7c,
-        shininess: 15,
-        map: textureLoader.load( 'textures/earth_atmos_2048.jpg' ),
-        specularMap: textureLoader.load( 'textures/earth_specular_2048.jpg' ),
-        normalMap: textureLoader.load( 'textures/earth_normal_2048.jpg' ),
+        shininess: 1,
+        map: textureLoader.load('textures/Martian/Martian Landscape ('.concat(variant).concat(').png')),
+        normalMap: textureLoader.load('textures/Martian/Martian Normal ('.concat(variant).concat(').png')),
 
         // y scale is negated to compensate for normal map handedness.
         normalScale: new THREE.Vector2( 0.85, - 0.85 )
@@ -88,13 +95,16 @@ function generate_planet(radius) {
     } );
     materialNormalMap.map.colorSpace = THREE.SRGBColorSpace;
 
-    const geometry = new THREE.SphereGeometry(radius, 100, 50);
+    const geometry = new THREE.SphereGeometry(radius, 500, 250);
     const meshPlanet = new THREE.Mesh( geometry, materialNormalMap);
+
+    meshPlanet.castShadow = true;
+    meshPlanet.receiveShadow = true;
 
     // Clouds
     const materialClouds = new THREE.MeshLambertMaterial( {
 
-        map: textureLoader.load( 'textures/earth_clouds_1024.png' ),
+        map: textureLoader.load('textures/Martian/Martian Clouds ('.concat(variant).concat(').png')),
         transparent: true
 
     } );
@@ -102,17 +112,15 @@ function generate_planet(radius) {
 
     const meshClouds = new THREE.Mesh( geometry, materialClouds );
     meshClouds.scale.set( 1.005, 1.005, 1.005);
+    meshClouds.receiveShadow = true;
 
-    // Group
-    const group = new THREE.Group();
-    group.add(meshPlanet);
-    group.add(meshClouds);
+    const tilt = Math.random();
+    meshPlanet.rotation.z = tilt;
+    meshClouds.rotation.z = tilt;
+    scene.add(meshPlanet);
+    scene.add(meshClouds);
 
-    group.rotation.z = 0.4;
-
-    scene.add(group);
-
-    return group;
+    return [meshPlanet, meshClouds];
 }
 
 function generate_orbit(semi_major, eccen) {
@@ -140,10 +148,14 @@ function generate_orbit(semi_major, eccen) {
     return spline;
 }
 
+function randInt(min, max) { 
+    return Math.floor(Math.random() * (max - min + 1) + min)
+  }
+
 window.addEventListener('resize', onWindowResize, false);
 
 
 init();
-splines = [generate_orbit(1, 0.02)]
-planets = [generate_planet(100)]
+splines = [generate_orbit(1, 0.02), generate_orbit(2, 0.02), generate_orbit(3, 0.02), generate_orbit(10, 0.02)]
+planets = [generate_planet(100), generate_planet(300), generate_planet(50), generate_planet(2000)]
 animate();
