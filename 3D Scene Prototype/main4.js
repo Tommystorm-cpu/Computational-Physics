@@ -29,8 +29,8 @@ function init() {
     Light = new THREE.PointLight(0xffffff, 3);
     Light.position.set(0, 0, 0);
     Light.castShadow = true;
-    Light.shadow.mapSize.width = 4096;
-    Light.shadow.mapSize.height = 4096;
+    Light.shadow.mapSize.width = 1024;
+    Light.shadow.mapSize.height = 1024;
     Light.shadow.radius = 50;
     scene.add(Light);
     
