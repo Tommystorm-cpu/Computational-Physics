@@ -1,7 +1,10 @@
 // Semi-major axis, eccentricity, orbital inclination/degrees,
 // Radius in earth radii, Rotational period/days, orbital period/years, Texture Type, Clouds?
 
+// For the stars: radius in earth radii, luminosity in sol lumens, texture
+
 const solarSystem = {
+    "Sun": [109.076, 1, "Sun"],
     "Mercury": [0.387, 0.21, 7, 0.383, 58.646, 0.243, "Mercury", 0],
     "Venus": [0.723, 0.01, 3.39, 0.949, 243.018,  0.615, "Venus", 0],
     "Earth": [1, 0.02, 0, 1, 0.997, 1, "Earth", 1],
