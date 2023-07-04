@@ -3,12 +3,13 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { solarSystem } from './planetData.js';
 import { get_angle } from './Theta_Function.js';
 
-let scene, camera, controls, renderer, light, time, splines, planets, cameraTarget, fakeCamera, sun, timeStep;
+let scene, camera, controls, renderer, light, time, splines, planets, cameraTarget, fakeCamera, sun, timeStep, sunLock, cameraRadii;
 
 function init() {
     cameraTarget = 0;
     time = 0;
     timeStep = 0.5;
+    sunLock = false;
 
     // Scene
     scene = new THREE.Scene();
@@ -68,6 +69,7 @@ function init() {
 
         if (isFinite(key)) {
             if (key === "0") {
+                sunLock = false;
                 if (cameraTarget == 0) {
                     controls.reset();
                 } else {
@@ -80,11 +82,18 @@ function init() {
                 controls.reset();
                 cameraTarget = planets[parseInt(key) - 1][1];
                 cameraTarget.add(camera);
+                cameraRadii = planets[parseInt(key) - 1][0][3];
                 const tempRadius = planets[parseInt(key) - 1][0][3] * 300;
                 const startPos = new THREE.Vector3(tempRadius, tempRadius, tempRadius);
                 fakeCamera.position.copy(startPos);
                 controls.enablePan = false;
+                sunLock = false;
             };
+        }
+        if (key === "s") {
+            if (cameraTarget != 0) {
+                sunLock = !sunLock;
+            }
         }
     });
 }
@@ -172,9 +181,10 @@ function generateOrbit(semi_major, eccen, inclination) {
 
     for (var angle = 0; angle < 2 * Math.PI; angle += 0.01) {
         const radius = (semi_major * (1 - (Math.pow(eccen, 2)))) / (1 - eccen * Math.cos(angle))
-        const xPos = radius * Math.sin(angle) * scalar;
+        let xPos = radius * Math.sin(angle) * scalar;
         const yPos = radius * Math.cos(angle) * scalar;
-        const zPos = xPos * Math.tan(inclination * (Math.PI / 180));
+        const zPos = xPos * Math.sin(inclination * (Math.PI / 180));
+        xPos = xPos * Math.cos(inclination * (Math.PI / 180));
         const vector = new THREE.Vector3(xPos, zPos, yPos);
         generatedPoints.push(vector);
     }
@@ -238,6 +248,16 @@ function animate() {
         }
     }
     time += timeStep/50;
+    
+    if (sunLock) {
+        let cameraPos = new THREE.Vector3();
+        const vertOffest = new THREE.Vector3(0, cameraRadii * 500, 0);
+        cameraPos.copy(cameraTarget.position);
+        cameraPos.normalize();
+        cameraPos.multiplyScalar(cameraRadii * 1000);
+        cameraPos.add(vertOffest);
+        fakeCamera.position.copy(cameraPos);
+    }
 
     camera.copy(fakeCamera);
     controls.update();
