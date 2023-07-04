@@ -3,11 +3,12 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { solarSystem } from './planetData.js';
 import { get_angle } from './Theta_Function.js';
 
-let scene, camera, controls, renderer, light, time, splines, planets, cameraTarget, fakeCamera;
+let scene, camera, controls, renderer, light, time, splines, planets, cameraTarget, fakeCamera, sun, timeStep;
 
 function init() {
     cameraTarget = 0;
     time = 0;
+    timeStep = 0.5;
 
     // Scene
     scene = new THREE.Scene();
@@ -86,6 +87,18 @@ function init() {
             };
         }
     });
+}
+
+function initControls() {
+    const sunButton = document.getElementById("sunButton");
+    sunButton.onclick = () => {
+        sun.visible = !sun.visible;
+    };
+
+    const timeSlider = document.getElementById("timeSlider");
+    timeSlider.oninput = (event) => {
+        timeStep = event.target.value;
+    };
 }
 
 function generatePlanet(planet) {
@@ -194,6 +207,7 @@ function generateStar(starData) {
     const geometry = new THREE.SphereGeometry(radius, 500, 250);
     const starMesh = new THREE.Mesh(geometry, materialMap);
     scene.add(starMesh);
+    sun = starMesh;
 
 }
 
@@ -213,17 +227,17 @@ function animate() {
     for (var i = 0; i < planets.length; i++) {
 
         // Rotate planet mesh
-        planets[i][1].children[0].rotateY(planets[i][0][4] / 100);
+        planets[i][1].children[0].rotateY(planets[i][0][4] / 100 * timeStep);
         // Move planet mesh (orbit path, planet mesh, time, planet data)
         positionObject(splines[i], planets[i][1], time, planets[i][0]);
 
         // Same as above for clouds
         if (planets[i].length == 3) {
-            planets[i][2].rotateY((planets[i][0][4] / 100) * 1.5);
+            planets[i][2].rotateY((planets[i][0][4] / 100) * 1.5 * timeStep);
             positionObject(splines[i], planets[i][2], time, planets[i][0]);
         }
     }
-    time += 0.001;
+    time += timeStep/50;
 
     camera.copy(fakeCamera);
     controls.update();
@@ -244,6 +258,7 @@ function randInt(min, max) {
 window.addEventListener('resize', onWindowResize, false);
 
 init();
+initControls();
 
 splines = []
 planets = []
