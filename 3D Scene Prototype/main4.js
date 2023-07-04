@@ -1,6 +1,7 @@
 import * as THREE from 'three';
-import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
-import {solarSystem} from './planetData.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { solarSystem } from './planetData.js';
+import { get_angle } from './Theta_Function.js';
 
 let scene, camera, renderer, light, time, splines, planets;
 
@@ -22,7 +23,7 @@ function init() {
         75, 
         window.innerWidth / window.innerHeight, 
         1, 
-        100000 
+        10000000 
     );
     camera.position.z = 1000;
     
@@ -54,8 +55,12 @@ function init() {
     const controls = new OrbitControls(camera, renderer.domElement );
 }
 
-function generatePlanet(radius, textureType, clouds, period, rotatePeriod) {
-    var result = [period, rotatePeriod];
+function generatePlanet(planet) {
+    const radius = planet[3] * 100;
+    const textureType = planet[6];
+    const clouds = planet[7];
+
+    var result = [planet];
 
     // Planet Texture
     var mapPath = "";
@@ -107,7 +112,7 @@ function generatePlanet(radius, textureType, clouds, period, rotatePeriod) {
     return result;
 }
 
-function generateOrbit(semi_major, eccen) {
+function generateOrbit(semi_major, eccen, inclination) {
     // Generate spline
     const generatedPoints = [];
     const scalar = 1000;
@@ -116,7 +121,8 @@ function generateOrbit(semi_major, eccen) {
         const radius = (semi_major*(1-(Math.pow(eccen, 2))))/(1-eccen*Math.cos(angle))
         const xPos = radius * Math.sin(angle) * scalar;
         const yPos = radius * Math.cos(angle) * scalar;
-        const vector = new THREE.Vector3(xPos, 0, yPos);
+        const zPos = xPos * Math.tan(inclination * (Math.PI/180));
+        const vector = new THREE.Vector3(xPos, zPos, yPos);
         generatedPoints.push(vector);
     }
     generatedPoints.push(generatedPoints[0].clone());
@@ -132,8 +138,11 @@ function generateOrbit(semi_major, eccen) {
     return spline;
 }
 
-function positionObject(curve, object, orbitTime, period){
-    const angle = (2 * Math.PI *  orbitTime) / period;
+function positionObject(curve, object, orbitTime, planetData){
+    const period = planetData[5];
+    const eccen = planetData[1];
+    //const angle = (2 * Math.PI *  orbitTime) / period;
+    const angle = get_angle(eccen, period, orbitTime);
     let pos = angle / (2 * Math.PI);
     pos = pos - Math.floor(pos)
     const position = curve.getPointAt(pos);
@@ -142,13 +151,18 @@ function positionObject(curve, object, orbitTime, period){
 
 function animate() {
     requestAnimationFrame(animate);
+    // Loop through all planets
     for (var i = 0; i < planets.length; i++) {
-        planets[i][2].rotateY(planets[i][1] / 100);
-        positionObject(splines[i], planets[i][2], time, planets[i][0]);
 
-        if (planets[i].length == 4)  {
-            planets[i][3].rotateY((planets[i][1] / 100) * 1.5);
-            positionObject(splines[i], planets[i][3], time, planets[i][0]);
+        // Rotate planet mesh
+        planets[i][1].rotateY(planets[i][0][4] / 100);
+        // Move planet mesh (orbit path, planet mesh, time, planet data)
+        positionObject(splines[i], planets[i][1], time, planets[i][0]);
+        
+        // Same as above for clouds
+        if (planets[i].length == 3)  {
+            planets[i][2].rotateY((planets[i][0][4] / 100) * 1.5);
+            positionObject(splines[i], planets[i][2], time, planets[i][0]);
         }
     }
     time += 0.001;
@@ -173,8 +187,10 @@ init();
 splines = []
 planets = []
 for (const [key, value] of Object.entries(solarSystem)) {
-  splines.push(generateOrbit(value[0], value[1]));
-  planets.push(generatePlanet(value[3] * 100, value[6], value[7], value[5], value[4]))
+  splines.push(generateOrbit(value[0], value[1], value[2]));
+  planets.push(generatePlanet(value))
 }
+
+
 
 animate();
