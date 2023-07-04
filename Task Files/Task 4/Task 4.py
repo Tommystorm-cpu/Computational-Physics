@@ -51,7 +51,8 @@ class Planet:
             radius = (semi_major * (1 - (eccen * eccen))) / (1 - eccen * math.cos(theta))
             x = radius * math.cos(theta)
             y = radius * math.sin(theta)
-            z = x * math.tan(self.incline)
+            z = x * math.sin(self.incline)
+            x = x * math.cos(self.incline)
             x_coords.append(x)
             y_coords.append(y)
             z_coords.append(z)
@@ -68,7 +69,8 @@ class Planet:
         r = (self.semi_major*(1-self.eccen**2)) / (1 - (self.eccen * math.cos(theta)))
         x = r * math.cos(theta)
         y = r * math.sin(theta)
-        z = x * math.tan(self.incline)
+        z = x * math.sin(self.incline)
+        x = x * math.cos(self.incline)
 
         self.point.set_data_3d(x, y, z)
         return self.point
