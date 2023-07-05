@@ -34,7 +34,7 @@ function init() {
         250000000000
     );
 
-    // 2500000
+    // 250000000000
 
     camera.position.y = 1000;
     camera.position.z = 1000;
@@ -45,10 +45,10 @@ function init() {
     light.castShadow = true;
     light.shadow.mapSize.width = 1024;
     light.shadow.mapSize.height = 1024;
-    light.shadow.radius = 50;
     scene.add(light);
 
-    light.shadow.camera.far = 100000;
+    light.shadow.camera.far = 250000000000;
+    light.shadow.camera.near = 0.1;
 
     const ambLight = new THREE.AmbientLight(0xffffff, 0.1)
     scene.add(ambLight)
