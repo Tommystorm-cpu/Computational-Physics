@@ -36,7 +36,7 @@ function init() {
 
 
     // Sphere
-    const geometry = new THREE.SphereGeometry(3, 64, 64);
+    const geometry = new THREE.SphereGeometry(5, 64, 64);
     const material = new THREE.MeshStandardMaterial({color: 0x00ff83});
     
     sphere = new THREE.Mesh(geometry, material);

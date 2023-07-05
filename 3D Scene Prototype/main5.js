@@ -28,11 +28,11 @@ function init() {
     camera = new THREE.PerspectiveCamera(
         75,
         window.innerWidth / window.innerHeight,
-        1,
-        100000000
+        0.1,
+        250000000000
     );
 
-    // 100000000
+    // 2500000
 
     camera.position.y = 1000;
     camera.position.z = 1000;
@@ -116,7 +116,7 @@ function initControls() {
 
         for (var i = 0; i < planets.length; i++) {
             if (accurateScale) {
-                planets[i][1].scale.copy(new THREE.Vector3(0.25, 0.25, 0.25));
+                planets[i][1].scale.copy(new THREE.Vector3(1/200, 1/200, 1/200));
             } else {
                 planets[i][1].scale.copy(new THREE.Vector3(1, 1, 1));
             }
@@ -266,10 +266,10 @@ function generateOrbit(semi_major, eccen, inclination, accurate) {
     if (!accurate) {
         scalar = 2000;
     } else {
-        scalar = 50 * 23450;
+        scalar = 23450;
     }
 
-    for (let angle = 0; angle < 2 * Math.PI; angle += 0.01) {
+    for (let angle = 0; angle < 2 * Math.PI; angle += 0.1) {
         const radius = (semi_major * (1 - (Math.pow(eccen, 2)))) / (1 - eccen * Math.cos(angle));
         let xPos = radius * Math.sin(angle) * scalar;
         const yPos = radius * Math.cos(angle) * scalar;
@@ -282,8 +282,12 @@ function generateOrbit(semi_major, eccen, inclination, accurate) {
     const spline = new THREE.CatmullRomCurve3(generatedPoints);
 
     // Draw Spline
-    //const resolution = parseInt(Math.floor(semi_major * 100));
-    const points = spline.getPoints(800);
+    let resolution = 1000;
+    if (accurate) {
+        resolution = parseInt(Math.floor(semi_major * 5000));
+        console.log(resolution);
+    }
+    const points = spline.getPoints(resolution);
     const splineGeometry = new THREE.BufferGeometry().setFromPoints(points);
     const material = new THREE.LineBasicMaterial({ color: 0xff0000 });
     const curveObject = new THREE.Line(splineGeometry, material);
@@ -297,7 +301,7 @@ function generateStar(starData, accurate) {
     if (!accurate) {
         radius = starData[0] * 3;
     } else {
-        radius = starData[0] * (200 / 4);
+        radius = starData[0];
     };
 
     const textureType = starData[2];
@@ -322,19 +326,17 @@ function generateStar(starData, accurate) {
 	const textureFlare3 = textureLoader.load('./textures/Lensflare/lensflare3.png' );
 
     // lensflare.addElement( new LensflareElement( textureFlare0, 200, 0, light.color ) );
-	lensflare.addElement( new LensflareElement( textureFlare3, 60, 0.6 ) );
-	lensflare.addElement( new LensflareElement( textureFlare3, 70, 0.7 ) );
-	lensflare.addElement( new LensflareElement( textureFlare3, 120, 0.9 ) );
-	lensflare.addElement( new LensflareElement( textureFlare3, 70, 1 ) );
+	lensflare.addElement(new LensflareElement(textureFlare3, 60, 0.6));
+	lensflare.addElement(new LensflareElement(textureFlare3, 70, 0.7));
+	lensflare.addElement(new LensflareElement(textureFlare3, 120, 0.9));
+	lensflare.addElement(new LensflareElement(textureFlare3, 70, 1));
 
+    light.remove(light.children[0]);
     light.add(lensflare);
 
     const spriteMaterial = new THREE.SpriteMaterial({map: textureFlare0});
     sunSprite = new THREE.Sprite(spriteMaterial);
-    sunSprite.scale.multiplyScalar(50000);
-    if (accurate) {
-        sunSprite.scale.multiplyScalar(200);
-    }
+    sunSprite.scale.set(50000, 50000, 50000);
     scene.add(sunSprite);
 
 }
@@ -382,15 +384,11 @@ function animate() {
 
     let distanceThreshold = 25000;
 
-    if (accurateScale) {
-        distanceThreshold = 100000;
-    };
-
-    if ((camera.position.distanceTo(sun.position) < distanceThreshold)) {
+    if ((camera.position.distanceTo(sun.position) < distanceThreshold) && (!accurateScale)) {
         sunSprite.visible = false;
     } else {
         sunSprite.visible = true;
-    }
+    };
 
     if (camera.parent != null) {
         if ((camera.parent.position.distanceTo(sun.position) < distanceThreshold)) {
@@ -398,9 +396,20 @@ function animate() {
         } else {
             sunSprite.visible = true;
         }
-    }
+    };
 
-    
+    if ((camera.parent != null) && (accurateScale)) {
+        const distanceToSun = camera.parent.position.distanceTo(sun.position)
+        sunSprite.visible = true;
+        const intensity = Math.pow(distanceToSun, 0.6) * 10000;
+        sunSprite.scale.set(intensity, intensity, intensity);
+    };
+
+    if ((camera.parent == null) && (accurateScale)) {
+        const distanceToSun = camera.position.distanceTo(sun.position)
+        const intensity = Math.pow(distanceToSun, 0.6) * 100;
+        sunSprite.scale.set(intensity, intensity, intensity);
+    };
 
     sun.visible = !sunSprite.visible;
 
@@ -444,4 +453,5 @@ for (const [key, value] of Object.entries(solarSystem)) {
     }
 }
 
+//scene.scale.set(0.0001, 0.0001, 0.0001);
 animate();
