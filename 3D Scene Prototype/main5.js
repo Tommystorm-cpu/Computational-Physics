@@ -286,7 +286,6 @@ function generateOrbit(semi_major, eccen, inclination, accurate) {
     let resolution = 1000;
     if (accurate) {
         resolution = parseInt(Math.floor(semi_major * 2500));
-        console.log(resolution);
     }
     const points = spline.getPoints(resolution);
     const splineGeometry = new THREE.BufferGeometry().setFromPoints(points);
@@ -416,6 +415,10 @@ function animate() {
     if ((cameraTarget == planets[8][1]) && (accurateScale)) {
         const scale = 1/25;
         planets[8][1].scale.set(scale, scale, scale);
+
+        const distanceToSun = camera.parent.position.distanceTo(sun.position)
+        const intensity = Math.pow(distanceToSun, 0.6) * 700;
+        sunSprite.scale.set(intensity, intensity, intensity);
     };
 
     sun.visible = !sunSprite.visible;
