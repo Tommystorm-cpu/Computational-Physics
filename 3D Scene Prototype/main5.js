@@ -3,9 +3,10 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { solarSystem, justPluto } from './planetData.js';
 import { get_angle } from './Theta_Function.js';
 import { Lensflare, LensflareElement } from 'three/addons/objects/Lensflare.js';
+import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
 
 let scene, camera, controls, renderer, light, time, splines, planets, cameraTarget, fakeCamera, sun, timeStep, sunLock, cameraRadii, sunSprite;
-let accurateScale, orbitObjects
+let accurateScale, orbitObjects, labelRenderer, labelBool, labelList
 
 function init() {
     cameraTarget = 0;
@@ -13,6 +14,7 @@ function init() {
     timeStep = 0.5;
     sunLock = false;
     accurateScale = false;
+    labelBool = false;
 
     // Scene
     scene = new THREE.Scene();
@@ -61,11 +63,18 @@ function init() {
     const textureCube = loader.load(['right.png', 'left.png', 'top.png', 'bottom.png', 'front.png', 'back.png']);
     scene.background = textureCube;
 
+    // Label Renderer
+    labelRenderer = new CSS2DRenderer();
+    labelRenderer.setSize( window.innerWidth, window.innerHeight );
+    labelRenderer.domElement.style.position = 'absolute';
+    labelRenderer.domElement.style.top = '0px';
+    document.body.appendChild( labelRenderer.domElement );
+
     // Controls
-    controls = new OrbitControls(camera, renderer.domElement);
+    controls = new OrbitControls(camera, labelRenderer.domElement);
 
     fakeCamera = camera.clone();
-    controls = new OrbitControls(fakeCamera, renderer.domElement);
+    controls = new OrbitControls(fakeCamera, labelRenderer.domElement);
     // controls.enablePan = false;
 
     
@@ -102,6 +111,11 @@ function init() {
                 sunLock = !sunLock;
             }
         }
+
+        if (key === "l") {
+            labelBool = !labelBool;
+            initLabels();
+        }
     });
 }
 
@@ -110,6 +124,14 @@ function initControls() {
     scaleButton.onclick = () => {
         accurateScale = !accurateScale;
         
+        if (accurateScale) {
+            labelBool = true;
+            initLabels();
+        } else {
+            labelBool = false;
+            initLabels();
+        }
+
         for (var i = 0; i < orbitObjects.length; i++) {
             scene.remove(orbitObjects[i])
         }
@@ -150,6 +172,29 @@ function initControls() {
     timeSlider.oninput = (event) => {
         timeStep = event.target.value;
     };
+}
+
+function initLabels() {
+    if (labelBool) {
+        for (var i = 0; i < planets.length; i++) {
+            const planetDiv = document.createElement( 'div' );
+            planetDiv.className = 'label';
+            planetDiv.textContent = planets[i][0][6];
+            planetDiv.style.backgroundColor = 'transparent';
+            planetDiv.style.color = cssColours[i];
+
+            const planetLabel = new CSS2DObject( planetDiv );
+            const distance = planets[i][0][3]  * 150;
+            planetLabel.position.set(distance, distance, distance);
+            planets[i][1].add( planetLabel );
+            labelList.push(planetLabel);
+        };
+    } else {
+        for (var i = 0; i < planets.length; i++) {
+            planets[i][1].remove(labelList[i]);
+        };
+        labelList = [];
+    }
 }
 
 function bend(g, rMin, rMax) {
@@ -432,6 +477,8 @@ function animate() {
     controls.update();
 
     renderer.render(scene, camera);
+
+    labelRenderer.render( scene, camera );
 }
 
 function onWindowResize() {
@@ -452,10 +499,13 @@ splines = []
 planets = []
 orbitObjects = []
 
+labelList = [];
+
 init();
 initControls();
 
 const colours =  [0xd10000, 0xd17300, 0x2ad100, 0x00d1ca, 0x005bd1, 0x1500d1, 0x6f00d1, 0xd100c3, 0xd10046];
+const cssColours = ["#d10000", "#d17300", "#2ad100", "#00d1ca", "#005bd1", "#1500d1", "#6f00d1", "#d100c3", "#d10046"];
 
 let i = -1;
 for (const [key, value] of Object.entries(solarSystem)) {
@@ -469,6 +519,8 @@ for (const [key, value] of Object.entries(solarSystem)) {
     }
     i++;
 }
+
+initLabels();
 
 //scene.scale.set(0.0001, 0.0001, 0.0001);
 animate();
