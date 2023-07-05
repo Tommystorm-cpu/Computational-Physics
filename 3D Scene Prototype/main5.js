@@ -270,8 +270,8 @@ function generateStar(starData) {
 
     const lensflare = new Lensflare();
 
-    const textureFlare0 = textureLoader.load('./textures/lensflare/lensflare0_alpha.png' );
-	const textureFlare3 = textureLoader.load('./textures/lensflare/lensflare3.png' );
+    const textureFlare0 = textureLoader.load('./textures/Lensflare/lensflare0_alpha.png' );
+	const textureFlare3 = textureLoader.load('./textures/Lensflare/lensflare3.png' );
 
     // lensflare.addElement( new LensflareElement( textureFlare0, 200, 0, light.color ) );
 	lensflare.addElement( new LensflareElement( textureFlare3, 60, 0.6 ) );
