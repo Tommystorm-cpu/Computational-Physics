@@ -118,6 +118,9 @@ function initControls() {
             if (accurateScale) {
                 const scale = 1/200
                 planets[i][1].scale.copy(new THREE.Vector3(scale, scale, scale));
+                if (planets[i].length == 3) {
+                    planets[i][2].scale.copy(new THREE.Vector3(scale*1.01, scale*1.01, scale*1.01));
+                }
             } else {
                 planets[i][1].scale.copy(new THREE.Vector3(1, 1, 1));
             }
