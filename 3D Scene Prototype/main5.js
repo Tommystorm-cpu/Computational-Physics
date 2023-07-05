@@ -144,8 +144,10 @@ function generatePlanet(planet) {
     }
 
     if (textureType == "Saturn") {
-        ringPath = "./textures/Solar System/Saturn Ring.jpg"
-    }
+        ringPath = "./textures/Solar System/Saturn Ring.png"
+    } else if (textureType == "Uranus") {
+        ringPath = "./textures/Solar System/Uranus Ring.jpg"
+    };
 
     const variant = randInt(1, 10);
     const textureLoader = new THREE.TextureLoader();
