@@ -116,7 +116,8 @@ function initControls() {
 
         for (var i = 0; i < planets.length; i++) {
             if (accurateScale) {
-                planets[i][1].scale.copy(new THREE.Vector3(1/200, 1/200, 1/200));
+                const scale = 1/200
+                planets[i][1].scale.copy(new THREE.Vector3(scale, scale, scale));
             } else {
                 planets[i][1].scale.copy(new THREE.Vector3(1, 1, 1));
             }
@@ -284,7 +285,7 @@ function generateOrbit(semi_major, eccen, inclination, accurate) {
     // Draw Spline
     let resolution = 1000;
     if (accurate) {
-        resolution = parseInt(Math.floor(semi_major * 5000));
+        resolution = parseInt(Math.floor(semi_major * 2500));
         console.log(resolution);
     }
     const points = spline.getPoints(resolution);
@@ -409,6 +410,12 @@ function animate() {
         const distanceToSun = camera.position.distanceTo(sun.position)
         const intensity = Math.pow(distanceToSun, 0.6) * 100;
         sunSprite.scale.set(intensity, intensity, intensity);
+    };
+
+
+    if ((cameraTarget == planets[8][1]) && (accurateScale)) {
+        const scale = 1/25;
+        planets[8][1].scale.set(scale, scale, scale);
     };
 
     sun.visible = !sunSprite.visible;
