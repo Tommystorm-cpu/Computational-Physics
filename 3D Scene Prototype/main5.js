@@ -5,12 +5,14 @@ import { get_angle } from './Theta_Function.js';
 import { Lensflare, LensflareElement } from 'three/addons/objects/Lensflare.js';
 
 let scene, camera, controls, renderer, light, time, splines, planets, cameraTarget, fakeCamera, sun, timeStep, sunLock, cameraRadii, sunSprite;
+let accurateScale, orbitObjects
 
 function init() {
     cameraTarget = 0;
     time = 0;
     timeStep = 0.5;
     sunLock = false;
+    accurateScale = false;
 
     // Scene
     scene = new THREE.Scene();
@@ -27,8 +29,11 @@ function init() {
         75,
         window.innerWidth / window.innerHeight,
         1,
-        10000000
+        100000000
     );
+
+    // 100000000
+
     camera.position.y = 1000;
     camera.position.z = 1000;
 
@@ -41,7 +46,7 @@ function init() {
     light.shadow.radius = 50;
     scene.add(light);
 
-    light.shadow.camera.far = 1000000;
+    light.shadow.camera.far = 100000;
 
     const ambLight = new THREE.AmbientLight(0xffffff, 0.1)
     scene.add(ambLight)
@@ -101,9 +106,38 @@ function init() {
 }
 
 function initControls() {
-    const sunButton = document.getElementById("sunButton");
-    sunButton.onclick = () => {
-        sun.visible = !sun.visible;
+    const scaleButton = document.getElementById("scaleButton");
+    scaleButton.onclick = () => {
+        accurateScale = !accurateScale;
+        
+        for (var i = 0; i < orbitObjects.length; i++) {
+            scene.remove(orbitObjects[i])
+        }
+
+        for (var i = 0; i < planets.length; i++) {
+            if (accurateScale) {
+                planets[i][1].scale.copy(new THREE.Vector3(0.25, 0.25, 0.25));
+            } else {
+                planets[i][1].scale.copy(new THREE.Vector3(1, 1, 1));
+            }
+        }
+
+        splines = [];
+        orbitObjects = [];
+
+        scene.remove(sun);
+        scene.remove(sunSprite);
+
+        for (const [key, value] of Object.entries(solarSystem)) {
+            if (key != Object.keys(solarSystem)[0]) {
+                const splineOrbit = generateOrbit(value[0], value[1], value[2], accurateScale);
+                splines.push(splineOrbit[0]);
+                orbitObjects.push(splineOrbit[1]);
+            } else {
+                generateStar(value, accurateScale);
+            }
+}
+
     };
 
     const timeSlider = document.getElementById("timeSlider");
@@ -125,7 +159,7 @@ function bend(g, rMin, rMax) {
       pos.setXY(i, Math.cos(a) * r, Math.sin(a) * r);
     }
     pos.needsUpdate = true;
-  }
+}
 
 function generatePlanet(planet) {
     const radius = planet[3] * 200;
@@ -225,10 +259,15 @@ function generatePlanet(planet) {
     return result;
 }
 
-function generateOrbit(semi_major, eccen, inclination) {
+function generateOrbit(semi_major, eccen, inclination, accurate) {
     // Generate spline
     const generatedPoints = [];
-    const scalar = 2000;
+    let scalar = 1
+    if (!accurate) {
+        scalar = 2000;
+    } else {
+        scalar = 50 * 23450;
+    }
 
     for (let angle = 0; angle < 2 * Math.PI; angle += 0.01) {
         const radius = (semi_major * (1 - (Math.pow(eccen, 2)))) / (1 - eccen * Math.cos(angle));
@@ -243,17 +282,24 @@ function generateOrbit(semi_major, eccen, inclination) {
     const spline = new THREE.CatmullRomCurve3(generatedPoints);
 
     // Draw Spline
-    const points = spline.getPoints(1000);
+    //const resolution = parseInt(Math.floor(semi_major * 100));
+    const points = spline.getPoints(800);
     const splineGeometry = new THREE.BufferGeometry().setFromPoints(points);
     const material = new THREE.LineBasicMaterial({ color: 0xff0000 });
     const curveObject = new THREE.Line(splineGeometry, material);
     scene.add(curveObject);
 
-    return spline;
+    return [spline, curveObject];
 }
 
-function generateStar(starData) {
-    const radius = starData[0] * 3;
+function generateStar(starData, accurate) {
+    let radius = 1;
+    if (!accurate) {
+        radius = starData[0] * 3;
+    } else {
+        radius = starData[0] * (200 / 4);
+    };
+
     const textureType = starData[2];
     let mapPath = "";
     if (textureType == "Sun") {
@@ -286,6 +332,9 @@ function generateStar(starData) {
     const spriteMaterial = new THREE.SpriteMaterial({map: textureFlare0});
     sunSprite = new THREE.Sprite(spriteMaterial);
     sunSprite.scale.multiplyScalar(50000);
+    if (accurate) {
+        sunSprite.scale.multiplyScalar(200);
+    }
     scene.add(sunSprite);
 
 }
@@ -331,19 +380,27 @@ function animate() {
         fakeCamera.position.copy(cameraPos);
     }
 
-    if ((camera.position.distanceTo(sun.position) < 25000)) {
+    let distanceThreshold = 25000;
+
+    if (accurateScale) {
+        distanceThreshold = 100000;
+    };
+
+    if ((camera.position.distanceTo(sun.position) < distanceThreshold)) {
         sunSprite.visible = false;
     } else {
         sunSprite.visible = true;
     }
 
     if (camera.parent != null) {
-        if ((camera.parent.position.distanceTo(sun.position) < 25000)) {
+        if ((camera.parent.position.distanceTo(sun.position) < distanceThreshold)) {
             sunSprite.visible = false;
         } else {
             sunSprite.visible = true;
         }
     }
+
+    
 
     sun.visible = !sunSprite.visible;
 
@@ -369,17 +426,21 @@ function randInt(min, max) {
 
 window.addEventListener('resize', onWindowResize, false);
 
+splines = []
+planets = []
+orbitObjects = []
+
 init();
 initControls();
 
-splines = []
-planets = []
 for (const [key, value] of Object.entries(solarSystem)) {
     if (key != Object.keys(solarSystem)[0]) {
-        splines.push(generateOrbit(value[0], value[1], value[2]));
+        const splineOrbit = generateOrbit(value[0], value[1], value[2], false);
+        splines.push(splineOrbit[0]);
+        orbitObjects.push(splineOrbit[1]);
         planets.push(generatePlanet(value));
     } else {
-        generateStar(value);
+        generateStar(value, false);
     }
 }
 
