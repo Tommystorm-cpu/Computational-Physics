@@ -4,7 +4,15 @@ import { solarSystem, justPluto } from './planetData.js';
 import { get_angle } from './Theta_Function.js';
 import { Lensflare, LensflareElement } from 'three/addons/objects/Lensflare.js';
 
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
 let scene, camera, controls, renderer, light, time, splines, planets, cameraTarget, fakeCamera, sun, timeStep, sunLock, cameraRadii, sunSprite;
+let bloomComposer, finalComposer, sunScene, renderTarget1, renderTarget2, baseScene
 
 function init() {
     cameraTarget = 0;
@@ -14,6 +22,7 @@ function init() {
 
     // Scene
     scene = new THREE.Scene();
+    sunScene = new THREE.Scene();
 
     // Renderer
     renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -45,6 +54,7 @@ function init() {
 
     const ambLight = new THREE.AmbientLight(0xffffff, 0.1)
     scene.add(ambLight)
+    sunScene.add(ambLight);
 
     // Axes Helper
     const axesHelper = new THREE.AxesHelper(100);
@@ -63,6 +73,7 @@ function init() {
     controls = new OrbitControls(fakeCamera, renderer.domElement);
     // controls.enablePan = false;
 
+    
 
     document.addEventListener('keyup', (event) => {
 
@@ -109,6 +120,60 @@ function initControls() {
     timeSlider.oninput = (event) => {
         timeStep = event.target.value;
     };
+}
+
+function initBloom() {
+    
+    const BLOOM_SCENE = 1;
+
+    //const bloomLayer = new THREE.Layers();
+    //bloomLayer.set( BLOOM_SCENE );
+
+    const params = {
+        threshold: 0,
+        strength: 5,
+        radius: 1,
+        exposure: 2
+    };
+
+    const renderSun = new RenderPass( sunScene, camera );
+    const renderScene = new RenderPass( scene, camera );
+
+    const bloomPass = new UnrealBloomPass( new THREE.Vector2( window.innerWidth*4, window.innerHeight*4 ), 1.5, 0.4, 0.85 );
+    bloomPass.threshold = params.threshold;
+    bloomPass.strength = params.strength;
+    bloomPass.radius = params.radius;
+
+    bloomComposer = new EffectComposer( renderer );
+    bloomComposer.renderToScreen = false;
+    bloomComposer.addPass( renderSun );
+    bloomComposer.addPass( bloomPass );
+
+    const mixPass = new ShaderPass(
+        new THREE.ShaderMaterial( {
+            uniforms: {
+                baseTexture: { value: null },
+                bloomTexture: { value: bloomComposer.renderTarget2.texture }
+            },
+            vertexShader: document.getElementById( 'vertexshader' ).textContent,
+            fragmentShader: document.getElementById( 'fragmentshader' ).textContent,
+            defines: {}
+        } ), 'baseTexture'
+    );
+    mixPass.needsSwap = true;
+
+    const outputPass = new OutputPass( THREE.ReinhardToneMapping );
+
+    finalComposer = new EffectComposer( renderer );
+    
+    finalComposer.addPass( renderSun );
+    finalComposer.addPass( renderScene );
+    finalComposer.addPass( mixPass );
+    
+    finalComposer.addPass( outputPass );
+    
+    
+    return
 }
 
 function generatePlanet(planet) {
@@ -217,7 +282,9 @@ function generateStar(starData) {
 
     const geometry = new THREE.SphereGeometry(radius, 500, 250);
     const starMesh = new THREE.Mesh(geometry, materialMap);
-    scene.add(starMesh);
+    const starMesh2 = new THREE.Mesh(geometry, materialMap);
+    sunScene.add(starMesh);
+    scene.add(starMesh2);
     sun = starMesh;
 
     const lensflare = new Lensflare();
@@ -231,12 +298,12 @@ function generateStar(starData) {
 	lensflare.addElement( new LensflareElement( textureFlare3, 120, 0.9 ) );
 	lensflare.addElement( new LensflareElement( textureFlare3, 70, 1 ) );
 
-    light.add(lensflare);
+    // light.add(lensflare);
 
     const spriteMaterial = new THREE.SpriteMaterial({map: textureFlare0});
     sunSprite = new THREE.Sprite(spriteMaterial);
     sunSprite.scale.multiplyScalar(50000);
-    scene.add(sunSprite);
+    //sunScene.add(sunSprite);
 
 }
 
@@ -286,18 +353,46 @@ function animate() {
         sunSprite.visible = true;
     }
 
-    console.log(cameraTarget.position);
+    // console.log(cameraTarget.position);
 
     camera.copy(fakeCamera);
     controls.update();
-    renderer.render(scene, camera);
+
+    //renderer.autoClear = true;
+    //renderer.render(scene, camera);
+    //renderer.autoClear = false;
+
+
+    //renderer.setRenderTarget(renderTarget1);
+    //renderer.render(sunScene, camera);
+
+    bloomComposer.render();
+    finalComposer.render();
+
+    //renderer.setRenderTarget(null);
+    //renderer.render(baseScene, camera);
+
+    // renderer.autoClear = true;
+
+    // renderer.setRenderTarget(renderTarg1);
+    // renderer.render(scene, camera);
+
+    // renderer.autoClear = false;
+
+    // renderer.setRenderTarget(renderTarg2);
+    // renderer.render(sunScene, camera);
+
+    
 }
 
 function onWindowResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
+    console.log(window.innerWidth, window.innerHeight);
 }
+
+
 
 function randInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min)
@@ -308,6 +403,7 @@ window.addEventListener('resize', onWindowResize, false);
 
 init();
 initControls();
+initBloom();
 
 splines = []
 planets = []
