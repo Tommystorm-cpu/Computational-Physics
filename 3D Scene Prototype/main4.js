@@ -1,9 +1,10 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { solarSystem } from './planetData.js';
+import { solarSystem, justPluto } from './planetData.js';
 import { get_angle } from './Theta_Function.js';
+import { Lensflare, LensflareElement } from 'three/addons/objects/Lensflare.js';
 
-let scene, camera, controls, renderer, light, time, splines, planets, cameraTarget, fakeCamera, sun, timeStep, sunLock, cameraRadii;
+let scene, camera, controls, renderer, light, time, splines, planets, cameraTarget, fakeCamera, sun, timeStep, sunLock, cameraRadii, sunSprite;
 
 function init() {
     cameraTarget = 0;
@@ -47,7 +48,7 @@ function init() {
 
     // Axes Helper
     const axesHelper = new THREE.AxesHelper(100);
-    scene.add(axesHelper);
+    // scene.add(axesHelper);
 
     // Skybox
     const loader = new THREE.CubeTextureLoader();
@@ -115,11 +116,11 @@ function generatePlanet(planet) {
     const textureType = planet[6];
     const clouds = planet[7];
 
-    var result = [planet];
+    let result = [planet];
 
     // Planet Texture
-    var mapPath = "";
-    var normalPath = "";
+    let mapPath = "";
+    let normalPath = "";
     if (textureType != "Martian") {
         mapPath = "./textures/Solar System/".concat(textureType).concat(" Map.jpg");
         normalPath = "./textures/Solar System/".concat(textureType).concat(" Normal.jpg");
@@ -150,7 +151,7 @@ function generatePlanet(planet) {
 
     if (clouds == 1) {
         // Clouds Texture
-        var cloudPath = "";
+        let cloudPath = "";
         if (textureType == "Earth") {
             cloudPath = "./textures/Solar System/Earth Clouds.jpg"
         } else {
@@ -179,8 +180,8 @@ function generateOrbit(semi_major, eccen, inclination) {
     const generatedPoints = [];
     const scalar = 2000;
 
-    for (var angle = 0; angle < 2 * Math.PI; angle += 0.01) {
-        const radius = (semi_major * (1 - (Math.pow(eccen, 2)))) / (1 - eccen * Math.cos(angle))
+    for (let angle = 0; angle < 2 * Math.PI; angle += 0.01) {
+        const radius = (semi_major * (1 - (Math.pow(eccen, 2)))) / (1 - eccen * Math.cos(angle));
         let xPos = radius * Math.sin(angle) * scalar;
         const yPos = radius * Math.cos(angle) * scalar;
         const zPos = xPos * Math.sin(inclination * (Math.PI / 180));
@@ -192,7 +193,7 @@ function generateOrbit(semi_major, eccen, inclination) {
     const spline = new THREE.CatmullRomCurve3(generatedPoints);
 
     // Draw Spline
-    const points = spline.getPoints(300);
+    const points = spline.getPoints(1000);
     const splineGeometry = new THREE.BufferGeometry().setFromPoints(points);
     const material = new THREE.LineBasicMaterial({ color: 0xff0000 });
     const curveObject = new THREE.Line(splineGeometry, material);
@@ -219,6 +220,24 @@ function generateStar(starData) {
     scene.add(starMesh);
     sun = starMesh;
 
+    const lensflare = new Lensflare();
+
+    const textureFlare0 = textureLoader.load('./textures/lensflare/lensflare0_alpha.png' );
+	const textureFlare3 = textureLoader.load('./textures/lensflare/lensflare3.png' );
+
+    // lensflare.addElement( new LensflareElement( textureFlare0, 200, 0, light.color ) );
+	lensflare.addElement( new LensflareElement( textureFlare3, 60, 0.6 ) );
+	lensflare.addElement( new LensflareElement( textureFlare3, 70, 0.7 ) );
+	lensflare.addElement( new LensflareElement( textureFlare3, 120, 0.9 ) );
+	lensflare.addElement( new LensflareElement( textureFlare3, 70, 1 ) );
+
+    light.add(lensflare);
+
+    const spriteMaterial = new THREE.SpriteMaterial({map: textureFlare0});
+    sunSprite = new THREE.Sprite(spriteMaterial);
+    sunSprite.scale.multiplyScalar(50000);
+    scene.add(sunSprite);
+
 }
 
 function positionObject(curve, object, orbitTime, planetData) {
@@ -234,7 +253,7 @@ function positionObject(curve, object, orbitTime, planetData) {
 function animate() {
     requestAnimationFrame(animate);
     // Loop through all planets
-    for (var i = 0; i < planets.length; i++) {
+    for (let i = 0; i < planets.length; i++) {
 
         // Rotate planet mesh
         planets[i][1].children[0].rotateY(planets[i][0][4] / 100 * timeStep);
@@ -258,6 +277,16 @@ function animate() {
         cameraPos.add(vertOffest);
         fakeCamera.position.copy(cameraPos);
     }
+
+    if ((camera.position.distanceTo(sun.position) < 50000)) {
+        sunSprite.visible = false;
+    } else if ((cameraTarget != 0) && (cameraTarget.position.distanceTo(sun.position) < 50000)) {
+        sunSprite.visible = false;
+    } else {
+        sunSprite.visible = true;
+    }
+
+    console.log(cameraTarget.position);
 
     camera.copy(fakeCamera);
     controls.update();
@@ -290,7 +319,5 @@ for (const [key, value] of Object.entries(solarSystem)) {
         generateStar(value);
     }
 }
-
-
 
 animate();

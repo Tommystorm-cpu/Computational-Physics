@@ -18,4 +18,9 @@ const solarSystem = {
 
 // Pluto radius 0.187
 
-export {solarSystem};
+const justPluto = {
+    "Sun": [109.076, 1, "Sun"],
+    "Pluto": [39.509, 0.25, 17.5, 0.187, 6.387, 248.348, "Pluto", 0]
+}
+
+export {solarSystem, justPluto};
