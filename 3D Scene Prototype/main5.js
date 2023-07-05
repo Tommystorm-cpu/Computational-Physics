@@ -129,14 +129,16 @@ function initControls() {
         scene.remove(sun);
         scene.remove(sunSprite);
 
+        let c = -1;
         for (const [key, value] of Object.entries(solarSystem)) {
             if (key != Object.keys(solarSystem)[0]) {
-                const splineOrbit = generateOrbit(value[0], value[1], value[2], accurateScale);
+                const splineOrbit = generateOrbit(value[0], value[1], value[2], accurateScale, colours[c]);
                 splines.push(splineOrbit[0]);
                 orbitObjects.push(splineOrbit[1]);
             } else {
                 generateStar(value, accurateScale);
             }
+            c++;
 }
 
     };
@@ -260,7 +262,7 @@ function generatePlanet(planet) {
     return result;
 }
 
-function generateOrbit(semi_major, eccen, inclination, accurate) {
+function generateOrbit(semi_major, eccen, inclination, accurate, colour) {
     // Generate spline
     const generatedPoints = [];
     let scalar = 1
@@ -289,7 +291,7 @@ function generateOrbit(semi_major, eccen, inclination, accurate) {
     }
     const points = spline.getPoints(resolution);
     const splineGeometry = new THREE.BufferGeometry().setFromPoints(points);
-    const material = new THREE.LineBasicMaterial({ color: 0xff0000 });
+    const material = new THREE.LineBasicMaterial({ color: colour });
     const curveObject = new THREE.Line(splineGeometry, material);
     scene.add(curveObject);
 
@@ -436,8 +438,6 @@ function onWindowResize() {
     console.log(window.innerWidth, window.innerHeight);
 }
 
-
-
 function randInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min)
 }
@@ -452,15 +452,19 @@ orbitObjects = []
 init();
 initControls();
 
+const colours =  [0xd10000, 0xd17300, 0x2ad100, 0x00d1ca, 0x005bd1, 0x1500d1, 0x6f00d1, 0xd100c3, 0xd10046];
+
+let i = -1;
 for (const [key, value] of Object.entries(solarSystem)) {
     if (key != Object.keys(solarSystem)[0]) {
-        const splineOrbit = generateOrbit(value[0], value[1], value[2], false);
+        const splineOrbit = generateOrbit(value[0], value[1], value[2], false, colours[i]);
         splines.push(splineOrbit[0]);
         orbitObjects.push(splineOrbit[1]);
         planets.push(generatePlanet(value));
     } else {
         generateStar(value, false);
     }
+    i++;
 }
 
 //scene.scale.set(0.0001, 0.0001, 0.0001);
