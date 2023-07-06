@@ -126,10 +126,10 @@ function initControls() {
     scaleButton.onclick = () => {
         accurateScale = !accurateScale;
         
-        if (accurateScale) {
+        if (accurateScale && !labelBool) {
             labelBool = true;
             initLabels();
-        } else {
+        } else if (!accurateScale && labelBool) {
             labelBool = false;
             initLabels();
         }
@@ -193,6 +193,12 @@ function initControls() {
         if (cameraTarget != 0) {
             sunLock = !sunLock;
         };
+    };
+
+    const labelButton = document.getElementById("labelButton");
+    labelButton.onclick = () => {
+        labelBool = !labelBool;
+        initLabels();
     };
 }
 
