@@ -187,6 +187,13 @@ function initControls() {
             controls.enablePan = true;
         };
     };
+
+    const sunButton = document.getElementById("sunLock");
+    sunButton.onclick = () => {
+        if (cameraTarget != 0) {
+            sunLock = !sunLock;
+        };
+    };
 }
 
 function initLabels() {
@@ -492,19 +499,6 @@ function animate() {
 
     sun.visible = !sunSprite.visible;
 
-    /*
-    raycaster.setFromCamera( pointer, camera );
-	// calculate objects intersecting the picking 
-    if (frameCount % 30 == 0) {
-	    const intersects = raycaster.intersectObjects( planetObjects );
-        for ( let i = 0; i < intersects.length; i ++ ) {
-
-            //
-    
-        }
-    }
-    frameCount++; */
-
     camera.copy(fakeCamera);
     controls.update();
 
@@ -529,30 +523,6 @@ function onMouseDown(event)  {
 	pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 
     lockOn();
-
-    /*
-    raycaster.setFromCamera( pointer, camera );
-    const intersects = raycaster.intersectObjects( planetObjects );
-        for ( let i = 0; i < intersects.length; i ++ ) {
-
-            let  planet = 0;
-            for (let t = 0;  t < planetObjects.length; t ++) {
-                if (intersects[i].object == planetObjects[t]) {
-                    planet = planets[t];
-                };
-            };
-
-            controls.reset();
-            cameraTarget = planet[1];
-            cameraTarget.add(camera);
-            cameraRadii = planet[0][3];
-            const tempRadius = planet[0][3] * 300;
-            const startPos = new THREE.Vector3(tempRadius, tempRadius, tempRadius);
-            fakeCamera.position.copy(startPos);
-            controls.enablePan = false;
-            sunLock = false;
-    
-        } */
 };
 
 function onTouchDown(event) {
