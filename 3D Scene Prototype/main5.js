@@ -561,7 +561,9 @@ function onMouseDown()  {
 
 window.addEventListener('resize', onWindowResize, false);
 window.addEventListener( 'pointermove', onPointerMove );
+window.addEventListener('touchmove', onMouseDown);
 window.addEventListener('mousedown', onMouseDown);
+window.addEventListener('touchstart', onMouseDown);
 
 splines = []
 planets = []
