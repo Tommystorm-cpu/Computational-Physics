@@ -546,22 +546,24 @@ function lockOn(){
     raycaster.setFromCamera( pointer, camera );
     const intersects = raycaster.intersectObjects( planetObjects );
     if (intersects[0] != null) {
-        let  planet = 0;
+        let  planet;
         for (let t = 0;  t < planetObjects.length; t ++) {
             if (intersects[0].object == planetObjects[t]) {
                 planet = planets[t];
             };
         };
 
-        controls.reset();
-        cameraTarget = planet[1];
-        cameraTarget.add(camera);
-        cameraRadii = planet[0][3];
-        const tempRadius = planet[0][3] * 300;
-        const startPos = new THREE.Vector3(tempRadius, tempRadius, tempRadius);
-        fakeCamera.position.copy(startPos);
-        controls.enablePan = false;
-        sunLock = false;
+        if (cameraTarget != planet[1]) {
+            controls.reset();
+            cameraTarget = planet[1];
+            cameraTarget.add(camera);
+            cameraRadii = planet[0][3];
+            const tempRadius = planet[0][3] * 300;
+            const startPos = new THREE.Vector3(tempRadius, tempRadius, tempRadius);
+            fakeCamera.position.copy(startPos);
+            controls.enablePan = false;
+            sunLock = false;
+        };
     };
 }
 
