@@ -6,7 +6,7 @@ import { Lensflare, LensflareElement } from 'three/addons/objects/Lensflare.js';
 import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
 
 let scene, camera, controls, renderer, light, time, splines, planets, cameraTarget, fakeCamera, sun, timeStep, sunLock, cameraRadii, sunSprite;
-let accurateScale, orbitObjects, labelRenderer, labelBool, labelList, raycaster, pointer, planetObjects
+let accurateScale, orbitObjects, labelRenderer, labelBool, labelList, raycaster, pointer, planetObjects, labelRadial, sunRadial, focusDropDown
 
 function init() {
     cameraTarget = 0;
@@ -25,6 +25,7 @@ function init() {
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     document.body.appendChild(renderer.domElement);
+    renderer.domElement.id = "solarCanvas";
 
     // Camera
     camera = new THREE.PerspectiveCamera(
@@ -87,25 +88,10 @@ function init() {
 
         if (isFinite(key)) {
             if (key === "0") {
-                sunLock = false;
-                if (cameraTarget == 0) {
-                    controls.reset();
-                } else {
-                    cameraTarget.remove(camera);
-                    fakeCamera.position.add(cameraTarget.position);
-                    cameraTarget = 0;
-                    controls.enablePan = true;
-                };
+                lockOn(null, true);
             } else {
-                controls.reset();
-                cameraTarget = planets[parseInt(key) - 1][1];
-                cameraTarget.add(camera);
-                cameraRadii = planets[parseInt(key) - 1][0][3];
-                const tempRadius = planets[parseInt(key) - 1][0][3] * 300;
-                const startPos = new THREE.Vector3(tempRadius, tempRadius, tempRadius);
-                fakeCamera.position.copy(startPos);
-                controls.enablePan = false;
-                sunLock = false;
+                const planet = planets[parseInt(key) - 1];
+                lockOn(planet, false);
             };
         }
         if (key === "s") {
@@ -122,61 +108,14 @@ function init() {
 }
 
 function initControls() {
-    const scaleButton = document.getElementById("scaleButton");
-    scaleButton.onclick = () => {
-        accurateScale = !accurateScale;
-        
-        if (accurateScale && !labelBool) {
-            labelBool = true;
-            initLabels();
-        } else if (!accurateScale && labelBool) {
-            labelBool = false;
-            initLabels();
-        }
-
-        for (var i = 0; i < orbitObjects.length; i++) {
-            scene.remove(orbitObjects[i])
-        }
-
-        for (var i = 0; i < planets.length; i++) {
-            if (accurateScale) {
-                const scale = 1/200
-                planets[i][1].scale.copy(new THREE.Vector3(scale, scale, scale));
-                if (planets[i].length == 3) {
-                    planets[i][2].scale.copy(new THREE.Vector3(scale*1.01, scale*1.01, scale*1.01));
-                }
-            } else {
-                planets[i][1].scale.copy(new THREE.Vector3(1, 1, 1));
-            }
-        }
-
-        splines = [];
-        orbitObjects = [];
-
-        scene.remove(sun);
-        scene.remove(sunSprite);
-
-        let c = -1;
-        for (const [key, value] of Object.entries(solarSystem)) {
-            if (key != Object.keys(solarSystem)[0]) {
-                const splineOrbit = generateOrbit(value[0], value[1], value[2], accurateScale, colours[c]);
-                splines.push(splineOrbit[0]);
-                orbitObjects.push(splineOrbit[1]);
-            } else {
-                generateStar(value, accurateScale);
-            }
-            c++;
-}
-
-    };
-
     const timeSlider = document.getElementById("timeSlider");
     timeSlider.oninput = (event) => {
         timeStep = event.target.value;
     };
 
     const centreButton = document.getElementById("centreButton");
-    centreButton.onclick = () => {
+    centreButton.onclick = (event) => {
+        //event.stopPropagation();
         sunLock = false;
         if (cameraTarget == 0) {
             controls.reset();
@@ -188,21 +127,51 @@ function initControls() {
         };
     };
 
-    const sunButton = document.getElementById("sunLock");
-    sunButton.onclick = () => {
-        if (cameraTarget != 0) {
-            sunLock = !sunLock;
-        };
+    sunRadial = document.getElementById("sunRadial");
+    sunRadial.onchange = () => {
+        sunLock = sunRadial.checked;
     };
 
-    const labelButton = document.getElementById("labelButton");
-    labelButton.onclick = () => {
-        labelBool = !labelBool;
+    labelRadial = document.getElementById("labelRadial");
+    labelRadial.onchange = (event) => {
+        //event.stopPropagation();
+        labelBool = labelRadial.checked;
         initLabels();
+    };
+
+    const scalingRadial = document.getElementById("scalingRadial");
+    scalingRadial.onchange = () => {
+        accurateScale = scalingRadial.checked;
+        updateScale();
+    };
+
+    const planetNames = []
+    focusDropDown = document.getElementById("focusDropDown");
+    for (let i = 0; i < planets.length; i++) {
+        const optionElement = document.createElement("option")
+        const textNode = document.createTextNode(planets[i][0][6]);
+        planetNames.push(planets[i][0][6]);
+        optionElement.appendChild(textNode);
+        focusDropDown.appendChild(optionElement);
+    }
+
+    focusDropDown.onchange = () => {
+        let planetIndex = -1;
+        for (let v = 0; v < planetNames.length; v++) {
+            if (focusDropDown.value == planetNames[v]) {
+                planetIndex = v;
+            };
+        };
+        if (planetIndex == -1) {
+            lockOn(null, true);
+        } else {
+            lockOn(planets[planetIndex], false);
+        };
     };
 }
 
 function initLabels() {
+    labelRadial.checked = labelBool;
     if (labelBool) {
         for (var i = 0; i < planets.length; i++) {
             const planetDiv = document.createElement( 'div' );
@@ -223,6 +192,50 @@ function initLabels() {
         };
         labelList = [];
     }
+}
+
+function updateScale() {
+    if (accurateScale && !labelBool) {
+        labelBool = true;
+        initLabels();
+    } else if (!accurateScale && labelBool) {
+        labelBool = false;
+        initLabels();
+    }
+
+    for (var i = 0; i < orbitObjects.length; i++) {
+        scene.remove(orbitObjects[i])
+    }
+
+    for (var i = 0; i < planets.length; i++) {
+        if (accurateScale) {
+            const scale = 1/200
+            planets[i][1].scale.copy(new THREE.Vector3(scale, scale, scale));
+            if (planets[i].length == 3) {
+                planets[i][2].scale.copy(new THREE.Vector3(scale*1.01, scale*1.01, scale*1.01));
+            }
+        } else {
+            planets[i][1].scale.copy(new THREE.Vector3(1, 1, 1));
+        }
+    }
+
+    splines = [];
+    orbitObjects = [];
+
+    scene.remove(sun);
+    scene.remove(sunSprite);
+
+    let c = -1;
+    for (const [key, value] of Object.entries(solarSystem)) {
+        if (key != Object.keys(solarSystem)[0]) {
+            const splineOrbit = generateOrbit(value[0], value[1], value[2], accurateScale, colours[c]);
+            splines.push(splineOrbit[0]);
+            orbitObjects.push(splineOrbit[1]);
+        } else {
+            generateStar(value, accurateScale);
+        }
+        c++;
+    };
 }
 
 function bend(g, rMin, rMax) {
@@ -505,6 +518,13 @@ function animate() {
 
     sun.visible = !sunSprite.visible;
 
+    if (cameraTarget == 0) {
+        sunRadial.disabled = "disabled";
+    } else {
+        sunRadial.disabled = "";
+    }
+    sunRadial.checked = sunLock;
+
     camera.copy(fakeCamera);
     controls.update();
 
@@ -517,7 +537,6 @@ function onWindowResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
-    console.log(window.innerWidth, window.innerHeight);
 }
 
 function randInt(min, max) {
@@ -528,7 +547,9 @@ function onMouseDown(event)  {
     pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
 	pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 
-    lockOn();
+    if (!event.target.classList.contains("blockPlanetFocus")) {
+        raycast();
+    }
 };
 
 function onTouchDown(event) {
@@ -539,10 +560,12 @@ function onTouchDown(event) {
     pointer.x = ( x / window.innerWidth ) * 2 - 1;
 	pointer.y = - ( y / window.innerHeight ) * 2 + 1;
 
-    lockOn();
+    if (!event.target.classList.contains("blockPlanetFocus")) {
+        raycast();
+    }
 };
 
-function lockOn(){
+function raycast() {
     raycaster.setFromCamera( pointer, camera );
     const intersects = raycaster.intersectObjects( planetObjects );
     if (intersects[0] != null) {
@@ -552,7 +575,13 @@ function lockOn(){
                 planet = planets[t];
             };
         };
+        lockOn(planet, false);
+    };
+};
 
+function lockOn(planet, sunBool){
+    if (!sunBool) {
+        focusDropDown.value = planet[0][6];
         if (cameraTarget != planet[1]) {
             controls.reset();
             cameraTarget = planet[1];
@@ -564,12 +593,21 @@ function lockOn(){
             controls.enablePan = false;
             sunLock = false;
         };
+    } else {
+        focusDropDown.value = "Sun";
+        sunLock = false;
+        if (cameraTarget == 0) {
+            controls.reset();
+        } else {
+            cameraTarget.remove(camera);
+            fakeCamera.position.add(cameraTarget.position);
+            cameraTarget = 0;
+            controls.enablePan = true;
+        };
     };
 }
 
-window.addEventListener('resize', onWindowResize, false);
-window.addEventListener('mousedown', onMouseDown);
-window.addEventListener('touchstart', onTouchDown);
+init();
 
 splines = []
 planets = []
@@ -578,8 +616,10 @@ planetObjects = []
 
 labelList = [];
 
-init();
-initControls();
+const domCanvas = document.getElementById("solarCanvas");
+window.addEventListener('resize', onWindowResize, false);
+window.addEventListener('mousedown', onMouseDown);
+window.addEventListener('touchstart', onTouchDown);
 
 const colours =  [0xd10000, 0xd17300, 0x2ad100, 0x00d1ca, 0x005bd1, 0x1500d1, 0x6f00d1, 0xd100c3, 0xd10046];
 const cssColours = ["#d10000", "#d17300", "#2ad100", "#00d1ca", "#005bd1", "#1500d1", "#6f00d1", "#d100c3", "#d10046"];
@@ -597,6 +637,7 @@ for (const [key, value] of Object.entries(solarSystem)) {
     i++;
 }
 
+initControls();
 initLabels();
 
 //scene.scale.set(0.0001, 0.0001, 0.0001);
