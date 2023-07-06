@@ -492,7 +492,7 @@ function animate() {
 
     sun.visible = !sunSprite.visible;
 
-
+    /*
     raycaster.setFromCamera( pointer, camera );
 	// calculate objects intersecting the picking 
     if (frameCount % 30 == 0) {
@@ -503,7 +503,7 @@ function animate() {
     
         }
     }
-    frameCount++;
+    frameCount++; */
 
     camera.copy(fakeCamera);
     controls.update();
@@ -520,21 +520,17 @@ function onWindowResize() {
     console.log(window.innerWidth, window.innerHeight);
 }
 
-function onPointerMove( event ) {
-
-	// calculate pointer position in normalized device coordinates
-	// (-1 to +1) for both components
-
-	pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-	pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-
-}
-
 function randInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min)
 }
 
-function onMouseDown()  {
+function onMouseDown(event)  {
+    pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+	pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
+    lockOn();
+
+    /*
     raycaster.setFromCamera( pointer, camera );
     const intersects = raycaster.intersectObjects( planetObjects );
         for ( let i = 0; i < intersects.length; i ++ ) {
@@ -556,14 +552,46 @@ function onMouseDown()  {
             controls.enablePan = false;
             sunLock = false;
     
-        }
+        } */
 };
 
+function onTouchDown(event) {
+    var evt = (typeof event.originalEvent === 'undefined') ? event : event.originalEvent;
+    var touch = evt.touches[0] || evt.changedTouches[0];
+    const x = touch.pageX;
+    const y = touch.pageY;
+    pointer.x = ( x / window.innerWidth ) * 2 - 1;
+	pointer.y = - ( y / window.innerHeight ) * 2 + 1;
+
+    lockOn();
+};
+
+function lockOn(){
+    raycaster.setFromCamera( pointer, camera );
+    const intersects = raycaster.intersectObjects( planetObjects );
+    if (intersects[0] != null) {
+        let  planet = 0;
+        for (let t = 0;  t < planetObjects.length; t ++) {
+            if (intersects[0].object == planetObjects[t]) {
+                planet = planets[t];
+            };
+        };
+
+        controls.reset();
+        cameraTarget = planet[1];
+        cameraTarget.add(camera);
+        cameraRadii = planet[0][3];
+        const tempRadius = planet[0][3] * 300;
+        const startPos = new THREE.Vector3(tempRadius, tempRadius, tempRadius);
+        fakeCamera.position.copy(startPos);
+        controls.enablePan = false;
+        sunLock = false;
+    };
+}
+
 window.addEventListener('resize', onWindowResize, false);
-window.addEventListener( 'pointermove', onPointerMove );
-window.addEventListener('touchmove', onMouseDown);
 window.addEventListener('mousedown', onMouseDown);
-window.addEventListener('touchstart', onMouseDown);
+window.addEventListener('touchstart', onTouchDown);
 
 splines = []
 planets = []
