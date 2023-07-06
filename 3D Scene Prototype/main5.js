@@ -72,7 +72,7 @@ function init() {
     document.body.appendChild( labelRenderer.domElement );
 
     // Controls
-    controls = new OrbitControls(camera, labelRenderer.domElement);
+    // controls = new OrbitControls(camera, labelRenderer.domElement);
 
     fakeCamera = camera.clone();
     controls = new OrbitControls(fakeCamera, labelRenderer.domElement);
