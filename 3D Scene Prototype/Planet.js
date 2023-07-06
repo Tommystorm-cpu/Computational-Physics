@@ -18,6 +18,7 @@ export class Planet {
         this.mesh;
         this.meshClouds;
         this.group;
+        this.currentOrbitSpline;
 
         this.orbitSpline;
         this.orbitMesh;
@@ -27,6 +28,8 @@ export class Planet {
         this.init();
         this.initOrbit(orbitColour);
         this.initScaledOrbit(orbitColour);
+
+        this.currentOrbitSpline = this.orbitSpline;
     }
 
     init() {
@@ -201,13 +204,14 @@ export class Planet {
 
         this.scaledOrbitSpline = spline;
         this.scaledOrbitMesh = curveObject;
+        this.scaledOrbitMesh.visible = false;
     }
 
     updatePosition (orbitTime) {
         const angle = GetAngle(this.eccen, this.orbitPeriod, orbitTime);
         let pos = angle / (2 * Math.PI);
         pos = pos - Math.floor(pos)
-        const position = this.orbitSpline.getPointAt(pos);
+        const position = this.currentOrbitSpline.getPointAt(pos);
         this.group.position.copy(position);
     }
 
@@ -215,7 +219,7 @@ export class Planet {
         const angle = GetAngle(this.eccen, this.orbitPeriod, orbitTime);
         let pos = angle / (2 * Math.PI);
         pos = pos - Math.floor(pos)
-        const position = this.orbitSpline.getPointAt(pos);
+        const position = this.currentOrbitSpline.getPointAt(pos);
         this.meshClouds.position.copy(position);
     }
 
@@ -229,6 +233,18 @@ export class Planet {
         if (this.meshClouds) {
             this.meshClouds.rotateY((this.rotatePeriod / 100) * 1.5 * timeStep);
             this.updateClouds(time);
+        }
+    }
+
+    toggleAccurateOrbit (isAccurate) {
+        if (isAccurate) {
+            this.scaledOrbitMesh.visible = true;
+            this.orbitMesh.visible = false;
+            this.currentOrbitSpline = this.scaledOrbitSpline;
+        } else {
+            this.scaledOrbitMesh.visible = false;
+            this.orbitMesh.visible = true;
+            this.currentOrbitSpline = this.orbitSpline;
         }
     }
 }

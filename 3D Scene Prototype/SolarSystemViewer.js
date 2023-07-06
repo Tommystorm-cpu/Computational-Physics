@@ -29,6 +29,12 @@ export class SolarSystemViewer {
         this.createControls();
         //this.createKeyHandler();
         this.createPlanets();
+
+        window.toggleOrbit = (accurate) => {
+            this.planets.forEach(planet => {
+                planet.toggleAccurateOrbit(accurate);
+            })
+        }
     }
 
     init3d () {
@@ -228,7 +234,7 @@ export class SolarSystemViewer {
                 this.scene.add(planet.meshClouds);
             }
             this.scene.add(planet.orbitMesh);
-            //this.scene.add(planet.scaledOrbitMesh);
+            this.scene.add(planet.scaledOrbitMesh);
         });
     }
 
@@ -245,6 +251,6 @@ export class SolarSystemViewer {
         this.renderer.render(this.scene, this.camera);
 
         this.time += this.timeStep/50;
-        //labelRenderer.render( scene, camera );
+        this.labelRenderer.render( this.scene, this.camera );
     }
 }
