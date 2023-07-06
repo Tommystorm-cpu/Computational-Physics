@@ -6,7 +6,7 @@ import { Lensflare, LensflareElement } from 'three/addons/objects/Lensflare.js';
 import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
 
 let scene, camera, controls, renderer, light, time, splines, planets, cameraTarget, fakeCamera, sun, timeStep, sunLock, cameraRadii, sunSprite;
-let accurateScale, orbitObjects, labelRenderer, labelBool, labelList
+let accurateScale, orbitObjects, labelRenderer, labelBool, labelList, raycaster, pointer, planetObjects
 
 function init() {
     cameraTarget = 0;
@@ -77,7 +77,9 @@ function init() {
     controls = new OrbitControls(fakeCamera, labelRenderer.domElement);
     // controls.enablePan = false;
 
-    
+    // Raycasting
+    raycaster = new THREE.Raycaster();
+    pointer = new THREE.Vector2();
 
     document.addEventListener('keyup', (event) => {
 
@@ -172,6 +174,19 @@ function initControls() {
     timeSlider.oninput = (event) => {
         timeStep = event.target.value;
     };
+
+    const centreButton = document.getElementById("centreButton");
+    centreButton.onclick = () => {
+        sunLock = false;
+        if (cameraTarget == 0) {
+            controls.reset();
+        } else {
+            cameraTarget.remove(camera);
+            fakeCamera.position.add(cameraTarget.position);
+            cameraTarget = 0;
+            controls.enablePan = true;
+        };
+    };
 }
 
 function initLabels() {
@@ -248,6 +263,8 @@ function generatePlanet(planet) {
     meshPlanet.castShadow = true;
     meshPlanet.receiveShadow = true;
 
+    planetObjects.push(meshPlanet);
+
     // Point Geometry (for camera locking)
     const pointgeo = new THREE.Points();
     const group = new THREE.Group();
@@ -306,6 +323,8 @@ function generatePlanet(planet) {
         scene.add(meshClouds);
         result.push(meshClouds);
     }
+
+    //planetObjects.push(result[1]);
 
     return result;
 }
@@ -473,6 +492,19 @@ function animate() {
 
     sun.visible = !sunSprite.visible;
 
+
+    raycaster.setFromCamera( pointer, camera );
+	// calculate objects intersecting the picking 
+    if (frameCount % 30 == 0) {
+	    const intersects = raycaster.intersectObjects( planetObjects );
+        for ( let i = 0; i < intersects.length; i ++ ) {
+
+            //
+    
+        }
+    }
+    frameCount++;
+
     camera.copy(fakeCamera);
     controls.update();
 
@@ -488,16 +520,53 @@ function onWindowResize() {
     console.log(window.innerWidth, window.innerHeight);
 }
 
+function onPointerMove( event ) {
+
+	// calculate pointer position in normalized device coordinates
+	// (-1 to +1) for both components
+
+	pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+	pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
+}
+
 function randInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min)
 }
 
+function onMouseDown()  {
+    raycaster.setFromCamera( pointer, camera );
+    const intersects = raycaster.intersectObjects( planetObjects );
+        for ( let i = 0; i < intersects.length; i ++ ) {
+
+            let  planet = 0;
+            for (let t = 0;  t < planetObjects.length; t ++) {
+                if (intersects[i].object == planetObjects[t]) {
+                    planet = planets[t];
+                };
+            };
+
+            controls.reset();
+            cameraTarget = planet[1];
+            cameraTarget.add(camera);
+            cameraRadii = planet[0][3];
+            const tempRadius = planet[0][3] * 300;
+            const startPos = new THREE.Vector3(tempRadius, tempRadius, tempRadius);
+            fakeCamera.position.copy(startPos);
+            controls.enablePan = false;
+            sunLock = false;
+    
+        }
+};
 
 window.addEventListener('resize', onWindowResize, false);
+window.addEventListener( 'pointermove', onPointerMove );
+window.addEventListener('mousedown', onMouseDown);
 
 splines = []
 planets = []
 orbitObjects = []
+planetObjects = []
 
 labelList = [];
 
@@ -523,4 +592,6 @@ for (const [key, value] of Object.entries(solarSystem)) {
 initLabels();
 
 //scene.scale.set(0.0001, 0.0001, 0.0001);
+
+let frameCount = 0;
 animate();
