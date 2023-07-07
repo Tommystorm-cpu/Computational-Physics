@@ -59,7 +59,7 @@ export class Planet {
         const textureLoader = new THREE.TextureLoader();
         this.solarSystemViewer.planetTextures++;
         const materialNormalMap = new THREE.MeshPhongMaterial({
-            map: textureLoader.load(mapPath, () => {this.solarSystemViewer.planetTextureLoad()}),
+            map: textureLoader.load(mapPath, () => {this.solarSystemViewer.planetTextureLoad()}, null, () => {this.solarSystemViewer.planetTextureLoad()}),
             normalMap: textureLoader.load(normalPath)
         });
         materialNormalMap.map.colorSpace = THREE.SRGBColorSpace;
@@ -88,7 +88,6 @@ export class Planet {
                 }
                 
             let ringGeometry = new THREE.PlaneGeometry(1, 1, 72, 3);
-            //bend(ringGeometry, ringParams.rMin, ringParams.rMax);
             BendPlane(ringGeometry, ringParams.rMin, ringParams.rMax);
             this.solarSystemViewer.planetTextures++;
             let ringMaterial = new THREE.MeshPhongMaterial({map: new THREE.TextureLoader().load(ringPath, tex => {
@@ -96,6 +95,8 @@ export class Planet {
                 tex.wrapT = THREE.RepeatWrapping;
                 tex.repeat.set( ringParams.texRepeat, 1 );
                 this.solarSystemViewer.planetTextureLoad();
+                null;
+                () => this.solarSystemViewer.planetTextureLoad();
             })});
             ringMaterial.side = THREE.DoubleSide;
             let ringMesh = new THREE.Mesh(ringGeometry, ringMaterial);
@@ -110,9 +111,6 @@ export class Planet {
         }
 
         this.group = group;
-
-        //scene.add(group);
-        //result.push(group);
 
         if (this.hasClouds) {
             // Clouds Texture

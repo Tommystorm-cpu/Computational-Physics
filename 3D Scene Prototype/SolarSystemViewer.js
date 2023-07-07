@@ -86,7 +86,12 @@ export class SolarSystemViewer {
         this.planetTextures++;
         const loader = new THREE.CubeTextureLoader();
         loader.setPath('Skybox/');
-        const textureCube = loader.load(['right.png', 'left.png', 'top.png', 'bottom.png', 'front.png', 'back.png'], () => this.planetTextureLoad());
+        const textureCube = loader.load(
+            ['right.png', 'left.png', 'top.png', 'bottom.png', 'front.png', 'back.png'],
+            () => this.planetTextureLoad(), 
+            null, 
+            () => this.solarSystemViewer.planetTextureLoad()
+        );
         this.scene.background = textureCube;
     }
 

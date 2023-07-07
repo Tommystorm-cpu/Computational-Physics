@@ -65,6 +65,14 @@ export class InputHandler {
             if (key === "l") {
                 this.solarSystemViewer.toggleLabels(!this.labelRadial.checked);
             }
+
+            if (key === "h") {
+                document.getElementById("controlPanel").style.display = "none";
+
+                document.getElementById("timeSliderContainer").style.display = "none !important";
+                document.getElementById("timeLabel").style.display = "none !important";
+                document.getElementById("timeSlider").style.display = "none !important";
+            }
         });
     }
 
