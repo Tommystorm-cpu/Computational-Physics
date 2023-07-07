@@ -2,6 +2,8 @@ import * as THREE from 'three';
 import { BendPlane } from "./BendPlane.js";
 import { GetAngle } from "./GetAngle.js";
 import { RandInt } from "./RandInt.js";
+import { CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+import { ConvertColour } from './ConvertColour.js';
 
 export class Planet {
     constructor (name, semiMajor, eccen, inclination, radius, rotatePeriod, orbitPeriod, textureType, hasClouds, axisTilt, orbitColour) {
@@ -19,6 +21,7 @@ export class Planet {
         this.meshClouds;
         this.group;
         this.currentOrbitSpline;
+        this.label;
 
         this.orbitSpline;
         this.orbitMesh;
@@ -28,6 +31,7 @@ export class Planet {
         this.init();
         this.initOrbit(orbitColour);
         this.initScaledOrbit(orbitColour);
+        this.createLabel(orbitColour)
 
         this.currentOrbitSpline = this.orbitSpline;
     }
@@ -207,6 +211,21 @@ export class Planet {
         this.scaledOrbitMesh.visible = false;
     }
 
+    createLabel (colour) {
+        const planetDiv = document.createElement( 'div' );
+        planetDiv.className = 'label';
+        planetDiv.textContent = this.name;
+        planetDiv.style.backgroundColor = 'transparent';
+        planetDiv.style.color = ConvertColour(colour);
+
+        const planetLabel = new CSS2DObject( planetDiv );
+        const distance = this.radius  * 150;
+        planetLabel.position.set(distance, distance, distance);
+        this.group.add(planetLabel);
+        this.label = planetLabel;
+        this.label.visible = false;
+    }
+
     updatePosition (orbitTime) {
         const angle = GetAngle(this.eccen, this.orbitPeriod, orbitTime);
         let pos = angle / (2 * Math.PI);
@@ -241,10 +260,27 @@ export class Planet {
             this.scaledOrbitMesh.visible = true;
             this.orbitMesh.visible = false;
             this.currentOrbitSpline = this.scaledOrbitSpline;
+
+
+            let scale;
+            if (this.name == "Pluto") {
+                scale = 1/25;
+            } else {
+                scale = 1/200;
+            }
+            this.group.scale.copy(new THREE.Vector3(scale, scale, scale));
+            if (this.hasClouds) {
+                this.meshClouds.scale.copy(new THREE.Vector3(scale*1.01, scale*1.01, scale*1.01));
+            }
         } else {
             this.scaledOrbitMesh.visible = false;
             this.orbitMesh.visible = true;
             this.currentOrbitSpline = this.orbitSpline;
+
+            this.group.scale.copy(new THREE.Vector3(1, 1, 1));
+            if (this.hasClouds) {
+                this.meshClouds.scale.copy(new THREE.Vector3(1.01, 1.01, 1.01));
+            }
         }
     }
 }

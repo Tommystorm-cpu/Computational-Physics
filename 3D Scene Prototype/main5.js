@@ -185,11 +185,11 @@ function initLabels() {
             planetLabel.position.set(distance, distance, distance);
             planets[i][1].add( planetLabel );
             labelList.push(planetLabel);
-        };
+        }
     } else {
         for (var i = 0; i < planets.length; i++) {
             planets[i][1].remove(labelList[i]);
-        };
+        }
         labelList = [];
     }
 }
@@ -530,7 +530,7 @@ function animate() {
 
     renderer.render(scene, camera);
 
-    labelRenderer.render( scene, camera );
+    labelRenderer.render(scene, camera);
 }
 
 function onWindowResize() {
