@@ -6,7 +6,8 @@ import { CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
 import { ConvertColour } from './ConvertColour.js';
 
 export class Planet {
-    constructor (name, semiMajor, eccen, inclination, radius, rotatePeriod, orbitPeriod, textureType, hasClouds, axisTilt, orbitColour) {
+    constructor (solarSystemViewer, name, semiMajor, eccen, inclination, radius, rotatePeriod, orbitPeriod, textureType, hasClouds, axisTilt, orbitColour) {
+        this.solarSystemViewer = solarSystemViewer;
         this.name = name;
         this.semiMajor = semiMajor;
         this.eccen = eccen;
@@ -38,10 +39,6 @@ export class Planet {
 
     init() {
         const radius = this.radius * 200;
-        //const textureType = planet[6];
-        //const clouds = planet[7];
-
-        // let result = [planet];
 
         // Planet Texture
         let mapPath = "";
@@ -60,8 +57,9 @@ export class Planet {
 
         const variant = RandInt(1, 10);
         const textureLoader = new THREE.TextureLoader();
+        this.solarSystemViewer.planetTextures++;
         const materialNormalMap = new THREE.MeshPhongMaterial({
-            map: textureLoader.load(mapPath),
+            map: textureLoader.load(mapPath, () => {this.solarSystemViewer.planetTextureLoad()}),
             normalMap: textureLoader.load(normalPath)
         });
         materialNormalMap.map.colorSpace = THREE.SRGBColorSpace;
@@ -72,7 +70,6 @@ export class Planet {
         meshPlanet.castShadow = true;
         meshPlanet.receiveShadow = true;
 
-        //planetObjects.push(meshPlanet);
         this.mesh = meshPlanet;
 
 
@@ -93,10 +90,12 @@ export class Planet {
             let ringGeometry = new THREE.PlaneGeometry(1, 1, 72, 3);
             //bend(ringGeometry, ringParams.rMin, ringParams.rMax);
             BendPlane(ringGeometry, ringParams.rMin, ringParams.rMax);
+            this.solarSystemViewer.planetTextures++;
             let ringMaterial = new THREE.MeshPhongMaterial({map: new THREE.TextureLoader().load(ringPath, tex => {
                 tex.wrapS = THREE.RepeatWrapping;
                 tex.wrapT = THREE.RepeatWrapping;
                 tex.repeat.set( ringParams.texRepeat, 1 );
+                this.solarSystemViewer.planetTextureLoad();
             })});
             ringMaterial.side = THREE.DoubleSide;
             let ringMesh = new THREE.Mesh(ringGeometry, ringMaterial);

@@ -22,6 +22,8 @@ export class SolarSystemViewer {
         this.planets = new Map();
         this.star;
         this.light;
+        this.loaded = false;
+        this.planetTextures = 0;
 
         this.init3d();
         this.createLabelRenderer();
@@ -81,9 +83,10 @@ export class SolarSystemViewer {
     }
 
     loadSkybox () {
+        this.planetTextures++;
         const loader = new THREE.CubeTextureLoader();
         loader.setPath('Skybox/');
-        const textureCube = loader.load(['right.png', 'left.png', 'top.png', 'bottom.png', 'front.png', 'back.png']);
+        const textureCube = loader.load(['right.png', 'left.png', 'top.png', 'bottom.png', 'front.png', 'back.png'], () => this.planetTextureLoad());
         this.scene.background = textureCube;
     }
 
@@ -118,15 +121,15 @@ export class SolarSystemViewer {
 
     createPlanets () {
         const planets = this.planets;
-        planets.set(1, new Planet("Mercury", 0.387, 0.21, 7, 0.383, 58.646, 0.243, "Mercury", 0, 0, 0xd10000));
-        planets.set(2, new Planet("Venus", 0.723, 0.01, 3.39, 0.949, 243.018,  0.615, "Venus", 0, 0, 0xd17300));
-        planets.set(3, new Planet("Earth", 1, 0.02, 0, 1, 0.997, 1, "Earth", 1, 0, 0x2ad100));
-        planets.set(4, new Planet("Mars", 1.523, 0.09, 1.85, 0.533, 1.026, 1.881, "Mars", 0, 0, 0x00d1ca));
-        planets.set(5, new Planet("Jupiter", 5.202, 0.05, 1.31, 11.209, 0.413, 11.861, "Jupiter", 0, 0, 0x005bd1));
-        planets.set(6, new Planet("Saturn", 9.576, 0.06, 2.49, 9.449, 0.444, 29.628, "Saturn", 0, 0, 0x1500d1));
-        planets.set(7, new Planet("Uranus", 19.293, 0.05, 0.77, 4.007, 0.718, 84.747, "Uranus", 0, 0, 0x6f00d1));
-        planets.set(8, new Planet("Neptune", 30.246, 0.01, 1.77, 3.883, 0.671, 166.344, "Neptune", 0, 0, 0xd100c3));
-        planets.set(9, new Planet("Pluto", 39.509, 0.25, 17.5, 0.187, 6.387, 248.348, "Pluto", 0, 0, 0xd10046));
+        planets.set(1, new Planet(this, "Mercury", 0.387, 0.21, 7, 0.383, 58.646, 0.243, "Mercury", 0, 0, 0xd10000));
+        planets.set(2, new Planet(this, "Venus", 0.723, 0.01, 3.39, 0.949, 243.018,  0.615, "Venus", 0, 0, 0xd17300));
+        planets.set(3, new Planet(this, "Earth", 1, 0.02, 0, 1, 0.997, 1, "Earth", 1, 0, 0x2ad100));
+        planets.set(4, new Planet(this, "Mars", 1.523, 0.09, 1.85, 0.533, 1.026, 1.881, "Mars", 0, 0, 0x00d1ca));
+        planets.set(5, new Planet(this, "Jupiter", 5.202, 0.05, 1.31, 11.209, 0.413, 11.861, "Jupiter", 0, 0, 0x005bd1));
+        planets.set(6, new Planet(this, "Saturn", 9.576, 0.06, 2.49, 9.449, 0.444, 29.628, "Saturn", 0, 0, 0x1500d1));
+        planets.set(7, new Planet(this, "Uranus", 19.293, 0.05, 0.77, 4.007, 0.718, 84.747, "Uranus", 0, 0, 0x6f00d1));
+        planets.set(8, new Planet(this, "Neptune", 30.246, 0.01, 1.77, 3.883, 0.671, 166.344, "Neptune", 0, 0, 0xd100c3));
+        planets.set(9, new Planet(this, "Pluto", 39.509, 0.25, 17.5, 0.187, 6.387, 248.348, "Pluto", 0, 0, 0xd10046));
 
         planets.forEach(planet => {
             this.scene.add(planet.group);
@@ -136,6 +139,15 @@ export class SolarSystemViewer {
             this.scene.add(planet.orbitMesh);
             this.scene.add(planet.scaledOrbitMesh);
         });
+    }
+
+    planetTextureLoad () {
+        this.planetTextures--;
+
+        if (this.planetTextures == 0) {
+            this.loaded = true;
+            document.getElementById("loadingPanel").style.display = "none";
+        }
     }
 
     createStar () {
@@ -198,6 +210,9 @@ export class SolarSystemViewer {
 
     render () {
         requestAnimationFrame(() => this.render());
+        if (!this.loaded) {
+            return;
+        }
 
         this.camera.copy(this.fakeCamera);
         this.controls.update();
