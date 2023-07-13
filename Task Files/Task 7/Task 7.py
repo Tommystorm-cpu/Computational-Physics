@@ -12,14 +12,13 @@ fig = plt.figure()
 ax = fig.add_subplot()
 ax.set_aspect('equal', adjustable='box')
 
-planet_system = Pd.outer_planets
-
+planet_system = Pd.inner_planets
 if planet_system == Pd.inner_planets:
     title = "Inner Planets"
     x = 25    
 elif planet_system == Pd.outer_planets:
     title = "Outer Planets"
-    x=5
+    x=10
 elif planet_system == Pd.GJ_system:
     title = "GJ 1061 System"
     x=40
@@ -28,8 +27,7 @@ elif planet_system == Pd.solar_system:
     x =5
 
 
-def task7(a, b):
-    centre_planet = a
+def task7(a,b):
     for i in range(len(planet_system)):
         x_coords = []
         y_coords = []
@@ -42,44 +40,34 @@ def task7(a, b):
             x = radius * math.cos(theta)
             y = radius * math.sin(theta)
                                                      
-            centre_theta = Theta_Function.get_angle(planet_system[centre_planet], t)
-            centre_semi_major = float(planet_system[centre_planet][1])
-            centre_eccen = float(planet_system[centre_planet][2])
+            centre_theta = Theta_Function.get_angle(planet_system[a], t)
+            centre_semi_major = float(planet_system[a][1])
+            centre_eccen = float(planet_system[a][2])
             centre_radius = (centre_semi_major*(1-(centre_eccen*centre_eccen)))/(1-centre_eccen*math.cos(centre_theta))
             centre_x = centre_radius *math.cos(centre_theta)
             centre_y = centre_radius *math.sin(centre_theta)
 
                                               
-            x_coords.append(x - centre_x)
-            y_coords.append(y - centre_y)
+            x_coords.append(float(x - centre_x))
+            y_coords.append(float(y - centre_y))
         plt.plot(x_coords, y_coords, label=planet_system[i][7])
 
     sun_x_coords =[]
     sun_y_coords = []
-    for t in np.arange(0, float(planet_system[a][6]), 0.0001):
-        """
-        centre_theta = Theta_Function.get_angle(planet_system[centre_planet], t)
-        centre_semi_major = float(planet_system[centre_planet][1])
-        centre_eccen = float(planet_system[centre_planet][2])
-        centre_radius = (centre_semi_major*(1-(centre_eccen*centre_eccen)))/(1-centre_eccen*math.cos(centre_theta))
-        """
-
-        centre_theta = Theta_Function.get_angle(planet_system[centre_planet], t)
-        centre_semi_major = float(planet_system[centre_planet][1])
-        centre_eccen = float(planet_system[centre_planet][2])
-        centre_radius = (centre_semi_major*(1-(centre_eccen*centre_eccen)))/(1-centre_eccen*math.cos(centre_theta))
-        centre_x = centre_radius *math.cos(centre_theta)
-        centre_y = centre_radius *math.sin(centre_theta)
         
-        sun_x = 0 - centre_x
-        sun_y = 0 - centre_y
+    for theta in np.arange(0, (2*math.pi)+1, 0.0001):
+        sun_radius = (centre_semi_major*(1-(centre_eccen*centre_eccen)))/(1-centre_eccen*math.cos(theta))
+        sun_x = -(sun_radius *math.cos(theta))
+        sun_y = -(sun_radius *math.sin(theta))
 
         sun_x_coords.append(sun_x)
         sun_y_coords.append(sun_y)
     plt.plot(sun_x_coords, sun_y_coords, color="y", label="Sun")
-    plt.plot(0, 0, marker="o", markersize=5, markerfacecolor="blue")
 
-task7(2, x)
+
+    
+
+task7(2,x)
 
 plt.title(title)
 plt.xlabel("X (AU)")
