@@ -1,0 +1,29 @@
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+.gradient {
+    background-image: linear-gradient(rgb(0, 12, 30), rgb(125, 170, 240));
+    background-color: rgb(125, 170, 240);
+    background-repeat: no-repeat;
+}
+
+.nav-text {
+    font-family: sans-serif;
+    font-size: 20px;
+}
+
+.footer-text {
+    font-family: sans-serif;
+    font-size: 20px;
+    color: rgb(157, 157, 157)
+}
+
+.footer {
+    clear: both;
+    position: relative;
+    z-index: 1;
+    height: -3em;
+    margin-top: 8rem;
+}

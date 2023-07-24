@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="./Website/CSS/index.css"/>
+    <link rel="stylesheet" type="text/css" href="../CSS/index.css"/>
     <title>Home Page</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
   </head>
@@ -13,8 +13,8 @@
     
     <nav class="navbar navbar-expand-lg shadow-lg navbar-dark sticky-top" style="background-color: rgb(34, 34, 34)">
       <div class="container">
-          <a class="navbar-brand" href="index.html">
-              <img src="./Website/Graphics/saturn-logo.svg" alt="Home Button" width="100" height="50">
+          <a class="navbar-brand" href="../../index.html">
+              <img src="../Graphics/saturn-logo.svg" alt="Home Button" width="100" height="50">
           </a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -22,10 +22,10 @@
           <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
               <li class="nav-item mx-3 nav-text">
-                <a class="nav-link active text-white" aria-current="page" href="index.html">Home</a>
+                <a class="nav-link active text-white" aria-current="page" href="../../index.html">Home</a>
               </li>
               <li class="nav-item mx-3 nav-text">
-                <a class="nav-link text-white" href="./Website/Pages/task-menu.html">Tasks</a>
+                <a class="nav-link text-white" href="task-menu.html">Tasks</a>
               </li>
               <li class="nav-item mx-3 nav-text">
                 <a class="nav-link text-white">Technical Report</a>
@@ -39,23 +39,45 @@
             </ul>
           </div>
           <a class="navbar-brand d-none d-lg-block" target="_blank" href="https://github.com/Tommystorm-cpu/Computational-Physics">
-              <img src="./Website/Graphics/github.png" alt="Github Button" width="50" height="50">
+              <img src="../Graphics/github.png" alt="Github Button" width="50" height="50">
           </a>
       </div>
     </nav>
 
-    <div class="w-50 h-50 bg-black m-auto mt-5"></div>
+    <div class="container-fluid d-flex justify-content-center">
+        <div class="card m-5" style="width: 18rem;">
+            <img src="../Graphics/task2preview.png" class="card-img-top" alt="...">
+            <hr class="m-0">
+            <div class="card-body">
+                <h5 class="card-title">Task 2</h5>
+                <p class="card-text">Plot different planetary systems in 2D.</p>
+                <a href="test-task.html" class="btn btn-primary stretched-link">Task Page</a>
+            </div>
+        </div>
 
-    <div class="m-auto mt-4 w-75 text-center">
-      <h1>Computational Physics: Orbits</h1>
-      <h5>Created by Thomas Davey and Alex Arnold</h5>
-      <p>This text will explain stuff</p>
-    </div>
+        <div class="card m-5" style="width: 18rem; height: 25rem;">
+            <img src="../Graphics/task2preview.png" class="card-img-top" alt="...">
+            <hr class="m-0">
+            <div class="card-body">
+                <h5 class="card-title"> 
+                    <a href="test-task.html" class="stretched-link">Task 2</a> 
+                </h5>
+                <p class="card-text">Plot different planetary systems in 2D.</p>
+            </div>
+        </div>
 
-    <div class="d-flex justify-content-center mt-3">
-      <a href="./Website/Pages/task-menu.html" type="button" class="btn btn-primary btn-lg" style="min-width: 20%;">
-        Task Menu
-      </a>
+        <div class="card m-5" style="width: 18rem; height: 23rem;">
+            <img src="../Graphics/task2preview.png" class="card-img" alt="...">
+            <hr class="m-0">
+            <div class="card-img-overlay">
+                <h3 class="card-title">
+                    <a href="test-task.html" class="stretched-link">Task 2</a>
+                </h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text">Plot different planetary systems in 2D.</p>
+            </div>
+        </div>
     </div>
 
     <footer class="footer" style="background-color: rgb(34, 34, 34)">

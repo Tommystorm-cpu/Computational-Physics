@@ -10,7 +10,7 @@ fig = plt.figure()
 ax = fig.add_subplot()
 ax.set_aspect('equal', adjustable='box')
 
-planet_system = Pd.object_data
+planet_system = Pd.solar_system
 
 for i in range(len(planet_system)):
     x_coords = []
