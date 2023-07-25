@@ -60,7 +60,7 @@
         files = ["PlanetData.py"]
     </py-config>
 
-    <div class="card container mx-auto w-75 bg-white" id="runArea" style="visibility: hidden;">
+    <div class="card container mx-auto w-75 bg-white" id="runArea" style="visibility: hidden; z-index: -5; position: absolute;">
         <select id="solars" class="form-select my-2" py-change="load_solar()" aria-label="Default select example">
             <option value="All">Select Planetary System</option>
             <option value="All">All Planets</option>
@@ -100,6 +100,8 @@
             const header = document.getElementsByTagName("head")[0];
             runButton.onclick = () => {
                 runArea.style.visibility = "visible"
+                runArea.style.position = "relative"
+                runArea.style.zIndex = "-1"
                 runArea.classList.add("mt-5")
 
                 let pyLink = document.createElement('link');
