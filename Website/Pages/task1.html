@@ -63,9 +63,7 @@
     <div class="card container mx-auto w-75 bg-white" id="runArea" style="visibility: hidden; z-index: -5; position: absolute;">
         <select id="solars" class="form-select my-2" py-change="load_solar()" aria-label="Default select example">
             <option value="All">Select Planetary System</option>
-            <option value="All">All Planets</option>
-            <option value="Solar">Solar System</option>
-            <option value="GJ">GJ</option>
+            <option value="All">All planets</option>
         </select>
         
         <div id="graph-area" class="d-flex align-items-center"></div>
@@ -87,6 +85,18 @@
                 const child = graphArea.children[0];
                 child.classList.add("img-fluid");
                 child.classList.add("m-auto");
+            }
+        </script>
+        <script type="module">
+            import {system_list, object_data} from "./PlanetData.js"
+
+            const systemMenu = document.getElementById("solars");
+            const systemNames = Object.keys(system_list);
+            for (const index in systemNames) {
+                const optionElement = document.createElement("option");
+                optionElement.value = systemNames[index];
+                optionElement.innerHTML = systemNames[index];
+                systemMenu.appendChild(optionElement);
             }
         </script>
     </div>

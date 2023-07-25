@@ -2,17 +2,11 @@ import matplotlib.pyplot as plt  # imports modules
 import numpy as np
 import PlanetData as Pd
 
-def task_1(solar_type):
+def task_1(system_name):
     fig = plt.figure()
     ax = fig.add_subplot()
 
-    data = 0
-    if solar_type == "Solar":
-        data = Pd.solar_system
-    elif solar_type == "GJ":
-        data = Pd.GJ_system
-    elif solar_type == "All":
-        data = Pd.object_data
+    data = Pd.system_list[system_name]
 
     plt.ylabel("T/Yr")  # labels axis
     plt.xlabel("(a/AU)^(3/2)")
@@ -30,7 +24,7 @@ def task_1(solar_type):
     c = line[1]
     plt.axline(xy1=(0, c), slope=m, color="r", label=f'$ y = {m}x$')  # plots line of best fit, assigns gradient as legend
     plt.plot(x, y, "bs")  # plots data as points
-    plt.title(f"Kepler's third law for {solar_type} planets")
+    plt.title(f"Kepler's third law for {system_name} planets")
     plt.legend(loc="upper right")
     plt.show()
     return fig

@@ -153,6 +153,7 @@ HR_5183 = {
 }
 
 system_list = {
+    "All": object_data,
     "Solar System": solar_system,
     "Inner Solar System": inner_planets,
     "Outer Solar System": outer_planets,

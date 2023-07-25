@@ -8,14 +8,8 @@ def cool_function(input):
     print(input)
 
 
-def plot_orbit(solar_type):
-    data = 0
-    if solar_type == "Inner":
-        data = Pd.inner_planets
-    elif solar_type == "Outer":
-        data = Pd.outer_planets
-    elif solar_type == "GJ":
-        data = Pd.GJ_system
+def plot_orbit(system_name):
+    data = Pd.system_list[system_name]
     fig = plt.figure()
     ax = fig.add_subplot()
     ax.set_aspect('equal', adjustable='box')
@@ -33,8 +27,8 @@ def plot_orbit(solar_type):
             y_coords.append(y)
         plt.plot(x_coords, y_coords, label=data[i][7])
 
-    plt.plot(0, 0, marker="o", markersize=20, markerfacecolor="yellow")
-    plt.title(solar_type + " Solar System")
+    plt.plot(0, 0, marker="o", markersize=5, markerfacecolor="yellow")
+    plt.title(system_name + " System")
     plt.xlabel("X (AU)")
     plt.ylabel("Y (AU)")
     plt.legend(loc="upper right")
