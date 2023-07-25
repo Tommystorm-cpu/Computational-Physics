@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="../CSS/index.css"/>
+    <title>Home Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/bfdd83abfd.js" crossorigin="anonymous"></script>
+
+    <!--
+    <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+    <script defer src="https://pyscript.net/latest/pyscript.js"></script> -->
+  </head>
+
+  <body class="gradient">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+
+    <nav class="navbar navbar-expand-lg shadow-lg navbar-dark sticky-top" style="background-color: rgb(34, 34, 34)">
+      <div class="container">
+          <a class="navbar-brand" href="../../index.html">
+              <img src="../Graphics/saturn-logo.svg" alt="Home Button" width="100" height="50">
+          </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+              <li class="nav-item mx-3 nav-text">
+                <a class="nav-link active text-white" aria-current="page" href="../../index.html">Home</a>
+              </li>
+              <li class="nav-item mx-3 nav-text">
+                <a class="nav-link text-white" href="task-menu.html">Tasks</a>
+              </li>
+              <li class="nav-item mx-3 nav-text">
+                <a class="nav-link text-white">Technical Report</a>
+              </li>
+              <li class="nav-item mx-3 nav-text">
+                <a class="nav-link text-white">App Download</a>
+              </li>
+              <li class="nav-item mx-3 nav-text">
+                <a class="nav-link d-lg-none text-white" target="_blank" href="https://github.com/Tommystorm-cpu/Computational-Physics">Github Repository</a>
+              </li>
+            </ul>
+          </div>
+          <a class="navbar-brand d-none d-lg-block" target="_blank" href="https://github.com/Tommystorm-cpu/Computational-Physics">
+              <img src="../Graphics/github.png" alt="Github Button" width="50" height="50">
+          </a>
+      </div>
+    </nav>
+
+    <py-config type="toml" class="m-0" style="visibility: hidden; height: 0%;"> 
+        packages = ["matplotlib", "numpy"] 
+        
+        [[fetch]]
+        from = '../Python'
+        files = ["Task_1_Web.py"]
+        [[fetch]]
+        from = '../Python'
+        files = ["PlanetData.py"]
+    </py-config>
+
+    <div class="card container mx-auto w-75 bg-white" id="runArea" style="visibility: hidden; z-index: -5; position: absolute;">
+        <select id="solars" class="form-select my-2" py-change="load_solar()" aria-label="Default select example">
+            <option value="All">Select Planetary System</option>
+            <option value="All">All Planets</option>
+            <option value="Solar">Solar System</option>
+            <option value="GJ">GJ</option>
+        </select>
+        
+        <div id="graph-area" class="d-flex align-items-center"></div>
+
+        <py-script>
+            import Task_1_Web as T1W
+            import js
+
+            def load_solar():
+                value = Element("solars").value
+                fig = T1W.task_1(value)
+                display(fig, target="graph-area", append=False)
+                js.formatImage()
+        </py-script>
+        
+        <script>
+            function formatImage () {
+                const graphArea = document.getElementById("graph-area");
+                const child = graphArea.children[0];
+                child.classList.add("img-fluid");
+                child.classList.add("m-auto");
+            }
+        </script>
+    </div>
+
+    <div class="card d-flex align-items-center mx-auto bg-white w-50" id="buttonArea">
+        <button id="runButton" class="card-body btn btn-primary mx-auto my-5">Run in browser <i class="fa-solid fa-play"></i></button>
+        <script>
+            const runButton = document.getElementById("runButton");
+            const runArea = document.getElementById("runArea");
+            const buttonArea = document.getElementById("buttonArea");
+            const header = document.getElementsByTagName("head")[0];
+            runButton.onclick = () => {
+                runArea.style.visibility = "visible"
+                runArea.style.position = "relative"
+                runArea.style.zIndex = "0"
+                runArea.classList.add("mt-5")
+
+                let pyLink = document.createElement('link');
+                let pyScript  = document.createElement('script');
+                pyLink.rel = "stylesheet"
+                pyLink.href = "https://pyscript.net/latest/pyscript.css"
+                pyScript.src = "https://pyscript.net/latest/pyscript.js"
+                pyScript.defer = true;
+                header.appendChild(pyLink)
+                header.appendChild(pyScript)
+                buttonArea.remove();
+            }
+        </script>
+    </div>
+
+    <div class="container-fluid text-center mt-5">
+        <p class="text-white">Some text explaining the task can go here.</p>
+    </div>
+
+    <footer class="footer" style="background-color: rgb(34, 34, 34)">
+      <div class="container-fluid">
+        <div class="row">
+          <p class="footer-text col mt-2">
+            This website was created for the 2023 BPhO Computational Physics Challenge, by Thomas Davey and Alex Arnold.
+          </p>
+          <p class="footer-text col text-end mt-2">August 14th 2023</p>
+        </div>
+      </div>
+    </footer>
+
+  </body>
+</html>
