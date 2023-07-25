@@ -15,18 +15,15 @@
             packages = ["matplotlib", "numpy"] 
             
             [[fetch]]
+            from = '../Python'
             files = ["PlanetData.py"]
             [[fetch]]
-            from = 'Task Files/Task 2'
+            from = '../Python'
             files = ["./Task_2_Web.py"]
-            [[fetch]]
-            from = 'Task Files/Task 3'
-            files = ["./Task_3_Web.py"]
         </py-config>
         <py-script>
             import datetime
             import Task_2_Web as T2W
-            import Task_3_Web as T3W
             
             def current_time():
                 now = datetime.datetime.now()
