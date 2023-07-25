@@ -114,7 +114,9 @@
         const optionElement = document.createElement("option");
         optionElement.value = systemNames[index];
         optionElement.innerHTML = systemNames[index];
-        systemMenu.appendChild(optionElement);
+        if ((systemNames[index] != "Inner Solar System") && (systemNames[index] != "Outer Solar System")) {
+          systemMenu.appendChild(optionElement);
+        }
       }
 
       const planetMenu = document.getElementById("planet");
