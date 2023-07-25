@@ -154,9 +154,9 @@ HR_5183 = {
 
 system_list = {
     "All": object_data,
-    "Solar System": solar_system,
-    "Inner Solar System": inner_planets,
-    "Outer Solar System": outer_planets,
+    "Solar": solar_system,
+    "Inner Solar": inner_planets,
+    "Outer Solar": outer_planets,
     "47 Ursae Majoris": Ursae_Majoris_47,
     "55 Cancri": Cancri_55,
     "61 Virginis": Virginis_61,
