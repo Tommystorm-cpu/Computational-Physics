@@ -6,9 +6,11 @@
     <link rel="stylesheet" type="text/css" href="../CSS/index.css"/>
     <title>Home Page</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/bfdd83abfd.js" crossorigin="anonymous"></script>
   </head>
 
   <body class="gradient">
+    <script type="module" src="task-menu.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
     
     <nav class="navbar navbar-expand-lg shadow-lg navbar-dark sticky-top" style="background-color: rgb(34, 34, 34)">
@@ -44,83 +46,152 @@
       </div>
     </nav>
 
-    <div class="container d-flex flex-wrap justify-content-center" style="max-width: 80rem;">
-        <div class="card m-5" style="width: 18rem; height: 25rem;">
-            <img src="../Graphics/task1preview.png" class="card-img-top" alt="...">
-            <hr class="m-0">
-            <div class="card-body">
-                <h5 class="card-title"> 
-                    <a href="test-task.html" class="stretched-link">Task 1</a> 
-                </h5>
-                <p class="card-text">Verify Keplar's Third Law.</p>
-            </div>
-        </div>
+    <div class="container" id="systemCollapseButton" style="max-width: 60rem;" data-bs-toggle="collapse" href="#systemTask" role="button" aria-expanded="true" aria-controls="systemTask">
+      <h4 class="text-white mb-1 mt-3"> System Simulator <i id="systemIcon" class="fa-solid fa-caret-down fa-rotate-180"></i> </h4>
+      <hr class="m-0 text-white">
+    </div>
 
-        <div class="card m-5" style="width: 18rem; height: 25rem;">
+    <div class="collapse show" id="systemTask">
+      <div class="container d-flex flex-wrap justify-content-center mt-4" style="max-width: 80rem;">
+        <div class="card mb-3" style="width: 40rem;">
+          <img src="../Graphics/systemWidePreview.png" class="card-img-top" alt="...">
+          <hr class="m-0">
+          <div class="card-body">
+              <h5 class="card-title"> 
+                  <a href="test-task.html" class="stretched-link">System Simulator</a> 
+              </h5>
+              <p class="card-text">A planetary system simulator built using ThreeJS. Explore fully rendered systems in 3D.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container" id="mainCollapseButton" style="max-width: 60rem;" data-bs-toggle="collapse" href="#mainTasks" role="button" aria-expanded="true" aria-controls="mainTasks">
+      <h4 class="text-white mb-1 mt-3"> Main Tasks <i id="mainIcon" class="fa-solid fa-caret-down fa-rotate-180"></i> </h4>
+      <hr class="m-0 text-white">
+    </div>
+
+    <div class="collapse show" id="mainTasks">
+      <div class="container d-flex flex-wrap justify-content-center" style="max-width: 80rem;">
+          <div class="card m-3" style="width: 18rem; height: 25rem;">
+              <img src="../Graphics/task1preview.png" class="card-img-top" alt="...">
+              <hr class="m-0">
+              <div class="card-body">
+                  <h5 class="card-title"> 
+                      <a href="test-task.html" class="stretched-link">Task 1</a> 
+                  </h5>
+                  <p class="card-text">Verify Keplar's Third Law.</p>
+              </div>
+          </div>
+
+          <div class="card m-3" style="width: 18rem; height: 25rem;">
+              <img src="../Graphics/task2preview.png" class="card-img-top" alt="...">
+              <hr class="m-0">
+              <div class="card-body">
+                  <h5 class="card-title"> 
+                      <a href="test-task.html" class="stretched-link">Task 2</a> 
+                  </h5>
+                  <p class="card-text">Plot different planetary systems in 2D.</p>
+              </div>
+          </div>
+
+          <div class="card m-3" style="width: 18rem; height: 25rem;">
+              <img src="../Graphics/task3preview.png" class="card-img-top" alt="...">
+              <hr class="m-0">
+              <div class="card-body">
+                  <h5 class="card-title"> 
+                      <a href="test-task.html" class="stretched-link">Task 3</a> 
+                  </h5>
+                  <p class="card-text">Animate different planetary systems in 2D.</p>
+              </div>
+          </div>
+
+          <div class="card m-3" style="width: 18rem; height: 25rem;">
+              <img src="../Graphics/task4preview.png" class="card-img-top" alt="...">
+              <hr class="m-0">
+              <div class="card-body">
+                  <h5 class="card-title"> 
+                      <a href="test-task.html" class="stretched-link">Task 4</a> 
+                  </h5>
+                  <p class="card-text">Animate different planetary systems in 3D.</p>
+              </div>
+          </div>
+
+          <div class="card m-3" style="width: 18rem; height: 25rem;">
+              <img src="../Graphics/task5preview.png" class="card-img-top" alt="...">
+              <hr class="m-0">
+              <div class="card-body">
+                  <h5 class="card-title"> 
+                      <a href="test-task.html" class="stretched-link">Task 5</a> 
+                  </h5>
+                  <p class="card-text">Plot Orbit Angle vs Time.</p>
+              </div>
+          </div>
+
+          <div class="card m-3" style="width: 18rem; height: 25rem;">
+              <img src="../Graphics/task6preview.png" class="card-img-top" alt="...">
+              <hr class="m-0">
+              <div class="card-body">
+                  <h5 class="card-title"> 
+                      <a href="test-task.html" class="stretched-link">Task 6</a> 
+                  </h5>
+                  <p class="card-text">Create Spirographs for different pairs of planets.</p>
+              </div>
+          </div>
+
+          <div class="card m-3" style="width: 18rem; height: 25rem;">
+              <img src="../Graphics/task7preview.png" class="card-img-top" alt="...">
+              <hr class="m-0">
+              <div class="card-body">
+                  <h5 class="card-title"> 
+                      <a href="test-task.html" class="stretched-link">Task 7</a> 
+                  </h5>
+                  <p class="card-text">View planetary systems with a planet fixed at the center.</p>
+              </div>
+          </div>
+      </div>
+    </div>
+
+    <div class="container" id="extensionCollapseButton" style="max-width: 60rem;" data-bs-toggle="collapse" href="#extensionTasks" role="button" aria-expanded="true" aria-controls="extensionTasks">
+      <h4 class="text-white mb-1 mt-3"> Extension Tasks <i id="extensionIcon" class="fa-solid fa-caret-down fa-rotate-180"></i> </h4>
+      <hr class="m-0 text-white">
+    </div>
+
+    <div class="collapse show" id="extensionTasks">
+      <div class="container d-flex flex-wrap justify-content-center" style="max-width: 80rem;">
+          <div class="card m-3" style="width: 18rem; height: 25rem;">
+              <img src="../Graphics/task1preview.png" class="card-img-top" alt="...">
+              <hr class="m-0">
+              <div class="card-body">
+                  <h5 class="card-title"> 
+                      <a href="test-task.html" class="stretched-link">System Simulator</a> 
+                  </h5>
+                  <p class="card-text">Explore fully rendered 3D systems.</p>
+              </div>
+          </div>
+
+          <div class="card m-3" style="width: 18rem; height: 25rem;">
+              <img src="../Graphics/task2preview.png" class="card-img-top" alt="...">
+              <hr class="m-0">
+              <div class="card-body">
+                  <h5 class="card-title"> 
+                      <a href="test-task.html" class="stretched-link">Binary Systems</a> 
+                  </h5>
+                  <p class="card-text">Plot the orbits of binary systems.</p>
+              </div>
+          </div>
+
+          <div class="card m-3" style="width: 18rem; height: 25rem;">
             <img src="../Graphics/task2preview.png" class="card-img-top" alt="...">
             <hr class="m-0">
             <div class="card-body">
                 <h5 class="card-title"> 
-                    <a href="test-task.html" class="stretched-link">Task 2</a> 
+                    <a href="test-task.html" class="stretched-link">Goldilocks Zone</a> 
                 </h5>
-                <p class="card-text">Plot different planetary systems in 2D.</p>
+                <p class="card-text">Plot the goldilocks zone for planetary systems.</p>
             </div>
         </div>
-
-        <div class="card m-5" style="width: 18rem; height: 25rem;">
-            <img src="../Graphics/task3preview.png" class="card-img-top" alt="...">
-            <hr class="m-0">
-            <div class="card-body">
-                <h5 class="card-title"> 
-                    <a href="test-task.html" class="stretched-link">Task 3</a> 
-                </h5>
-                <p class="card-text">Animate different planetary systems in 2D.</p>
-            </div>
-        </div>
-
-        <div class="card m-5" style="width: 18rem; height: 25rem;">
-            <img src="../Graphics/task4preview.png" class="card-img-top" alt="...">
-            <hr class="m-0">
-            <div class="card-body">
-                <h5 class="card-title"> 
-                    <a href="test-task.html" class="stretched-link">Task 4</a> 
-                </h5>
-                <p class="card-text">Animate different planetary systems in 3D.</p>
-            </div>
-        </div>
-
-        <div class="card m-5" style="width: 18rem; height: 25rem;">
-            <img src="../Graphics/task5preview.png" class="card-img-top" alt="...">
-            <hr class="m-0">
-            <div class="card-body">
-                <h5 class="card-title"> 
-                    <a href="test-task.html" class="stretched-link">Task 5</a> 
-                </h5>
-                <p class="card-text">Plot Orbit Angle vs Time.</p>
-            </div>
-        </div>
-
-        <div class="card m-5" style="width: 18rem; height: 25rem;">
-            <img src="../Graphics/task6preview.png" class="card-img-top" alt="...">
-            <hr class="m-0">
-            <div class="card-body">
-                <h5 class="card-title"> 
-                    <a href="test-task.html" class="stretched-link">Task 6</a> 
-                </h5>
-                <p class="card-text">Create Spirographs for different pairs of planets.</p>
-            </div>
-        </div>
-
-        <div class="card m-5" style="width: 18rem; height: 25rem;">
-            <img src="../Graphics/task7preview.png" class="card-img-top" alt="...">
-            <hr class="m-0">
-            <div class="card-body">
-                <h5 class="card-title"> 
-                    <a href="test-task.html" class="stretched-link">Task 7</a> 
-                </h5>
-                <p class="card-text">View planetary systems with a planet fixed at the center.</p>
-            </div>
-        </div>
+      </div>
     </div>
 
     <footer class="footer" style="background-color: rgb(34, 34, 34)">
