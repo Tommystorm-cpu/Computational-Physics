@@ -8,9 +8,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <script src="https://kit.fontawesome.com/bfdd83abfd.js" crossorigin="anonymous"></script>
 
-    <!--
-    <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
-    <script defer src="https://pyscript.net/latest/pyscript.js"></script> -->
   </head>
 
   <body class="gradient">
@@ -49,72 +46,33 @@
       </div>
     </nav>
 
-    <py-config type="toml" class="m-0" style="visibility: hidden; height: 0%;"> 
-        packages = ["matplotlib", "numpy"] 
-        
-        [[fetch]]
-        from = '../Python'
-        files = ["Task_1_Web.py"]
-        [[fetch]]
-        from = '../Python'
-        files = ["PlanetData.py"]
-    </py-config>
-
-    <div class="card container mx-auto w-75 bg-white" id="runArea" style="visibility: hidden; z-index: -5; position: absolute;">
-        <select id="solars" class="form-select my-2" py-change="load_solar()" aria-label="Default select example">
-            <option value="All">Select Planetary System</option>
-            <option value="All">All Planets</option>
-            <option value="Solar">Solar System</option>
-            <option value="GJ">GJ</option>
+    <div class="card container mx-auto mt-5 w-75 bg-white" id="runArea">
+        <select id="solars" class="form-select my-2" aria-label="Default select example">
+            <option value="Inner Solar">Select Planetary System</option>
         </select>
         
-        <div id="graph-area" class="d-flex align-items-center"></div>
+        <div id="graph-area" class="d-flex align-items-center">
+          <video id="graph-video" class="m-auto w-75" src="" controls autoplay style="visibility: hidden;"></video>
+        </div>
 
-        <py-script>
-            import Task_1_Web as T1W
-            import js
+        <script type="module">
+          import {system_list, object_data} from "./PlanetData.js"
 
-            def load_solar():
-                value = Element("solars").value
-                fig = T1W.task_1(value)
-                display(fig, target="graph-area", append=False)
-                js.formatImage()
-        </py-script>
-        
-        <script>
-            function formatImage () {
-                const graphArea = document.getElementById("graph-area");
-                const child = graphArea.children[0];
-                child.classList.add("img-fluid");
-                child.classList.add("m-auto");
-            }
-        </script>
-    </div>
+          const systemMenu = document.getElementById("solars");
+          const systemNames = Object.keys(system_list);
+          for (const index in systemNames) {
+              const optionElement = document.createElement("option");
+              optionElement.value = systemNames[index];
+              optionElement.innerHTML = systemNames[index];
+              systemMenu.appendChild(optionElement);
+          }
 
-    <div class="card d-flex align-items-center mx-auto bg-white w-50" id="buttonArea">
-        <button id="runButton" class="card-body btn btn-primary mx-auto my-5">Run in browser <i class="fa-solid fa-play"></i></button>
-        <script>
-            const runButton = document.getElementById("runButton");
-            const runArea = document.getElementById("runArea");
-            const buttonArea = document.getElementById("buttonArea");
-            const header = document.getElementsByTagName("head")[0];
-            runButton.onclick = () => {
-                runArea.style.visibility = "visible"
-                runArea.style.position = "relative"
-                runArea.style.zIndex = "0"
-                runArea.classList.add("mt-5")
-
-                let pyLink = document.createElement('link');
-                let pyScript  = document.createElement('script');
-                pyLink.rel = "stylesheet"
-                pyLink.href = "https://pyscript.net/latest/pyscript.css"
-                pyScript.src = "https://pyscript.net/latest/pyscript.js"
-                pyScript.defer = true;
-                header.appendChild(pyLink)
-                header.appendChild(pyScript)
-                buttonArea.remove();
-            }
-        </script>
+          const videoElement = document.getElementById("graph-video");
+          systemMenu.onchange = () => {
+            videoElement.style.visibility = "visible";
+            videoElement.src = "../Videos/" + systemMenu.value + " 2D.mp4";
+          }
+      </script>
     </div>
 
     <div class="container-fluid text-center mt-5">

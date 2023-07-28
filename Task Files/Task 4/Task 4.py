@@ -8,20 +8,11 @@ import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath("__file__")))))
 import PlanetData as Pd
 import Theta_Function
-solar_system = Pd.outer_planets
 
-title = ""
+system_name = "Inner Solar"
+solar_system = Pd.system_list[system_name]
 
-if solar_system == Pd.inner_planets:
-    title = "Inner Planets"
-elif solar_system == Pd.outer_planets:
-    title = "Outer Planets"
-elif solar_system == Pd.GJ_system:
-    title = "GJ 1061 System"
-elif solar_system == Pd.solar_system:
-    title = "The Solar System"
-elif solar_system == Pd.object_data:
-    title = "All the planets lol"
+title = system_name + " System"
 
 
 class Planet:
