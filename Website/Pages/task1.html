@@ -59,7 +59,7 @@
       </div>
     </div>
 
-    <py-config type="toml" class="m-0" style="visibility: hidden; height: 0%;"> 
+    <py-config type="toml" class="m-0" style="visibility: hidden; height: 0%; position: absolute; z-index: -5;"> 
         packages = ["matplotlib", "numpy"] 
         
         [[fetch]]
@@ -70,7 +70,7 @@
         files = ["PlanetData.py"]
     </py-config>
 
-    <div class="card task-content mx-auto bg-white" id="runArea" style="visibility: hidden; z-index: -5; position: absolute;">
+    <div class="card task-content mx-auto bg-white mt-5" id="runArea" style="visibility: hidden; z-index: -5; position: absolute;">
         <select id="solars" class="form-select my-2" py-change="load_solar()" aria-label="Default select example">
             <option value="All">Select Planetary System</option>
             <option value="All">All planets</option>
@@ -111,7 +111,7 @@
         </script>
     </div>
 
-    <div class="card d-flex align-items-center mx-auto bg-white task-content" id="buttonArea">
+    <div class="card d-flex align-items-center mx-auto bg-white task-content mt-5" id="buttonArea">
         <button id="runButton" class="card-body btn btn-primary mx-auto my-5">Run in browser <i class="fa-solid fa-play"></i></button>
         <script>
             const runButton = document.getElementById("runButton");
