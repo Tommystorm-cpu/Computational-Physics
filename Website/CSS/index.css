@@ -30,3 +30,8 @@ body {
     margin-top: auto;
     width: 100%;
 }
+
+.task-content {
+    max-width: 70rem;
+    width: 90%;
+}
