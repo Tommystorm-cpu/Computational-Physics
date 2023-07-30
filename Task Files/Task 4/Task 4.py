@@ -97,7 +97,7 @@ for count, planet in enumerate(solar_system):
     plan_class.plot_orbit()
     ani_list.append(FuncAnimation(fig, plan_class.step_function, repeat=True, interval=1, init_func=plan_class.init_func()))
 
-#plt.legend(loc="upper right")
+plt.legend(loc="upper right")
 plt.title(title)
 
 plt.show()
