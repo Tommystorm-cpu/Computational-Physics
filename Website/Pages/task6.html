@@ -55,8 +55,18 @@
       </a>
     </div>
   </nav>
+  
+  <div class="w-75 mx-auto container mt-3" style="max-width: 40rem;">
+    <div class="row">
+      <a class="btn btn-primary col" href="task5.html"><i class="fa-solid fa-caret-down fa-rotate-90"></i> Task 5</a>
+      <div class="col">
+        <h5 class="col text-white text-center pt-1">Task 6</h5>
+      </div>
+      <a class="btn btn-primary col" href="task7.html">Task 7 <i class="fa-solid fa-caret-down fa-rotate-270"></i></a>
+    </div>
+  </div>
 
-  <py-config type="toml" class="m-0" style="visibility: hidden; height: 0%; position: absolute; z-index: -5;">
+  <py-config type="toml" class="m-0" style="visibility: hidden; height: 0%;">
     packages = ["matplotlib", "numpy"]
 
     [[fetch]]
@@ -69,16 +79,6 @@
     from = '../Python'
     files = ["Theta_Function.py"]
   </py-config>
-
-  <div class="w-75 mx-auto container mt-3" style="max-width: 40rem;">
-    <div class="row">
-      <a class="btn btn-primary col" href="task5.html"><i class="fa-solid fa-caret-down fa-rotate-90"></i> Task 5</a>
-      <div class="col">
-        <h5 class="col text-white text-center pt-1">Task 6</h5>
-      </div>
-      <a class="btn btn-primary col" href="task7.html">Task 7 <i class="fa-solid fa-caret-down fa-rotate-270"></i></a>
-    </div>
-  </div>
 
   <div class="card container mx-auto w-75 bg-white" id="runArea"
     style="visibility: hidden; z-index: -5; position: absolute;">
@@ -177,7 +177,7 @@
     </script>
   </div>
 
-  <div class="card d-flex align-items-center mx-auto mt-5 bg-white w-50" id="buttonArea">
+  <div class="card d-flex align-items-center mx-auto bg-white w-50" id="buttonArea">
     <button id="runButton" class="card-body btn btn-primary mx-auto my-5">Run in browser <i
         class="fa-solid fa-play"></i></button>
     <script>
