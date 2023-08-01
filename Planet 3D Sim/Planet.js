@@ -12,8 +12,14 @@ export class Planet {
         this.semiMajor = semiMajor;
         this.eccen = eccen;
         this.inclination = inclination;
+        if (this.inclination == "N/A") {
+            this.inclination = 0;
+        }
         this.radius = radius;
         this.rotatePeriod = rotatePeriod;
+        if (this.rotatePeriod == "N/A") {
+            this.rotatePeriod = 1;
+        }
         this.orbitPeriod = orbitPeriod;
         this.textureType = textureType;
         this.hasClouds = hasClouds;
@@ -38,15 +44,21 @@ export class Planet {
     }
 
     init() {
-        const radius = this.radius * 200;
+        const radius = this.radius * this.solarSystemViewer.inaccurateScalar;
 
         // Planet Texture
         let mapPath = "";
         let normalPath = "";
         let ringPath = "";
-        if (this.textureType != "Martian") {
+
+        const uniqueTextures = ["Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"];
+
+        if (uniqueTextures.includes(this.textureType)) {
             mapPath = "./textures/Solar System/".concat(this.textureType).concat(" Map.jpg");
             normalPath = "./textures/Solar System/".concat(this.textureType).concat(" Normal.jpg");
+        } else {
+            mapPath = "./textures/Solar System/Earth Map.jpg"
+            normalPath = "./textures/Solar System/Earth Normal.jpg"
         }
 
         if (this.textureType == "Saturn") {
@@ -241,13 +253,13 @@ export class Planet {
 
     render (time, timeStep) {
         // Rotate planet mesh
-        this.mesh.rotateY(this.rotatePeriod / 100 * timeStep);
+        this.mesh.rotateY((timeStep / (this.rotatePeriod / 365)) * 2 * Math.PI);
         // Move planet mesh (orbit path, planet mesh, time, planet data)
         this.updatePosition(time);
 
         // Same as above for clouds
         if (this.meshClouds) {
-            this.meshClouds.rotateY((this.rotatePeriod / 100) * 1.5 * timeStep);
+            this.meshClouds.rotateY((timeStep / this.rotatePeriod / 365) * 2 * Math.PI * 1.5);
             this.updateClouds(time);
         }
     }
@@ -263,7 +275,7 @@ export class Planet {
             if (this.name == "Pluto") {
                 scale = 1/25;
             } else {
-                scale = 1/200;
+                scale = 1/this.solarSystemViewer.inaccurateScalar;
             }
             this.group.scale.copy(new THREE.Vector3(scale, scale, scale));
             if (this.hasClouds) {
@@ -279,5 +291,16 @@ export class Planet {
                 this.meshClouds.scale.copy(new THREE.Vector3(1.01, 1.01, 1.01));
             }
         }
+    }
+
+    removePlanet () {
+        this.mesh.material.dispose();
+        this.mesh.geometry.dispose();
+        this.solarSystemViewer.scene.remove(this.group);
+        if (this.meshClouds) {
+            this.scene.remove(this.meshClouds);
+        }
+        this.solarSystemViewer.scene.remove(this.orbitMesh);
+        this.solarSystemViewer.scene.remove(this.scaledOrbitMesh);
     }
 }

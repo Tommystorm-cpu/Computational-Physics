@@ -69,6 +69,12 @@
             </p>
             <div class="collapse blockPlanetFocus" id="controlCollapse">
                 <div class="card card-body blockPlanetFocus">
+                    <label for="exoplanetDropDown" class="form-label blockPlanetFocus">System:</label>
+                    <select class="form-select form-select-sm blockPlanetFocus" aria-label=".form-select-sm example" id="exoplanetDropDown">
+                    </select>
+                    <button id="loadButton" type="submit" class="btn btn-primary blockPlanetFocus">Load System</button>
+                </div>
+                <div class="card card-body blockPlanetFocus">
                     <div class="form-check form-switch blockPlanetFocus">
                         <input class="form-check-input blockPlanetFocus" type="checkbox" role="switch" id="scalingRadial">
                         <label class="form-check-label blockPlanetFocus" for="scalingRadial">Accurate Scaling</label>
@@ -89,9 +95,10 @@
                 </div>
             </div>
         </div>
+
         <div id="timeSliderContainer" class="d-flex justify-content-center blockPlanetFocus">
             <div class="d-flex flex-column blockPlanetFocus">
-                <input type="range" class="form-range blockPlanetFocus" id="timeSlider" min="0" max="2.5" step="0.01" value="0.5">
+                <input type="range" class="form-range blockPlanetFocus" id="timeSlider" min="0" max="248" step="0.01" value="0.0027397">
                 <label id="timeLabel" for="timeSlider" class="form-label blockPlanetFocus" style="width: 100%; text-align: center; color: white;">Time Slider</label>
             </div>
         </div>

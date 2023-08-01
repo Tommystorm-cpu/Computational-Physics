@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { system_list } from './PlanetData.js';
 
 export class InputHandler {
     constructor (solarSystemViewer) {
@@ -11,6 +12,8 @@ export class InputHandler {
         this.solarSystemViewer = solarSystemViewer;
         this.raycaster;
         this.pointer;
+        this.loadButton;
+        this.exoplanetDropDown;
 
         this.initUI();
         this.initKeyHandler();
@@ -42,6 +45,17 @@ export class InputHandler {
         })
 
         focusDropDown.onchange = () => {this.focusDropDownEvent()};
+
+        this.exoplanetDropDown = document.getElementById("exoplanetDropDown");
+        Object.keys(system_list).forEach(planetSystem => {
+            const optionElement = document.createElement("option")
+            const textNode = document.createTextNode(planetSystem);
+            optionElement.appendChild(textNode);
+            exoplanetDropDown.appendChild(optionElement);
+        })
+
+        this.loadButton = document.getElementById("loadButton");
+        this.loadButton.onclick = () => {this.loadButtonEvent()};
     }
 
     initKeyHandler () {
@@ -115,6 +129,59 @@ export class InputHandler {
         if (!quitBool) {
             this.solarSystemViewer.lockOn(0);
         }
+    }
+
+    loadButtonEvent () {
+        this.solarSystemViewer.lockOn(0);
+        this.labelRadial.checked = false;
+        this.labelRadialEvent();
+        this.scalingRadial.checked = false;
+        this.scalingRadialEvent();
+
+        this.solarSystemViewer.planets.forEach(planet => {
+            planet.removePlanet();
+        })
+        this.solarSystemViewer.renderer.renderLists.dispose();
+        const LabelElements = document.getElementsByClassName("label");
+        Array.from(LabelElements).forEach(label => {
+            label.remove();
+        })
+
+        this.solarSystemViewer.planets = new Map();;
+        this.solarSystemViewer.systemName = this.exoplanetDropDown.value;
+        this.solarSystemViewer.createPlanets();
+
+        this.focusDropDown.innerHTML = "";
+        let text = "";
+        if (["Inner Solar", "Outer Solar", "Solar"].includes(this.solarSystemViewer.systemName)) {
+            text = "Sun";
+        } else {
+            text = this.solarSystemViewer.systemName.concat(" a");
+        }
+        const optionElement = document.createElement("option")
+        const textNode = document.createTextNode(text);
+        optionElement.appendChild(textNode);
+        focusDropDown.appendChild(optionElement);
+        
+        this.solarSystemViewer.planets.forEach(planet => {
+            const optionElement = document.createElement("option")
+            const textNode = document.createTextNode(planet.name);
+            optionElement.appendChild(textNode);
+            focusDropDown.appendChild(optionElement);
+        })
+
+        this.solarSystemViewer.star.removeStar();
+        this.solarSystemViewer.createStar();
+
+        let tempOrbitPeriod = 0;
+        this.solarSystemViewer.planets.forEach(planet => {
+            if (planet.orbitPeriod > tempOrbitPeriod) {
+                tempOrbitPeriod = planet.orbitPeriod;
+            }
+        })
+        this.timeSlider.value = 0;
+        this.timeSlider.max = tempOrbitPeriod /  10;
+        this.timeSlider.step = this.timeSlider.max / 1000;
     }
 
     onMouseDown (event) {
