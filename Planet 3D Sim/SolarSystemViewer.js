@@ -203,7 +203,7 @@ export class SolarSystemViewer {
             };
         } else {
             let text = "";
-            if (new Array(["Inner Solar", "Outer Solar", "Solar"]).includes(this.systemName)) {
+            if (["Inner Solar", "Outer Solar", "Solar"].includes(this.systemName)) {
                 text = "Sun";
             } else {
                 text = this.systemName.concat(" a");
