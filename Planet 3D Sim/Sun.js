@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { Lensflare, LensflareElement } from 'three/addons/objects/Lensflare.js';
+import { distance_thresholds, intensity_params } from './PlanetData.js';
 
 export class Sun {
     constructor (name, radius, textureType, solarSystemViewer) {
@@ -9,6 +10,7 @@ export class Sun {
         this.lensflare;
         this.sunSprite;
         this.solarSystemViewer = solarSystemViewer;
+        this.inaccurateRadius = this.radius * 0.015 * this.solarSystemViewer.inaccurateScalar
 
         this.loadSunMesh(textureType);
         this.createLensFlare();
@@ -26,13 +28,13 @@ export class Sun {
             map: textureLoader.load(mapPath),
         });
 
-        const geometry = new THREE.SphereGeometry(this.radius * 3, 500, 250);
+        const geometry = new THREE.SphereGeometry(this.inaccurateRadius, 500, 250);
         this.mesh = new THREE.Mesh(geometry, materialMap);
     }
 
     toggleAccurate (accurate) {
         if (accurate) {
-            this.mesh.scale.copy(new THREE.Vector3(1/3, 1/3, 1/3));
+            this.mesh.scale.copy(new THREE.Vector3(1/this.inaccurateRadius, 1/this.inaccurateRadius, 1/this.inaccurateRadius));
         } else {
             this.mesh.scale.copy(new THREE.Vector3(1, 1, 1));
             this.sunSprite.scale.copy(new THREE.Vector3(50000, 50000, 50000));
@@ -58,22 +60,24 @@ export class Sun {
         const textureFlare0 = textureLoader.load('./textures/Lensflare/lensflare0_alpha.png' );
         const spriteMaterial = new THREE.SpriteMaterial({map: textureFlare0, transparent: true});
         this.sunSprite = new THREE.Sprite(spriteMaterial);
-        this.sunSprite.scale.set(50000, 50000, 50000);
+        const tempIntensity = distance_thresholds[this.solarSystemViewer.systemName] / 0.5;
+        this.sunSprite.scale.set(tempIntensity, tempIntensity, tempIntensity);
     }
 
     changeSpriteSizeAccurate () {
         const camera = this.solarSystemViewer.camera;
         const cameraTarget = this.solarSystemViewer.cameraTarget;
+        const tempIntensity = intensity_params[this.solarSystemViewer.systemName];
 
         if ((camera.parent != null)) {
             const distanceToSun = camera.parent.position.distanceTo(this.mesh.position)
-            const intensity = Math.pow(distanceToSun, 0.6) * 10000;
+            const intensity = Math.pow(distanceToSun, 0.6) * tempIntensity[0];
             this.sunSprite.scale.set(intensity, intensity, intensity);
         };
 
         if ((camera.parent == null)) {
             const distanceToSun = camera.position.distanceTo(this.mesh.position)
-            const intensity = Math.pow(distanceToSun, 0.6) * 100;
+            const intensity = Math.pow(distanceToSun, 0.6) * tempIntensity[1];
             this.sunSprite.scale.set(intensity, intensity, intensity);
         };
 
@@ -85,9 +89,9 @@ export class Sun {
     }
 
     updateSunVisibility () {
-        let distanceThreshold = 25000;
+        let distanceThreshold = distance_thresholds[this.solarSystemViewer.systemName];
         if (this.solarSystemViewer.accurateScale) {
-            distanceThreshold = 2500;
+            distanceThreshold = this.radius * 2;
         }
         const camera = this.solarSystemViewer.camera;
         const fadeOutThreshold = distanceThreshold * 0.8
@@ -112,5 +116,13 @@ export class Sun {
         }
 
         this.mesh.visible = (this.sunSprite.material.opacity != 1)
+    }
+
+    removeStar () {
+        this.mesh.material.dispose();
+        this.mesh.geometry.dispose();
+        this.solarSystemViewer.scene.remove(this.mesh);
+        this.solarSystemViewer.scene.remove(this.sunSprite);
+        this.solarSystemViewer.light.remove(this.lensflare);
     }
 }

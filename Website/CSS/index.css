@@ -1,0 +1,37 @@
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+.gradient {
+    background-image: linear-gradient(rgb(0, 12, 30), rgb(125, 170, 240));
+    background-color: rgb(125, 170, 240);
+    background-repeat: no-repeat;
+}
+
+.nav-text {
+    font-family: sans-serif;
+    font-size: 20px;
+}
+
+.footer-text {
+    font-family: sans-serif;
+    font-size: 20px;
+    color: rgb(157, 157, 157)
+}
+
+.footer {
+    margin-top: auto;
+    width: 100%;
+}
+
+.task-content {
+    max-width: 70rem;
+    width: 90%;
+}

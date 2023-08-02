@@ -11,6 +11,7 @@ import math
 def task_5(a):
     fig = plt.figure()
     ax = fig.add_subplot()
+    #ax.set_aspect('equal', adjustable='box')
     x1= [] # x and y array for eccentric orbit 
     y1= []
     x2= [] # x and y array for circular orbit
@@ -65,4 +66,4 @@ def task_5(a):
     plt.legend()
     plt.show() 
     return fig
-task_5(43)
+task_5(8)

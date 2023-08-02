@@ -12,7 +12,7 @@ ax = fig.add_subplot()
 ax.set_aspect('equal', adjustable='box')
 
 # Longer orbit goes second!
-two_planets = [Pd.solar_system[7], Pd.solar_system[8]]
+two_planets = [Pd.solar_system[2], Pd.solar_system[3]]
 
 num_of_orbits = 10
 total_time = num_of_orbits * float(two_planets[1][6])
