@@ -14,20 +14,41 @@ fig = plt.figure()
 ax = fig.add_subplot()
 ax.set_aspect('equal', adjustable='box')
 
-solar_system = Pd.inner_planets
+planet_system = Pd.GJ_1061_system
 
 title = ""
 
-if solar_system == Pd.inner_planets:
+if np.array_equiv(planet_system, Pd.inner_planets):
     title = "Inner Planets"
-elif solar_system == Pd.outer_planets:
+elif np.array_equiv(planet_system, Pd.outer_planets):
     title = "Outer Planets"
-elif solar_system == Pd.GJ_system:
+elif np.array_equiv(planet_system, Pd.GJ_1061_system):
     title = "GJ 1061 System"
-elif solar_system == Pd.solar_system:
+elif np.array_equiv(planet_system, Pd.solar_system):
     title = "The Solar System"
-elif solar_system == Pd.object_data:
+elif np.array_equiv(planet_system, Pd.object_data):
     title = "All the planets lol"
+elif np.array_equiv(planet_system, Pd.Ursae_Majoris_system):
+    title = "Ursae Majoris system"
+elif np.array_equiv(planet_system, Pd.Cancri_system):
+    title = "Cancri system"
+elif np.array_equiv(planet_system, Pd.Virginis_system):
+    title = "Virginis system"
+elif np.array_equiv(planet_system, Pd.CoRoT_7_system):
+    title = "CoRoT-7_system"
+elif np.array_equiv(planet_system, Pd.DMPP_1_system):
+    title = "DMPP-1 system"
+elif np.array_equiv(planet_system, Pd.EPIC_249893012_system):
+    title = "EPIC 249893012 system"
+elif np.array_equiv(planet_system, Pd.GJ_163_system):
+    title = "GJ 163 system"
+elif np.array_equiv(planet_system, Pd.Kepler_106_system):
+    title = "Kepler-106 system"
+elif np.array_equiv(planet_system, Pd.TOI_700_system):
+    title = "TOI-700 system"
+elif np.array_equiv(planet_system, Pd.HR_5183_system):
+    title = "HR 5183 system"
+
 
 
 class Planet:
@@ -39,15 +60,15 @@ class Planet:
         self.index = index
         self.point = 0
         self.data = data
-        self.time_scale = float(solar_system[len(solar_system)-1][6]) / 1000
+        self.time_scale = float(planet_system[len(planet_system)-1][6]) / 1000
         self.colour = (0, 0, 0)
 
     def plot_orbit(self):
         x_coords = []
         y_coords = []
-        for theta in np.arange(0, (2 * math.pi) + 1, 0.1):
-            semi_major = float(solar_system[self.index][1])
-            eccen = float(solar_system[self.index][2])
+        for theta in np.arange(0, (2 * math.pi) + 1, 0.01):
+            semi_major = float(planet_system[self.index][1])
+            eccen = float(planet_system[self.index][2])
             radius = (semi_major * (1 - (eccen * eccen))) / (1 - eccen * math.cos(theta))
             x = radius * math.cos(theta)
             y = radius * math.sin(theta)
@@ -77,8 +98,8 @@ plt.ylabel("Y (AU)")
 
 
 ani_list = []
-for count, planet in enumerate(solar_system):
-    plan_class = Planet(solar_system[planet], count)
+for count, planet in enumerate(planet_system):
+    plan_class = Planet(planet_system[planet], count)
     plan_class.plot_orbit()
     ani_list.append(FuncAnimation(fig, plan_class.step_function, repeat=True, interval=1, init_func=plan_class.init_func()))
 
