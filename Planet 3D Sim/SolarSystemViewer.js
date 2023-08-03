@@ -195,7 +195,7 @@ export class SolarSystemViewer {
                 this.cameraTarget = lockPlanet;
                 this.cameraTarget.group.add(this.camera);
                 this.cameraRadii = lockPlanet.radius;
-                const tempRadius = lockPlanet.radius * 300;
+                const tempRadius = (this.cameraRadii * this.inaccurateScalar * 3) / Math.sqrt(3);
                 const startPos = new THREE.Vector3(tempRadius, tempRadius, tempRadius);
                 this.fakeCamera.position.copy(startPos);
                 this.controls.enablePan = false;
@@ -235,10 +235,10 @@ export class SolarSystemViewer {
     updateSunLock () {
         if (this.sunLock) {
             let cameraPos = new THREE.Vector3();
-            const vertOffest = new THREE.Vector3(0, this.cameraRadii * 500, 0);
+            const vertOffest = new THREE.Vector3(0, this.cameraRadii * this.inaccurateScalar * 1.5, 0);
             cameraPos.copy(this.cameraTarget.group.position);
             cameraPos.normalize();
-            cameraPos.multiplyScalar(this.cameraRadii * 1000);
+            cameraPos.multiplyScalar(this.cameraRadii * this.inaccurateScalar * 3);
             cameraPos.add(vertOffest);
             this.fakeCamera.position.copy(cameraPos);
         }
