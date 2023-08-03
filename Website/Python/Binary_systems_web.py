@@ -9,13 +9,14 @@ import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath("__file__")))))
 
 import math
-plt.rcParams['animation.ffmpeg_path'] = r'C:\\Users\\Alex Arnold\\Desktop\\ffmpeg\\bin\\ffmpeg.exe'
+#plt.rcParams['animation.ffmpeg_path'] = r'C:\\Users\\Alex Arnold\\Desktop\\ffmpeg\\bin\\ffmpeg.exe'
+
 def binary_systems(semi_major, planet_start_distance, star1M, star2M, initv, starorbit):
     """dr french's stupid arbitrary values"""
     #semi-major axis of mutual star orbit in AU
-    a = semi-major
+    a = semi_major
     #planet (initial) circular orbit radius about star 1
-    ap = a/planet-start-distance
+    ap = a/planet_start_distance
     #initial angle from x axis (anticlockwise) of planet / radians
     theta0 = math.pi/4
     #masses of stars in solar masses

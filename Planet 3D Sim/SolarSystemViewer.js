@@ -147,7 +147,7 @@ export class SolarSystemViewer {
 
         // Mass in Earth masses, semi-major axis, eccentricity, orbital inclination/degrees, Radius in earth radii, Rotational period/days, orbital period/years, planet name
 
-        // (solarSystemViewer, name, semiMajor, eccen, inclination, radius, rotatePeriod, orbitPeriod, textureType, hasClouds, axisTilt, orbitColour)
+        // (solarSystemViewer, name, semiMajor, eccen, inclination, radius, rotatePeriod, orbitPeriod, textureType, cloudType, axisTilt, orbitColour)
         const colourList = [0xd10000, 0xd17300, 0x2ad100, 0x00d1ca, 0x005bd1, 0x1500d1, 0x6f00d1, 0xd100c3, 0xd10046];
 
         this.inaccurateScalar = system_scales[this.systemName];
@@ -156,7 +156,7 @@ export class SolarSystemViewer {
         let index = 0;
         for (const planetIndex in systemPlanets) {
             const planet = systemPlanets[planetIndex];
-            planets.set(index, new Planet(this, planet[7], planet[1], planet[2], planet[3], planet[4], planet[5], planet[6], planet[8], 0, 0, colourList[index]));
+            planets.set(index, new Planet(this, planet[7], planet[1], planet[2], planet[3], planet[4], planet[5], planet[6], planet[8], planet[9], 0, colourList[index]));
             index ++;
         }
 

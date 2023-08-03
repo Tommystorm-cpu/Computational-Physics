@@ -60,6 +60,7 @@
     from = '../Python'
     files = ["Binary_systems_web.py"]
   </py-config>
+
   <div class="card task-content mx-auto bg-white mt-5" id="runArea" style="visibility: hidden; z-index: -5; position: absolute;">
     <select id="solars" class="form-select my-2" py-change="load_solar()" aria-label="Default select example">
         <option value="All">Select Planetary System</option>
@@ -74,7 +75,8 @@
 
         def load_solar():
             value = Element("solars").value
-            fig = BSW.binary_systems(semi_major, planet_start_distance, star1M, star2M, initv, starorbit)
+            #fig = BSW.binary_systems(semi_major, planet_start_distance, star1M, star2M, initv, starorbit)
+            fig = BSW.binary_systems(3, 5, 1, 2, 1, 1)
             display(fig, target="graph-area", append=False)
             js.formatImage()
     </py-script>

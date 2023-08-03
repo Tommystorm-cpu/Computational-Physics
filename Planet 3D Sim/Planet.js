@@ -6,7 +6,7 @@ import { CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
 import { ConvertColour } from './ConvertColour.js';
 
 export class Planet {
-    constructor (solarSystemViewer, name, semiMajor, eccen, inclination, radius, rotatePeriod, orbitPeriod, textureType, hasClouds, axisTilt, orbitColour) {
+    constructor (solarSystemViewer, name, semiMajor, eccen, inclination, radius, rotatePeriod, orbitPeriod, textureType, cloudType, axisTilt, orbitColour) {
         this.solarSystemViewer = solarSystemViewer;
         this.name = name;
         this.semiMajor = semiMajor;
@@ -22,7 +22,7 @@ export class Planet {
         }
         this.orbitPeriod = orbitPeriod;
         this.textureType = textureType;
-        this.hasClouds = hasClouds;
+        this.cloudType = cloudType;
         this.axisTilt = axisTilt;
         this.mesh;
         this.meshClouds;
@@ -124,13 +124,17 @@ export class Planet {
 
         this.group = group;
 
-        if (this.hasClouds) {
+        if (this.cloudType != 0) {
             // Clouds Texture
             let cloudPath = "";
             if (this.textureType == "Earth") {
                 cloudPath = "./textures/Solar System/Earth Clouds.jpg"
             } else {
-                cloudPath = './textures/Martian/Martian Clouds ('.concat(variant).concat(').png');
+                if (this.cloudType == 2){
+                    cloudPath = "./textures/Exoplanet Clouds/Light Clouds.png"
+                } else {
+                    cloudPath = "./textures/Exoplanet Clouds/Heavy Clouds.png"
+                }
             }
 
             const materialClouds = new THREE.MeshLambertMaterial({
@@ -259,7 +263,7 @@ export class Planet {
 
         // Same as above for clouds
         if (this.meshClouds) {
-            this.meshClouds.rotateY((timeStep / this.rotatePeriod / 365) * 2 * Math.PI * 1.5);
+            this.meshClouds.rotateY((timeStep / (this.rotatePeriod / 365)) * 2 * Math.PI * 1.5);
             this.updateClouds(time);
         }
     }
@@ -277,7 +281,7 @@ export class Planet {
                 scale = 1/this.solarSystemViewer.inaccurateScalar;
             }
             this.group.scale.copy(new THREE.Vector3(scale, scale, scale));
-            if (this.hasClouds) {
+            if (this.cloudType) {
                 this.meshClouds.scale.copy(new THREE.Vector3(scale*1.01, scale*1.01, scale*1.01));
             }
         } else {
@@ -286,7 +290,7 @@ export class Planet {
             this.currentOrbitSpline = this.orbitSpline;
 
             this.group.scale.copy(new THREE.Vector3(1, 1, 1));
-            if (this.hasClouds) {
+            if (this.cloudType) {
                 this.meshClouds.scale.copy(new THREE.Vector3(1.01, 1.01, 1.01));
             }
         }
@@ -297,7 +301,7 @@ export class Planet {
         this.mesh.geometry.dispose();
         this.solarSystemViewer.scene.remove(this.group);
         if (this.meshClouds) {
-            this.scene.remove(this.meshClouds);
+            this.solarSystemViewer.scene.remove(this.meshClouds);
         }
         this.solarSystemViewer.scene.remove(this.orbitMesh);
         this.solarSystemViewer.scene.remove(this.scaledOrbitMesh);
