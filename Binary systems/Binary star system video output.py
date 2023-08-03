@@ -174,7 +174,7 @@ plt.legend(loc="upper right")
 plt.title("Binary Star System Simulation")
 # Display the animation
 writervideo = animation.FFMpegWriter(fps=60) 
-anim.save("test.mp4", writer = writervideo, dpi=900)
+anim.save("Binary System.mp4", writer = writervideo, dpi=200)
 plt.show()
 
     
