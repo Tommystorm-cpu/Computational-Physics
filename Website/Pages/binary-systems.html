@@ -62,10 +62,29 @@
   </py-config>
 
   <div class="card task-content mx-auto bg-white mt-5" id="runArea" style="visibility: hidden; z-index: -5; position: absolute;">
-    <select id="solars" class="form-select my-2" py-change="load_solar()" aria-label="Default select example">
-        <option value="All">Select Planetary System</option>
-        <option value="All">All planets</option>
-    </select>
+    
+    <label for="mass1" class="form-label">Mass of Star 1</label>
+    <input type="range" class="form-range w-50" min="0" max="10" step="1" id="mass1">
+
+    <label for="mass2" class="form-label">Mass of Star 2</label>
+    <input type="range" class="form-range w-50" min="0" max="10" step="1" id="mass2">
+
+    <label for="semiMajor" class="form-label">Semi Major</label>
+    <input type="range" class="form-range w-50" min="0" max="10" step="1" id="semiMajor">
+
+    <label for="startDistance" class="form-label">Planet Starting Distance</label>
+    <input type="range" class="form-range w-50" min="0" max="10" step="1" id="startDistance">
+
+    <label for="velocity" class="form-label">Initial Velocity Multiplier</label>
+    <input type="range" class="form-range w-50" min="-2" max="2" step="0.1" id="velocity">
+
+    <div class="form-check form-switch">
+      <input class="form-check-input" type="checkbox" role="switch" id="starOrbit">
+      <label class="form-check-label" for="starOrbit">Star to orbit</label>
+    </div>
+
+    <button type="button" class="btn btn-primary" py-click="load_solar()">Create Image</button>
+    
     
     <div id="graph-area" class="d-flex align-items-center"></div>
 
@@ -74,9 +93,21 @@
         import js
 
         def load_solar():
-            value = Element("solars").value
-            #fig = BSW.binary_systems(semi_major, planet_start_distance, star1M, star2M, initv, starorbit)
-            fig = BSW.binary_systems(3, 5, 1, 2, 1, 1)
+            star1M = int(Element("mass1").value)
+            star2M = int(Element("mass2").value)
+            semi_major = int(Element("semiMajor").value)
+            planet_start_distance = float(Element("startDistance").value)
+            initv = float(Element("velocity").value)
+            """
+            if Element("starOrbit").checked == "on":
+              starOrbit = 1
+            else:
+              starOrbit = 2
+            """
+            starOrbit = int(js.document.querySelector("#starOrbit").checked) + 1
+
+            fig = BSW.binary_systems(semi_major, planet_start_distance, star1M, star2M, initv, starOrbit)
+            #fig = BSW.binary_systems(3, 5, 1, 2, 1, 1)
             display(fig, target="graph-area", append=False)
             js.formatImage()
     </py-script>
@@ -87,18 +118,6 @@
             const child = graphArea.children[0];
             child.classList.add("img-fluid");
             child.classList.add("m-auto");
-        }
-    </script>
-    <script type="module">
-        import {system_list, object_data} from "./PlanetData.js"
-
-        const systemMenu = document.getElementById("solars");
-        const systemNames = Object.keys(system_list);
-        for (const index in systemNames) {
-            const optionElement = document.createElement("option");
-            optionElement.value = systemNames[index];
-            optionElement.innerHTML = systemNames[index];
-            systemMenu.appendChild(optionElement);
         }
     </script>
 </div>
