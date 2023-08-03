@@ -228,7 +228,7 @@ export class Planet {
         planetDiv.style.color = ConvertColour(colour);
 
         const planetLabel = new CSS2DObject( planetDiv );
-        const distance = this.radius  * 150;
+        const distance = (this.radius * this.solarSystemViewer.inaccurateScalar * 1.2) / Math.sqrt(3);
         planetLabel.position.set(distance, distance, distance);
         this.group.add(planetLabel);
         this.label = planetLabel;
@@ -269,7 +269,6 @@ export class Planet {
             this.scaledOrbitMesh.visible = true;
             this.orbitMesh.visible = false;
             this.currentOrbitSpline = this.scaledOrbitSpline;
-
 
             let scale;
             if (this.name == "Pluto") {
