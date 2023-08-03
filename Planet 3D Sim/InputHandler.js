@@ -132,7 +132,6 @@ export class InputHandler {
     }
 
     loadButtonEvent () {
-        this.solarSystemViewer.lockOn(0);
         this.labelRadial.checked = false;
         this.labelRadialEvent();
         this.scalingRadial.checked = false;
@@ -150,6 +149,9 @@ export class InputHandler {
         this.solarSystemViewer.planets = new Map();;
         this.solarSystemViewer.systemName = this.exoplanetDropDown.value;
         this.solarSystemViewer.createPlanets();
+
+        this.solarSystemViewer.lockOn(0);
+        this.solarSystemViewer.lockOn(0);
 
         this.focusDropDown.innerHTML = "";
         let text = "";
@@ -179,9 +181,10 @@ export class InputHandler {
                 tempOrbitPeriod = planet.orbitPeriod;
             }
         })
-        this.timeSlider.value = 0;
         this.timeSlider.max = tempOrbitPeriod /  10;
         this.timeSlider.step = this.timeSlider.max / 1000;
+        this.timeSlider.value = this.timeSlider.max / 2;
+        this.timeSliderEvent();
     }
 
     onMouseDown (event) {

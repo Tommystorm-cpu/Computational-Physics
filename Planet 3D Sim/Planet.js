@@ -57,8 +57,8 @@ export class Planet {
             mapPath = "./textures/Solar System/".concat(this.textureType).concat(" Map.jpg");
             normalPath = "./textures/Solar System/".concat(this.textureType).concat(" Normal.jpg");
         } else {
-            mapPath = "./textures/Solar System/Earth Map.jpg"
-            normalPath = "./textures/Solar System/Earth Normal.jpg"
+            mapPath = "./textures/Exoplanets/".concat(this.textureType).concat(" Map.png")
+            normalPath = "./textures/Exoplanets/".concat(this.textureType).concat(" Normal.png")
         }
 
         if (this.textureType == "Saturn") {
