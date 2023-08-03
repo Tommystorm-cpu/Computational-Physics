@@ -10,7 +10,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(
 
 import math
 plt.rcParams['animation.ffmpeg_path'] = r'C:\\Users\\Alex Arnold\\Desktop\\ffmpeg\\bin\\ffmpeg.exe'
-def binary_systems(semi-major, planet-start-distance, star1M, star2M, initv, starorbit)
+def binary_systems(semi_major, planet_start_distance, star1M, star2M, initv, starorbit):
     """dr french's stupid arbitrary values"""
     #semi-major axis of mutual star orbit in AU
     a = semi-major
