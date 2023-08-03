@@ -2,12 +2,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.animation import FuncAnimation
 from matplotlib.patches import Circle
+import matplotlib.animation as animation
 
 import os.path
 import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath("__file__")))))
 
 import math
+plt.rcParams['animation.ffmpeg_path'] = r'C:\\Users\\Alex Arnold\\Desktop\\ffmpeg\\bin\\ffmpeg.exe'
 
 """dr french's stupid arbitrary values"""
 #semi-major axis of mutual star orbit in AU
@@ -124,51 +126,15 @@ while t[-1] < num_periods * T:
 fig, ax = plt.subplots()
 ax.set_aspect('equal', adjustable='box')
 
-plt.plot(0, 0, marker="+", markersize=5, color='k')
-
-# Create an empty line for the trail of the planet
-planet_trail_line, = ax.plot([], [], 'g', lw=1, alpha=0.75, zorder = 2)
-
-# Create circular patches for the stars and planet
-planet_patch = Circle((x[0], y[0]), 0.1, color='g', alpha=1, zorder = 2)
-star1_patch = Circle((X1[0], Y1[0]), 0.1 * M1, color='r', alpha=1, zorder = 3)
-star2_patch = Circle((X2[0], Y2[0]), 0.1 * M2, color='b', alpha=1, zorder = 3)
-
-# Add the patches to the axis
-ax.add_patch(planet_patch)
-ax.add_patch(star1_patch)
-ax.add_patch(star2_patch)
-
-# Set axis limits
+ax.plot(0, 0, marker="+", markersize=5, color='k')
+ax.plot(x, y, "g", lw=0.5)
+ax.plot(X1, Y1, "r", lw=1)
+ax.plot(X2, Y2, "b", lw=1)
+ax.set_xlabel("X (AU)")
+ax.set_ylabel("Y (AU)")
 ax.set_xlim(-1.1* a, 1.1* a)
 ax.set_ylim(-1.1* a, 1.1* a)
 
-# Set axis labels
-ax.set_xlabel("X (AU)")
-ax.set_ylabel("Y (AU)")
-
-# Animation initialization function
-def init():
-    planet_trail_line.set_data([], [])
-    planet_patch.center = (x[0], y[0])
-    star1_patch.center = (X1[0], Y1[0])
-    star2_patch.center = (X2[0], Y2[0])
-    return  planet_trail_line, planet_patch, star1_patch, star2_patch
-v = 3 # controls the speed of the simulation 
-# Animation update function
-def animate(i):
-    planet_patch.center = (x[v*i], y[v*i])
-    star1_patch.center = (X1[v*i], Y1[v*i])
-    star2_patch.center = (X2[v*i], Y2[v*i])
-    planet_trail_line.set_data(x[:v*i], y[:v*i])  # Set the trail line data
-    return  planet_patch, star1_patch, star2_patch, planet_trail_line
-
-# Create the animation
-anim = FuncAnimation(fig, animate, init_func=init, frames=len(x)//v, interval=33.3, blit=False, repeat = False)
-ax.plot(x, y, "g", lw=0.5, alpha=0.25, zorder=1)
-ax.plot(X1, Y1, "r", lw=0.5, zorder = 1)
-ax.plot(X2, Y2,  "b", lw=0.5, zorder = 1)
-# Display the animation
 plt.show()
 
     
