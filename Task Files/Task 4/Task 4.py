@@ -87,7 +87,6 @@ def create_video(planet_system_name):
             output.append(planet.point)
         return output
 
-    plt.style.use('dark_background')
     fig = plt.figure()
     ax = fig.add_subplot(projection="3d")
     title = planet_system_name + " System"
@@ -127,14 +126,19 @@ def create_video(planet_system_name):
         plan_class = Planet(planet_system[planet], count, ax, max_period, max_semi_major)
         planet_list.append(plan_class)
 
-    anim = FuncAnimation(fig, animate_func, init_func=animation_init, frames=len(planet_list[0].xArray), interval=0.1, blit=False, repeat=True)
+    anim = FuncAnimation(fig, animate_func, init_func=animation_init, frames=len(planet_list[0].xArray), interval=0.1, blit=True, repeat=True)
 
     plt.legend(loc="upper right")
     plt.title(title)
 
-    #writervideo = animation.FFMpegWriter(fps=60)
-    #anim.save(f"{planet_system_name}.mp4", writer=writervideo, dpi=200)
+    writervideo = animation.FFMpegWriter(fps=60)
+    anim.save(f"{planet_system_name} 3D.mp4", writer=writervideo, dpi=200)
 
-    plt.show()
+    #plt.show()
+    
+for planet_system_name in Pd.system_list:
+    if planet_system_name != "All":
+        create_video(planet_system_name)
 
-create_video("Inner Solar")
+
+create_video("All")
