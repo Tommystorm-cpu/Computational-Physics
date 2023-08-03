@@ -2,13 +2,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.animation import FuncAnimation
 from matplotlib.patches import Circle
-
+import matplotlib.animation as animation
 
 import os.path
 import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath("__file__")))))
 
 import math
+plt.rcParams['animation.ffmpeg_path'] = r'C:\\Users\\Alex Arnold\\Desktop\\ffmpeg\\bin\\ffmpeg.exe'
 
 """dr french's stupid arbitrary values"""
 #semi-major axis of mutual star orbit in AU
@@ -82,7 +83,7 @@ ay = ay1 + ay2
 
 n = 0
 #number of orbital periods
-num_periods = 50
+num_periods = 22
 #timestep in years
 dt = 0.001
 while t[-1] < num_periods * T:
@@ -165,11 +166,13 @@ def animate(i):
     return  planet_patch, star1_patch, star2_patch, planet_trail_line
 
 # Create the animation
-anim = FuncAnimation(fig, animate, init_func=init, frames=len(x), interval=33.3, blit=False, repeat = False)
+anim = FuncAnimation(fig, animate, init_func=init, frames=len(x)//v, interval=1, blit=True, repeat = False)
 ax.plot(x, y, "g", lw=0.5, alpha=0.25, zorder=1)
 ax.plot(X1, Y1, "r", lw=0.5, zorder = 1)
 ax.plot(X2, Y2,  "b", lw=0.5, zorder = 1)
 # Display the animation
+writervideo = animation.FFMpegWriter(fps=60) 
+anim.save("test.mp4", writer = writervideo, dpi=900)
 plt.show()
 """
  #image output not animation
