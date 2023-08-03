@@ -10,8 +10,8 @@ body {
   }
 
 .gradient {
-    background-image: linear-gradient(rgb(0, 12, 30), rgb(125, 170, 240));
-    background-color: rgb(125, 170, 240);
+    background-image: linear-gradient(rgb(5, 13, 26), rgb(22, 61, 128));
+    background-color: rgb(2, 34, 88);
     background-repeat: no-repeat;
 }
 
@@ -22,7 +22,7 @@ body {
 
 .footer-text {
     font-family: sans-serif;
-    font-size: 20px;
+    font-size: 10px;
     color: rgb(157, 157, 157)
 }
 
