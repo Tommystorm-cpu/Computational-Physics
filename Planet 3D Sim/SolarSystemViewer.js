@@ -30,6 +30,7 @@ export class SolarSystemViewer {
         this.systemName = "Solar";
         this.inaccurateScalar;
         this.endTime = [];
+        this.smallestOrbit = 100000;
 
         this.init3d();
         this.createLabelRenderer();
@@ -155,11 +156,11 @@ export class SolarSystemViewer {
         let index = 0;
         for (const planetIndex in systemPlanets) {
             const planet = systemPlanets[planetIndex];
-            planets.set(index, new Planet(this, planet[7], planet[1], planet[2], planet[3], planet[4], planet[5], planet[6], planet[7], 0, 0, colourList[index]));
+            planets.set(index, new Planet(this, planet[7], planet[1], planet[2], planet[3], planet[4], planet[5], planet[6], planet[8], 0, 0, colourList[index]));
             index ++;
         }
 
-        
+        this.smallestOrbit = 100000;
         planets.forEach(planet => {
             this.scene.add(planet.group);
             if (planet.meshClouds) {
@@ -167,6 +168,10 @@ export class SolarSystemViewer {
             }
             this.scene.add(planet.orbitMesh);
             this.scene.add(planet.scaledOrbitMesh);
+
+            if (planet.semiMajor < this.smallestOrbit) {
+                this.smallestOrbit = planet.semiMajor;
+            }
         });
     }
 
@@ -210,7 +215,10 @@ export class SolarSystemViewer {
             }
             this.inputHandler.focusDropDown.value = text;
             if (this.cameraTarget == 0) {
-                this.controls.reset();
+                //this.controls.reset();
+                //2584
+                this.fakeCamera.position.set(0, this.smallestOrbit * 10000, this.smallestOrbit * 10000);
+                this.fakeCamera.lookAt(new THREE.Vector3(0,0,0))
             } else {
                 this.cameraTarget.group.remove(this.camera);
                 this.fakeCamera.position.add(this.cameraTarget.group.position);
