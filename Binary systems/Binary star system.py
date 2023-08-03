@@ -127,7 +127,7 @@ ax.set_aspect('equal', adjustable='box')
 plt.plot(0, 0, marker="+", markersize=5, color='k')
 
 # Create an empty line for the trail of the planet
-planet_trail_line, = ax.plot([], [], 'g', lw=1, alpha=0.75, zorder = 2)
+planet_trail_line, = ax.plot([], [], 'g', lw=1, alpha=0.75, zorder = 2, label = "Planet")
 
 # Create circular patches for the stars and planet
 planet_patch = Circle((x[0], y[0]), 0.1, color='g', alpha=1, zorder = 2)
@@ -166,8 +166,10 @@ def animate(i):
 # Create the animation
 anim = FuncAnimation(fig, animate, init_func=init, frames=len(x)//v, interval=33.3, blit=False, repeat = False)
 ax.plot(x, y, "g", lw=0.5, alpha=0.25, zorder=1)
-ax.plot(X1, Y1, "r", lw=0.5, zorder = 1)
-ax.plot(X2, Y2,  "b", lw=0.5, zorder = 1)
+ax.plot(X1, Y1, "r", lw=0.5, zorder = 1, label= "Star 1")
+ax.plot(X2, Y2,  "b", lw=0.5, zorder = 1, label = "Star 2")
+plt.legend(loc="upper right")
+plt.title("Binary Star System Simulation")
 # Display the animation
 plt.show()
 

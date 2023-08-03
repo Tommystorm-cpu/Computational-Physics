@@ -127,14 +127,15 @@ fig, ax = plt.subplots()
 ax.set_aspect('equal', adjustable='box')
 
 ax.plot(0, 0, marker="+", markersize=5, color='k')
-ax.plot(x, y, "g", lw=0.5)
-ax.plot(X1, Y1, "r", lw=1)
-ax.plot(X2, Y2, "b", lw=1)
+ax.plot(x, y, "g", lw=0.5, label = "Planet")
+ax.plot(X1, Y1, "r", lw=1, label = "Star 1")
+ax.plot(X2, Y2, "b", lw=1, label = "Star 2")
 ax.set_xlabel("X (AU)")
 ax.set_ylabel("Y (AU)")
 ax.set_xlim(-1.1* a, 1.1* a)
 ax.set_ylim(-1.1* a, 1.1* a)
-
+plt.legend(loc="upper right")
+plt.title("Binary Star System Simulation")
 plt.show()
 
     
