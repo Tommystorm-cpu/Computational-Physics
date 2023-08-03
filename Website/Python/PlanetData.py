@@ -169,3 +169,19 @@ system_list = {
     "TOI-700": TOI_700,
     "HR 5183": HR_5183
 }
+
+star_luminosity = {
+    "Solar": 1,
+    "Inner Solar": 1,
+    "47 Ursae Majoris": 1.48,
+    "55 Cancri": 0.582,
+    "61 Virginis": 0.8222,
+    "CoRoT-7": 0.3,
+    "DMPP-1": 2.07,
+    "EPIC 249893012": 2.5468,
+    "GJ 1061": 0.00164,
+    "GJ 163": 0.01,
+    "Kepler-106": 0.6, #iffy on this one
+    "TOI-700": 	0.0233,
+    "HR 5183": 0.6
+}
