@@ -7,6 +7,10 @@
     <title>Home Page</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <script src="https://kit.fontawesome.com/bfdd83abfd.js" crossorigin="anonymous"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+        <script id="MathJax-script" async
+                src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+                </script>
 
     <!--
     <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
@@ -53,7 +57,7 @@
       <div class="row">
         <a class="btn btn-primary col" href="binary-systems.html"><i class="fa-solid fa-caret-down fa-rotate-90"></i> Binary Systems</a>
         <h5 class="col text-white text-center my-auto">Goldilocks Zone</h5>
-        <a class="btn btn-primary col" href="3d-sim-landing.html">Systen Simulator <i class="fa-solid fa-caret-down fa-rotate-270"></i></a>
+        <a class="btn btn-primary col" href="Lagrange-points.html">Lagrange Points<i class="fa-solid fa-caret-down fa-rotate-270"></i></a>
       </div>
     </div>
 
@@ -142,7 +146,7 @@
           A planet is considered in the goldilocks zone if the temperature due to the luminosity of the star is neither too hot nor too cold.
           The distance from the sun is calculated using the following formula:
           <br>
-          Distance = (luminosity of star / luminosity of sol)**0.5
+          $$Distance = \sqrt{\frac{StarLuminosity}{SolLuminosity}}$$
           <br>
           To find the lower bound of the annalus the distance is  multiplied by 0.95 and to find the upper bound the distance is multiplied by 1.37.
           Naturally being withing the Goldilocks zone does not dictate whether or  not the planet is habitable, rather dictates whether the temperature allows water to remain a liquid.

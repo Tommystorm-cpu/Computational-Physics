@@ -7,6 +7,10 @@
     <title>Home Page</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <script src="https://kit.fontawesome.com/bfdd83abfd.js" crossorigin="anonymous"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+        <script id="MathJax-script" async
+                src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+                </script>
   </head>
 
   <body class="gradient">
@@ -152,20 +156,18 @@
   <div class="d-flex flex-wrap justify-content-center" style="width: 100%;">
     <p class="text-left mx-3 my-auto py-3" style="width: 40rem;">
       The Binary systems model shows a system such that there are 2 stars of arbitrary mass( measured in solar masses) and 1 planet where the mass is treated as negligible.
-      The planets have an inital seperation equal to their semi major axis and the distance from the center of mass of the 2 stars to each star is determined from the following equation:
-      <br>
-      R1 = (Semi-major axis(M2))/(M1 +M2)
-      <br>
-      R2 = Semi-major axis - R1
-      <br>
+      The planets have an inital seperation equal to their semi-major axis(a) and the distance from the center of mass of the 2 stars to each star is determined from the following equations:
+      $$r_{1} = a\frac{M1}{M1 + M2}$$
+      $$r_2 = a - r_1$$
       Time increments in small steps, where at each step acceleration for both stars and the planet is calculated using newtons law of gravitation:
-      <br>
-      insert newtons law of gravitation
-      <br>
+      $$a_{n,i} = -G\sum_{j\ne i}^{N}M_j\frac{r_i-r_j}{\left|r_i-r_j \right|^3}$$
       The new position of each planet is then calculated using the verlet method shown below:
-      <br>
-      insert verlet method here
-      <br>
+      $$a_n = f(t_n, r_n, v_n)$$
+      $$t_{n+1} = t_n +\Delta t$$
+      $$r_{n+1} = r_n + v_n\Delta t + \frac{1}{2}a_n\Delta t^2$$
+      $$V = v_n + a_n\Delta t$$
+      $$A = f(t_{n+1}, r_{n+1}, V)$$
+      $$v_{n+1} = v_n + \frac{1}{2}(a_n +A)\Delta t$$
       The time then continues incrementing until a set number of orbits has been achieved. The orbital paths are then plotted and outputted as a graph.
       The model can also be animated and an example video accompanies this page to demonstrate the animated model.
       <br>
