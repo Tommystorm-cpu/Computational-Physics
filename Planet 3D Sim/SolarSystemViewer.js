@@ -34,8 +34,8 @@ export class SolarSystemViewer {
 
         this.init3d();
         this.createLabelRenderer();
-        this.createControls();
         this.createPlanets();
+        this.createControls();
         this.createStar();
         
         this.inputHandler = new InputHandler(this);
@@ -62,9 +62,6 @@ export class SolarSystemViewer {
             0.1,
             250000000000
         );
-
-        this.camera.position.y = 1000;
-        this.camera.position.z = 1000;
 
         this.createLights();
         
@@ -129,6 +126,9 @@ export class SolarSystemViewer {
     createControls () {
         this.fakeCamera = this.camera.clone();
         this.controls = new OrbitControls(this.fakeCamera, this.labelRenderer.domElement);
+
+        this.fakeCamera.position.set(0, this.smallestOrbit * 10000, this.smallestOrbit * 10000);
+        this.fakeCamera.lookAt(new THREE.Vector3(0,0,0))
     }
 
     createPlanets () {
@@ -284,5 +284,7 @@ export class SolarSystemViewer {
 
         this.renderer.render(this.scene, this.camera);
         this.labelRenderer.render(this.scene, this.camera);
+
+        this.inputHandler.updateTimeLabel();
     }
 }

@@ -14,6 +14,9 @@ export class InputHandler {
         this.pointer;
         this.loadButton;
         this.exoplanetDropDown;
+        this.dayButton;
+        this.yearButton;
+        this.timeLabel;
 
         this.initUI();
         this.initKeyHandler();
@@ -23,6 +26,14 @@ export class InputHandler {
     initUI () {
         this.timeSlider = document.getElementById("timeSlider");
         this.timeSlider.oninput = () => {this.timeSliderEvent()};
+
+        this.timeLabel = document.getElementById("timeLabel");
+
+        this.yearButton = document.getElementById("yearButton");
+        this.yearButton.onclick = () => {this.yearButtonEvent()};
+
+        this.dayButton = document.getElementById("dayButton");
+        this.dayButton.onclick = () => {this.dayButtonEvent()};
 
         this.centreButton = document.getElementById("centreButton");
         this.centreButton.onclick = () => {this.centreButtonEvent()};
@@ -56,6 +67,17 @@ export class InputHandler {
 
         this.loadButton = document.getElementById("loadButton");
         this.loadButton.onclick = () => {this.loadButtonEvent()};
+
+        let tempOrbitPeriod = 0;
+        this.solarSystemViewer.planets.forEach(planet => {
+            if (planet.orbitPeriod > tempOrbitPeriod) {
+                tempOrbitPeriod = planet.orbitPeriod;
+            }
+        })
+        this.timeSlider.max = tempOrbitPeriod /  50;
+        this.timeSlider.step = this.timeSlider.max / 1000;
+        this.timeSlider.value = 1;
+        this.timeSliderEvent();
     }
 
     initKeyHandler () {
@@ -100,6 +122,20 @@ export class InputHandler {
 
     timeSliderEvent () {
         this.solarSystemViewer.timeStep = this.timeSlider.value;
+    }
+
+    updateTimeLabel() {
+        this.timeLabel.innerHTML = (parseFloat(this.solarSystemViewer.timeStep)).toFixed(4).concat(" years/second");
+    }
+
+    dayButtonEvent () {
+        this.timeSlider.value = 1/365;
+        this.solarSystemViewer.timeStep = 1/365;
+    }
+
+    yearButtonEvent () {
+        this.timeSlider.value = 1;
+        this.solarSystemViewer.timeStep = 1;
     }
 
     sunRadialEvent () {
@@ -181,10 +217,17 @@ export class InputHandler {
                 tempOrbitPeriod = planet.orbitPeriod;
             }
         })
-        this.timeSlider.max = tempOrbitPeriod /  10;
-        this.timeSlider.step = this.timeSlider.max / 1000;
-        this.timeSlider.value = this.timeSlider.max / 2;
-        this.timeSliderEvent();
+        if (this.exoplanetDropDown.value != "Solar") {
+            this.timeSlider.max = tempOrbitPeriod /  10;
+            this.timeSlider.step = this.timeSlider.max / 1000;
+            this.timeSlider.value = this.timeSlider.max / 2;
+            this.timeSliderEvent();
+        } else {
+            this.timeSlider.max = tempOrbitPeriod /  50;
+            this.timeSlider.step = this.timeSlider.max / 1000;
+            this.timeSlider.value = 1;
+            this.timeSliderEvent();
+        }
     }
 
     onMouseDown (event) {
