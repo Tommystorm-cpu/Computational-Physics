@@ -35,6 +35,12 @@
                 width: 100%;
             }
 
+            #backButton {
+                z-index: 1000;
+                position: absolute;
+                right: 0;
+            }
+
             input[type="range"]::-webkit-slider-runnable-track {
                 background-color: rgba(255, 255, 255, 0.3); 
             }
@@ -107,6 +113,12 @@
             <button class="btn btn-primary blockPlanetFocus mx-1" id="yearButton">
                 1 Year/s
             </button>
+        </div>
+
+        <div id="backButton">
+            <a class="btn btn-primary blockPlanetFocus" href="../Website/Pages/task-menu.html">
+                Back to website
+            </a>
         </div>
         
     </body>
