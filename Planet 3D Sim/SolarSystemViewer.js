@@ -215,7 +215,7 @@ export class SolarSystemViewer {
             }
             this.inputHandler.focusDropDown.value = text;
             if (this.cameraTarget == 0) {
-                //this.controls.reset();
+                this.controls.reset();
                 //2584
                 this.fakeCamera.position.set(0, this.smallestOrbit * 10000, this.smallestOrbit * 10000);
                 this.fakeCamera.lookAt(new THREE.Vector3(0,0,0))
