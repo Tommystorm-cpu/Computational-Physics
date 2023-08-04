@@ -12,7 +12,7 @@ fig = plt.figure()
 ax = fig.add_subplot()
 ax.set_aspect('equal', adjustable='box')
 
-planet_system = Pd.inner_planets
+planet_system = Pd.GJ_system
 if planet_system == Pd.inner_planets:
     title = "Inner Planets"
     x = 25    
@@ -73,5 +73,5 @@ plt.title(title)
 plt.xlabel("X (AU)")
 plt.ylabel("Y (AU)")
 plt.legend(loc="upper right")
-
+plt.savefig("task7preview3.png", bbox_inches = "tight")
 plt.show()

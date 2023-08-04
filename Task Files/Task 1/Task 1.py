@@ -8,7 +8,6 @@ import PlanetData as Pd
 def task_1(system):
     fig = plt.figure()
     ax = fig.add_subplot()
-    ax.set_aspect('equal', adjustable='box')
 
     plt.ylabel("T/Yr")  # labels axis
     plt.xlabel("(a/AU)^(3/2)")
@@ -27,7 +26,8 @@ def task_1(system):
 
     plt.axline(xy1=(0, c), slope=m, color="r", label=f'$ y = {m}x$')  # plots line of best fit, assigns gradient as legend
     plt.plot(x, y, "bs")  # plots data as points
-    plt.title("Kepler's third law")
-    #plt.legend(loc="upper right")
+    plt.title("Kepler's third law - Solar system")
+    plt.legend(loc="upper right")
     plt.show()
+    
 task_1(Pd.solar_system)

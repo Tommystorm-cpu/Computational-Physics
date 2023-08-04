@@ -12,7 +12,7 @@ ax = fig.add_subplot()
 ax.set_aspect('equal', adjustable='box')
 
 # Longer orbit goes second!
-two_planets = [Pd.solar_system[2], Pd.solar_system[3]]
+two_planets = [Pd.Kepler_106[2], Pd.Kepler_106[3]]
 
 num_of_orbits = 10
 total_time = num_of_orbits * float(two_planets[1][6])
@@ -51,5 +51,5 @@ plt.title(f"{two_planets[0][7]} {two_planets[1][7]} Spirograph")
 plt.xlabel("X (AU)")
 plt.ylabel("Y (AU)")
 plt.legend(loc="upper right")
-
+plt.savefig("task6preview3.png", bbox_inches = "tight")
 plt.show()

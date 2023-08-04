@@ -40,7 +40,7 @@ def plot_orbit(system_name):
     plt.xlabel("X (AU)")
     plt.ylabel("Y (AU)")
     plt.legend(loc="upper right")
-
+    plt.savefig("Goldilockspreview3.png", bbox_inches = "tight")
     plt.show()
 
-plot_orbit("47 Ursae Majoris")
+plot_orbit("Kepler-106")

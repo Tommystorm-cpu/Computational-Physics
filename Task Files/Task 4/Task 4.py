@@ -131,14 +131,14 @@ def create_video(planet_system_name):
     plt.legend(loc="upper right")
     plt.title(title)
 
-    writervideo = animation.FFMpegWriter(fps=60)
-    anim.save(f"{planet_system_name} 3D.mp4", writer=writervideo, dpi=200)
-
-    #plt.show()
+    #writervideo = animation.FFMpegWriter(fps=60)
+    #anim.save(f"{planet_system_name} 3D.mp4", writer=writervideo, dpi=200)
+    #plt.savefig("task4preview3.png", bbox_inches = "tight")
+    plt.show()
     
-for planet_system_name in Pd.system_list:
+"""for planet_system_name in Pd.system_list:
     if planet_system_name != "All":
         create_video(planet_system_name)
+"""
 
-
-create_video("All")
+create_video("EPIC 249893012")

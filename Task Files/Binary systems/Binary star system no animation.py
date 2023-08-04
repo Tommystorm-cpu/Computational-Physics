@@ -22,7 +22,7 @@ theta0 = math.pi/4
 M1 = 3
 M2 = 2
 #Initial vy velocity multiplier from mutually circular of stars
-k = 1.1
+k = 1.5
 #determines which star the planet orbits
 star_orbit = 1
 
@@ -58,14 +58,18 @@ VY2 = k*2*math.pi*X2[0]/T
 #Planet
 if star_orbit == 1:
     s = X1[0]
+    starVY = VY1
+    starM = M1
 elif star_orbit == 2:
     s = X2[0]
+    starVY = VY2
+    starM = M2
 
 t = [0]
 x = [s + ap*math.cos(theta0)]
 y=  [ap*math.sin(theta0)]
-vx = -2 * np.pi * (M1 / ap)**(1/2) * np.sin(theta0)
-vy = 2 * np.pi * (M1 / ap)**(1/2) * np.cos(theta0) + VY1
+vx = -2 * np.pi * (starM / ap)**(1/2) * np.sin(theta0)
+vy = 2 * np.pi * (starM / ap)**(1/2) * np.cos(theta0) + starVY
 
 #initial acceleration of star 1
 aX1, aY1 = gravity( X1[0],Y1[0], X2[0], Y2[0], M2 )
@@ -136,6 +140,7 @@ ax.set_xlim(-1.1* a, 1.1* a)
 ax.set_ylim(-1.1* a, 1.1* a)
 plt.legend(loc="upper right")
 plt.title("Binary Star System Simulation")
+plt.savefig("Binarypreview3.png", bbox_inches = "tight")
 plt.show()
 
     

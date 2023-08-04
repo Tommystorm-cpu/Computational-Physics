@@ -58,14 +58,18 @@ VY2 = k*2*math.pi*X2[0]/T
 #Planet
 if star_orbit == 1:
     s = X1[0]
+    starVY = VY1
+    starM = M1
 elif star_orbit == 2:
     s = X2[0]
+    starVY = VY2
+    starM = M2
 
 t = [0]
 x = [s + ap*math.cos(theta0)]
 y=  [ap*math.sin(theta0)]
-vx = -2 * np.pi * (M1 / ap)**(1/2) * np.sin(theta0)
-vy = 2 * np.pi * (M1 / ap)**(1/2) * np.cos(theta0) + VY1
+vx = -2 * np.pi * (starM / ap)**(1/2) * np.sin(theta0)
+vy = 2 * np.pi * (starM / ap)**(1/2) * np.cos(theta0) + starVY
 
 #initial acceleration of star 1
 aX1, aY1 = gravity( X1[0],Y1[0], X2[0], Y2[0], M2 )

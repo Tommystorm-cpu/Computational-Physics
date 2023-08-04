@@ -64,6 +64,6 @@ def task_5(a):
     plt.ylabel("Orbit polar angle /rad")
     plt.xlabel("Time /years")
     plt.legend()
+    plt.savefig("task5preview3.png", bbox_inches = "tight")
     plt.show() 
-    return fig
-task_5(8)
+task_5(43)

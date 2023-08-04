@@ -10,7 +10,7 @@ fig = plt.figure()
 ax = fig.add_subplot()
 ax.set_aspect('equal', adjustable='box')
 
-planet_system = Pd.solar_system
+planet_system = Pd.Ursae_Majoris_47
 
 for i in range(len(planet_system)):
     x_coords = []
@@ -26,7 +26,7 @@ for i in range(len(planet_system)):
     plt.plot(x_coords, y_coords, label=planet_system[i][7])
 
 plt.plot(0, 0, marker="o", markersize=20, markerfacecolor="yellow")
-plt.title("Inner Solar System")
+plt.title("Ursae Majoris 47 system")
 plt.xlabel("X (AU)")
 plt.ylabel("Y (AU)")
 plt.legend(loc="upper right")
