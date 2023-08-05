@@ -5,6 +5,7 @@ import os.path
 import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath("__file__")))))
 import PlanetData as Pd
+import numpy
 
 fig = plt.figure()
 ax = fig.add_subplot()
@@ -35,7 +36,7 @@ M2 = 0.1
 
 mu = M2 / (M1 + M2)
 
-baryDistance = R * mu
+baryDistance = R * mu  # distance of sun to centre of mass
 
 M1Coords = [-baryDistance, 0]
 M2Coords = [R - baryDistance, 0]
@@ -52,6 +53,10 @@ y = y / 100
 X, Y = np.meshgrid(x, y)
 Z = np.zeros(int(((R+2)*200)**2)).reshape(int((R+2)*200), int((R+2)*200))
 
+G_constant = 6.67 * (10**-11)
+angularFrequency = math.sqrt((G_constant * (M1 + M2))/(R**3))
+angularVelocity = np.array([0, 0, angularFrequency])
+
 for yIterable in range(len(y)):
     for xIterable in range(len(x)):
         tempX = x[xIterable]
@@ -64,9 +69,14 @@ for yIterable in range(len(y)):
             r1 = 0.001
         if r2 == 0:
             r2 = 0.001
+        position = [tempX, tempY, 0]
 
         gravPotential = -((1-mu)/r1) - (mu/r2)
         effectivePotential = -(1/2) * (tempX**2 + tempY**2) + gravPotential
+
+        #effectivePotential = gravPotential + (1 / 2) * numpy.dot(numpy.cross(angularVelocity, position), numpy.cross(angularVelocity, position))
+
+        #effectivePotential = numpy.dot((1/2) * numpy.cross(angularVelocity, position), numpy.cross(angularVelocity, position))
 
         if effectivePotential < -3:
             effectivePotential = -3
