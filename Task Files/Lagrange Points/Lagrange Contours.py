@@ -24,18 +24,15 @@ for theta in np.arange(0, (2*math.pi)+1, 0.1):
     y_coords.append(y)
 #plt.plot(x_coords, y_coords, label=planet[7])
 
-x = np.arange(-300, 300, 1)
-y = np.arange(-300, 300, 1)
-x = x / 100
-y = y / 100
-
-X, Y = np.meshgrid(x, y)
-Z = np.zeros(360000).reshape(600, 600)
-
 R = 1
 
 M1 = 1
 M2 = 0.1
+
+#M1 = 1.989e30
+#M2 = 5.972e24
+#M2 = 1.898e27
+
 mu = M2 / (M1 + M2)
 
 baryDistance = R * mu
@@ -45,6 +42,15 @@ M2Coords = [R - baryDistance, 0]
 
 plt.plot(M1Coords[0], 0, marker="o", markersize=20, markerfacecolor="yellow")
 plt.plot(M2Coords[0], 0, marker="o", markersize=10, markerfacecolor="blue")
+
+
+x = np.arange(-(R+2)*100, (R+2)*100, 1)
+y = np.arange(-(R+2)*100, (R+2)*100, 1)
+x = x / 100
+y = y / 100
+
+X, Y = np.meshgrid(x, y)
+Z = np.zeros(int(((R+2)*200)**2)).reshape(int((R+2)*200), int((R+2)*200))
 
 for yIterable in range(len(y)):
     for xIterable in range(len(x)):
@@ -69,7 +75,22 @@ for yIterable in range(len(y)):
 
 plt.contour(X, Y, Z, 50)
 
-limit = 2
+L1X = M2Coords[0] - (R * ((M2/(3 * M1)) ** (1/3)))
+L2X = M2Coords[0] + (R * ((M2/(3 * M1)) ** (1/3)))
+L3X = -R * (1 + (5/12)*mu)
+L4X = (R/2) * ((M1 - M2)/(M1 + M2))
+L5X = L4X
+
+L4Y = (math.sqrt(3)/2) * R
+L5Y = -L4Y
+
+plt.plot(L1X, 0, marker="o", markersize=10, markerfacecolor="red")
+plt.plot(L2X, 0, marker="o", markersize=10, markerfacecolor="red")
+plt.plot(L3X, 0, marker="o", markersize=10, markerfacecolor="red")
+plt.plot(L4X, L4Y, marker="o", markersize=10, markerfacecolor="red")
+plt.plot(L5X, L5Y, marker="o", markersize=10, markerfacecolor="red")
+
+limit = R + 1
 
 ax.set_xlim(-limit, limit)
 ax.set_ylim(-limit, limit)
