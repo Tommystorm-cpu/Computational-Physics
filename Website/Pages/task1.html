@@ -84,12 +84,14 @@
         <py-script>
             import Task_1_Web as T1W
             import js
+            import matplotlib.pyplot as plt
 
             def load_solar():
                 value = Element("solars").value
                 fig = T1W.task_1(value)
                 display(fig, target="graph-area", append=False)
                 js.formatImage()
+                plt.close(fig)
         </py-script>
         
         <script>

@@ -104,6 +104,7 @@
       import Task_6_Web as T6W
       import PlanetData as PD
       import js
+      import matplotlib.pyplot as plt
 
       def load_solar():
         systemValue = Element("system").value
@@ -112,6 +113,7 @@
         fig = T6W.task_6(systemValue, planet1Value, planet2Value)
         display(fig, target="graph-area", append=False)
         js.formatImage()
+        plt.close(fig)
     </py-script>
 
     <script>

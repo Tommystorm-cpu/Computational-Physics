@@ -100,12 +100,14 @@
       import Task_5_Web as T5W
       import PlanetData as PD
       import js
+      import matplotlib.pyplot as plt
 
       def load_solar():
         value = int(Element("planet").value)
         fig = T5W.task_5(value)
         display(fig, target="graph-area", append=False)
         js.formatImage()
+        plt.close(fig)
     </py-script>
 
     <script>

@@ -95,6 +95,7 @@
     <py-script>
         import Binary_systems_web as BSW
         import js
+        import matplotlib.pyplot as plt
 
         def load_solar():
             star1M = int(Element("mass1").value)
@@ -114,6 +115,7 @@
             #fig = BSW.binary_systems(3, 5, 1, 2, 1, 1)
             display(fig, target="graph-area", append=False)
             js.formatImage()
+            plt.close(fig)
     </py-script>
     
     <script>
