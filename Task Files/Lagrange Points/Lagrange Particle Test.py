@@ -45,7 +45,7 @@ class TestMass:
     def __init__(self, initial_position, initial_v):
         self.position = initial_position
         self.velocity = initial_v
-        self.mass = 0.0001
+        self.mass = 1
 
         self.x_list = []
         self.y_list = []
@@ -113,10 +113,17 @@ def animate_func(i):
 
 G_constant = 6.67 * (10**-11)
 
-R = 10
+#R = 10
+#M1 = 10000
+#M2 = 1
 
-M1 = 10000
-M2 = 1
+R = 1.496e+11
+M1 = 1.989 * (10 ** 30)
+M2 = 5.972 * (10 ** 24)
+
+#R = 7.785e11
+#M1 = 1.989 * (10 ** 30)
+#M2 = 1.898 * (10 ** 27)
 
 mu = M2 / (M1 + M2)
 
@@ -158,9 +165,10 @@ for yIterable in range(len(y)):
             r2 = 0.001
 """
 
-testMass = TestMass([L4X+0.001, L4Y], [0, 0])
-#-0.0000001
-timeStep = 1000
+testMass = TestMass([L4X+(1e7), L4Y], [0, 0])
+#L4X+(1e7), L4Y
+#+0.001
+timeStep = 86400
 #1000
 time = 0
 
@@ -169,11 +177,10 @@ angularVelocity = np.array([0, 0, angularFrequency])
 #angularFrequency = 2 * math.pi
 #print(angularFrequency)
 
-#10000
-#50000000
-
 #6000000
-while time < 6000000:
+max_time = 50*3.156e+7
+#max_time = 50*12*3.156e+7
+while time < max_time:
     time += timeStep
     testMass.update_position(M1, M2, M1Coords, M2Coords, angularVelocity, timeStep)
 
@@ -230,6 +237,6 @@ plt.title("Inner Solar System")
 plt.xlabel("X (AU)")
 plt.ylabel("Y (AU)")
 
-anim = FuncAnimation(fig, animate_func, init_func=animation_init, frames=1050, interval=0.1, blit=False, repeat=True)
+anim = FuncAnimation(fig, animate_func, init_func=animation_init, frames=int(max_time/timeStep), interval=0.1, blit=False, repeat=True)
 
 plt.show()

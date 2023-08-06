@@ -45,14 +45,14 @@ class TestMass:
     def __init__(self, initial_position, initial_v):
         self.position = initial_position
         self.velocity = initial_v
-        self.mass = 0.0001
+        self.mass = 10000
 
         self.x_list = []
         self.y_list = []
         self.x_list.append(initial_position[0])
         self.y_list.append(initial_position[1])
 
-        self.planet_patch = Circle((self.x_list[0], self.y_list[0]), radius=0.5, color="b", alpha=1)
+        self.planet_patch = Circle((self.x_list[0], self.y_list[0]), radius=R*0.05, color="b", alpha=1)
         ax.add_patch(self.planet_patch)
 
     def update_position(self, m1, m2, pos1, pos2, time_step):
@@ -82,7 +82,22 @@ class TestMass:
         self.y_list.append(self.position[1])
 
     def plot_path(self):
-        plt.plot(self.x_list, self.y_list)
+        if fix_reference_frame:
+            plot_x_list = []
+            plot_y_list = []
+            for i in range(len(self.x_list)):
+                rotation_amount = -earthParticle.theta_list[i]
+                initial_position = [self.x_list[i], self.y_list[i]]
+                offset_matrix = np.array([
+                    [math.cos(rotation_amount), -math.sin(rotation_amount)],
+                    [math.sin(rotation_amount), math.cos(rotation_amount)]
+                ])
+                transformed_position = offset_matrix @ initial_position
+                plot_x_list.append(transformed_position[0])
+                plot_y_list.append(transformed_position[1])
+            plt.plot(plot_x_list, plot_y_list, color="g")
+        else:
+            plt.plot(self.x_list, self.y_list, color="g")
 
 
 class BigMass:
@@ -92,15 +107,17 @@ class BigMass:
 
         self.x_list = []
         self.y_list = []
+        self.theta_list = [0]
         self.x_list.append(initial_position[0])
         self.y_list.append(initial_position[1])
 
-        self.planet_patch = Circle((self.x_list[0], self.y_list[0]), radius=0.5, color="g", alpha=1)
+        self.planet_patch = Circle((self.x_list[0], self.y_list[0]), radius=R*0.05, color="g", alpha=1)
         ax.add_patch(self.planet_patch)
 
     def update_position(self, angular_velocity, time_step):
         angular_velocity = angular_velocity[2]
         delta_theta = angular_velocity * time_step
+        self.theta_list.append(self.theta_list[-1] + delta_theta)
 
         rotation_matrix = np.array([
             [math.cos(delta_theta),  -math.sin(delta_theta)],
@@ -125,7 +142,7 @@ class LPoint:
         self.x_list.append(initial_position[0])
         self.y_list.append(initial_position[1])
 
-        self.planet_patch = Circle((initial_position[0], initial_position[1]), radius=0.3, color="r", alpha=0.5)
+        self.planet_patch = Circle((initial_position[0], initial_position[1]), radius=R*0.03, color="r", alpha=0.5)
         ax.add_patch(self.planet_patch)
 
     def update_position(self, angular_velocity, time_step):
@@ -158,7 +175,6 @@ def animation_init():
 
     return output
 
-frame_cutter_value = 100
 
 def animate_func(i):
     i *= frame_cutter_value
@@ -171,20 +187,40 @@ def animate_func(i):
     sunParticle.planet_patch.center = (sunParticle.x_list[i], sunParticle.y_list[i])
     output.append(sunParticle.planet_patch)
 
-
     for lpoint in L_Array:
         lpoint.planet_patch.center = (lpoint.x_list[i], lpoint.y_list[i])
-        output.append(lpoint.planet_patch.center)
+        output.append(lpoint.planet_patch)
+
+    if fix_reference_frame:
+        rotation_amount = -earthParticle.theta_list[i]
+        for artist in output:
+            initial_center = [artist.center[0], artist.center[1]]
+            offset_matrix = np.array([
+                [math.cos(rotation_amount),  -math.sin(rotation_amount)],
+                [math.sin(rotation_amount), math.cos(rotation_amount)]
+            ])
+            transformed_center = offset_matrix @ initial_center
+            artist.center = (transformed_center[0], transformed_center[1])
 
     return output
 
 
+frame_cutter_value = 100
+fix_reference_frame = True
+
 G_constant = 6.67 * (10**-11)
 
-R = 10
+#R = 10
+#M1 = 100
+#M2 = 1
 
-M1 = 100
-M2 = 1
+#R = 1.496e+11
+#M1 = 1.989 * (10 ** 30)
+#M2 = 5.972 * (10 ** 24)
+
+R = 7.785e11
+M1 = 1.989 * (10 ** 30)
+M2 = 1.898 * (10 ** 27)
 
 mu = M2 / (M1 + M2)
 
@@ -226,7 +262,8 @@ earthParticle = BigMass(M2, M2Coords)
 sunParticle = BigMass(M1, M1Coords)
 
 #-0.0000001
-timeStep = 100
+#timeStep = 100
+timeStep = 86400
 #1000
 time = 0
 
@@ -253,7 +290,7 @@ perpendicular_matrix = np.array([
     [math.sin(math.pi / 2), math.cos(math.pi / 2)]
 ])
 
-init_position = [L4X, L4Y]  # change position here
+init_position = [L5X+1e10, L5Y-1e10]  # change position here
 
 perpendicular_vector = perpendicular_matrix @ init_position
 perpendicular_vector = perpendicular_vector / numpy.linalg.norm(perpendicular_vector)
@@ -263,7 +300,9 @@ velocity_vector = perpendicular_vector * numpy.linalg.norm(init_velocity)
 testMass = TestMass(init_position, velocity_vector)
 
 time = 0
-max_time = 6000000
+#max_time = 6000000
+#max_time = 50*3.156e+7 #50 years
+max_time = 50*12*3.156e+7
 while time < max_time:
     time += timeStep
     earthParticle.update_position(angularVelocity, timeStep)
@@ -273,7 +312,8 @@ while time < max_time:
     for l_point in L_Array:
         l_point.update_position(angularVelocity, timeStep)
 
-#testMass.plot_path()
+if fix_reference_frame:
+    testMass.plot_path()
 earthParticle.plot_path()
 sunParticle.plot_path()
 
