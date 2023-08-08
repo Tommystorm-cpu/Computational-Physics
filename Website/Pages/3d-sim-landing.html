@@ -68,52 +68,67 @@
 
   <div class="mx-auto my-5 card task-content">
     <div class="d-flex flex-wrap justify-content-center" style="width: 100%;">
-      <p class="text-center mx-3 my-auto py-3" style="width: 30rem;">
-        Some text explaining the task can go here. 
-        Some text explaining the task can go here. 
-        Some text explaining the task can go here.
-        Some text explaining the task can go here. 
-        Some text explaining the task can go here. 
-        Some text explaining the task can go here.
-        Some text explaining the task can go here. 
-        Some text explaining the task can go here. 
-        Some text explaining the task can go here.
-        Some text explaining the task can go here. 
-        Some text explaining the task can go here. 
-        Some text explaining the task can go here.
-      </p>
+      <div class="my-auto mx-3 pt-3" style="width: 30rem;">
+        <p>The System Simulator allows you to explore fully rendered 3D systems, in your browser. </p>
+        <ul>
+          <li>A control panel can be accessed in the top left, which contains many options for you to experiment with, as well as a drop down to load different planetary systems.</li>
+          <li>The time slider at the bottom controls the speed  of the simulation, with dedicated buttons for running it at 1 day/second or 1 year/second.</li>
+          <li>You can click/tap on planets to lock onto them instead of using the menu.</li>
+          <li>If you wish to return to this page, there is a "back to website button" in the top right.</li>
+        </ul>
+        <p>Details about how this was made can be found in our Technical Report.</p>
+      </div>
 
-      <div id="imageCarousel" class="carousel slide mx-3" data-bs-theme="dark" style="width: 40%; min-width: 18rem;">
-        <div class="carousel-inner rounded-3">
-          <div class="carousel-item active">
-            <img src="../Graphics/task1preview.png" class="d-block w-100" alt="...">
+      <div class="mt-3" style="width: 40%; min-width: 20rem;">
+        <div id="imageCarousel" class="carousel slide mx-3" data-bs-ride="carousel">
+          <div class="carousel-indicators">
+            <button type="button" data-bs-target="#imageCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#imageCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#imageCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            <button type="button" data-bs-target="#imageCarousel" data-bs-slide-to="3" aria-label="Slide 4"></button>
+            <button type="button" data-bs-target="#imageCarousel" data-bs-slide-to="4" aria-label="Slide 5"></button>
+            <button type="button" data-bs-target="#imageCarousel" data-bs-slide-to="5" aria-label="Slide 6"></button>
+            <button type="button" data-bs-target="#imageCarousel" data-bs-slide-to="6" aria-label="Slide 7"></button>
           </div>
-          <div class="carousel-item">
-            <img src="../Graphics/task2preview.png" class="d-block w-100" alt="...">
+          <div class="carousel-inner rounded-3">
+            <div class="carousel-item active">
+              <img src="../Graphics/systemsim1.png" class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+              <img src="../Graphics/systemsim2.png" class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+              <img src="../Graphics/systemsim3.png" class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+              <img src="../Graphics/systemsim4.png" class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+              <img src="../Graphics/systemsim5.png" class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+              <img src="../Graphics/systemsim6.png" class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+              <img src="../Graphics/systemsim7.png" class="d-block w-100" alt="...">
+            </div>
           </div>
-          <div class="carousel-item">
-            <img src="../Graphics/task3preview.png" class="d-block w-100" alt="...">
-          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#imageCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#imageCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
         </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#imageCarousel" data-bs-slide="prev">
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#imageCarousel" data-bs-slide="next">
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Next</span>
-        </button>
+        <p class="mt-2 text-center footer-text">
+          Images taken from the System Simulator.
+        </p>
       </div>
     </div>
 
-    <p class="mt-5 py-3 mx-auto text-center">
-      More text here.
-      More text here.
-      More text here.
-      More text here.
-      More text here.
-      More text here.
-    </p>
+    
   </div>
 
   <footer class="footer" style="background-color: rgb(34, 34, 34)">
