@@ -1,41 +1,19 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import math
-import os.path
-import sys
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath("__file__")))))
-import PlanetData as Pd
-import numpy
+
 
 fig = plt.figure()
 ax = fig.add_subplot()
 ax.set_aspect('equal', adjustable='box')
 
-planet = Pd.object_data[2]
-
-x_coords = []
-y_coords = []
-for theta in np.arange(0, (2*math.pi)+1, 0.1):
-    semi_major = float(planet[1])
-    eccen = float(planet[2])
-    radius = (semi_major*(1-(eccen*eccen)))/(1-eccen*math.cos(theta))
-    x = radius * math.cos(theta)
-    y = radius * math.sin(theta)
-    x_coords.append(x)
-    y_coords.append(y)
-#plt.plot(x_coords, y_coords, label=planet[7])
-
+# Inputs
 R = 1
-
 M1 = 1
-M2 = 0.1
+M2 = 0.01
 
-#M1 = 1.989e30
-#M2 = 5.972e24
-#M2 = 1.898e27
-
+# Essential Values
 mu = M2 / (M1 + M2)
-
 baryDistance = R * mu  # distance of sun to centre of mass
 
 M1Coords = [-baryDistance, 0]
@@ -74,10 +52,6 @@ for yIterable in range(len(y)):
         gravPotential = -((1-mu)/r1) - (mu/r2)
         effectivePotential = -(1/2) * (tempX**2 + tempY**2) + gravPotential
 
-        #effectivePotential = gravPotential + (1 / 2) * numpy.dot(numpy.cross(angularVelocity, position), numpy.cross(angularVelocity, position))
-
-        #effectivePotential = numpy.dot((1/2) * numpy.cross(angularVelocity, position), numpy.cross(angularVelocity, position))
-
         if effectivePotential < -3:
             effectivePotential = -3
 
@@ -105,11 +79,8 @@ limit = R + 1
 ax.set_xlim(-limit, limit)
 ax.set_ylim(-limit, limit)
 
-#plt.plot(0, 0, marker="o", markersize=20, markerfacecolor="yellow")
-#plt.plot(x_coords[0], 0, marker="o", markersize=10, markerfacecolor="blue")
 plt.title("Inner Solar System")
 plt.xlabel("X (AU)")
 plt.ylabel("Y (AU)")
-#plt.legend(loc="upper right")
 
 plt.show()
