@@ -66,6 +66,23 @@ export class SolarSystemViewer {
         this.createLights();
         
         this.loadSkybox();
+
+        window.addEventListener('resize', () => this.onWindowResize(), false);
+    }
+
+    onWindowResize () {
+        this.fakeCamera.aspect = window.innerWidth / window.innerHeight;
+        this.fakeCamera.updateProjectionMatrix();
+
+        this.camera.aspect = window.innerWidth / window.innerHeight;
+        this.camera.updateProjectionMatrix();
+    
+        this.renderer.setSize(window.innerWidth, window.innerHeight);
+
+        this.controls.update();
+
+        this.labelRenderer.domElement.style.width = this.renderer.domElement.width + 'px';
+        this.labelRenderer.domElement.style.height = this.renderer.domElement.height + 'px';
     }
 
     toggleLabels (labelBool) {
@@ -180,7 +197,20 @@ export class SolarSystemViewer {
 
         if (this.planetTextures == 0) {
             this.loaded = true;
-            document.getElementById("loadingPanel").style.display = "none";
+            document.getElementById("loadingRing").style.display = "none";
+            document.getElementById("loadingTitle").style.display = "none";
+            document.getElementById("loadingButton").style.display = "block";
+
+            document.getElementById("loadingButton").onclick = () => {
+
+                const loadingPanel = document.getElementById("loadingPanel");
+
+                while (loadingPanel.firstChild) {
+                    loadingPanel.removeChild(loadingPanel.firstChild);
+                }
+
+                loadingPanel.remove();
+            };
         }
     }
 
