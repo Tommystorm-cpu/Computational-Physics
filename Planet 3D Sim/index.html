@@ -44,6 +44,70 @@
             input[type="range"]::-webkit-slider-runnable-track {
                 background-color: rgba(255, 255, 255, 0.3); 
             }
+
+            #loadingPanel {
+                z-index: 2000;
+                color: white;
+                text-align: center;
+                background-color: black;
+                background-image: url(Skybox/top.png);
+                background-repeat: no-repeat;
+                background-size: cover;
+            }
+
+            #loadingPanel div {
+                text-shadow: 4px 4px 8px rgba(182, 27, 242, 0.4), 4px -4px 8px rgba(182, 27, 242, 0.4), -4px 4px 8px rgba(182, 27, 242, 0.4), -4px -4px 8px rgba(182, 27, 242, 0.4), 0 0 20px rgba(0, 134, 255, 0.75);
+            }
+
+            #loadingPanel div:first-of-type {
+                font-size: 10vw;
+            }
+
+            #loadingPanel p {
+                font-size: 3vw;
+            }
+
+            #loadingButton {
+                display: none;
+                margin-bottom: 2vw;
+            }
+
+            #loadingPanel button {
+                font-size: 4vw;
+                color: #fff;
+                padding: 1vw;
+                background-color: rgba(182, 27, 242, 0.7);
+                border-radius: 6px;
+                box-shadow: 0 1px 0 0 #f9fcfc inset, 0 2px 4px 1px rgba(0, 0, 0, 0.24);
+            }
+
+            .ring {
+                display: inline-block;
+                width: 100px;
+                height: 100px;
+                margin: 48px 0;
+            }
+
+            .ring:after {
+                content: " ";
+                display: block;
+                width: 84px;
+                height: 84px;
+                margin: 8px;
+                border-radius: 50%;
+                border: 12px solid #fff;
+                border-color: #fff transparent #fff transparent;
+                animation: ring 1.2s linear infinite;
+            }
+
+            @keyframes ring {
+                0% {
+                    transform: rotate(0deg);
+                }
+                100% {
+                    transform: rotate(360deg);
+                }
+            }
         </style>
 
         <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
@@ -51,8 +115,8 @@
         <script type="importmap">
         {
             "imports": {
-            "three": "https://unpkg.com/three@v0.154.0/build/three.module.js",
-            "three/addons/": "https://unpkg.com/three@v0.154.0/examples/jsm/"
+                "three": "https://unpkg.com/three@v0.154.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@v0.154.0/examples/jsm/"
             }
         }
         </script>
@@ -63,8 +127,23 @@
     <body>
         <script type="module" src="main.js"></script>
         
-        <div id="loadingPanel" class="w-100 h-100 position-absolute bg-black" style="z-index: 2000;">
-            <div style="font-size: 20vw; color: white; text-align: center; line-height: 100vh;">Loading...</div>
+        <div id="loadingPanel" class="w-100 h-100 position-absolute d-flex align-items-center">
+
+            <div class="d-flex flex-column align-items-center mx-auto">
+
+                <div id="loadingTitle">Loading...</div>
+                <div id="loadingRing" class="ring"></div>
+                <div id="loadingButton"><button>Click to Start</button></div>
+    
+                <div>
+                    <p>Use mouse / touch to pan the camera</p>
+                    <p>Zoom with the mouse wheel / pinch</p>
+                    <p>Click a planet to focus it</p>
+                    <p>Change System via the Control Panel</p>
+                </div>
+
+            </div>
+
         </div>
 
         <div id="controlPanel">
