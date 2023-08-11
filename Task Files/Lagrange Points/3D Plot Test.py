@@ -84,7 +84,7 @@ ax.yaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
 ax.zaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
 
 
-plt.title("Inner Solar System")
+plt.title("3D Plots")
 plt.xlabel("X (AU)")
 plt.ylabel("Y (AU)")
 

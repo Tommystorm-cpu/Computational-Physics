@@ -79,7 +79,7 @@ limit = R + 1
 ax.set_xlim(-limit, limit)
 ax.set_ylim(-limit, limit)
 
-plt.title("Inner Solar System")
+plt.title("Contour of effective potential")
 plt.xlabel("X (AU)")
 plt.ylabel("Y (AU)")
 
