@@ -61,7 +61,6 @@ plt.title(f"{two_planets[0][7]} {two_planets[1][7]} Spirograph")
 plt.xlabel("X (AU)")
 plt.ylabel("Y (AU)")
 plt.legend(loc="upper right")
-plt.savefig("task6preview3.png", bbox_inches = "tight")
 
 # Display graph
 plt.show()
