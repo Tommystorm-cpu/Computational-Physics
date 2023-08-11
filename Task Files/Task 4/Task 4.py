@@ -161,7 +161,7 @@ for count, planet in enumerate(planet_system):
     planet_list.append(plan_class)
 
 # Labels created
-plt.legend(loc="upper right")
+#plt.legend(loc="upper right")
 
 # Start animation
 anim = FuncAnimation(fig, animate_func, init_func=animation_init, frames=len(planet_list[0].xArray), interval=0.1, blit=True, repeat=True)
