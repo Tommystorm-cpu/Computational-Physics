@@ -7,7 +7,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(
 import PlanetData as Pd
 from matplotlib.patches import Annulus
 
-
+# plots orbits using same method as task 2
 def plot_orbit(system_name):
     data = Pd.system_list[system_name]
     fig = plt.figure()
@@ -26,16 +26,16 @@ def plot_orbit(system_name):
             x_coords.append(x)
             y_coords.append(y)
         plt.plot(x_coords, y_coords, label=data[i][7])
-
-    luminosity = Pd.star_luminosity[system_name]
-    sun_luminosity = Pd.star_luminosity["Solar"]
-    habit_distance = (luminosity / sun_luminosity)**0.5
-    inner_distance = habit_distance * 0.95
-    outer_distance = habit_distance * 1.37
+        
+    luminosity = Pd.star_luminosity[system_name] # determines luminosity of star
+    sun_luminosity = Pd.star_luminosity["Solar"] # luminosity of the sun
+    habit_distance = (luminosity / sun_luminosity)**0.5   
+    inner_distance = habit_distance * 0.95 # lower range of habitable zone 
+    outer_distance = habit_distance * 1.37 # upper range of habtiable zone
     habitable_zone = Annulus((0, 0), outer_distance, outer_distance-inner_distance, alpha=0.5, color="g")
-    ax.add_patch(habitable_zone)
+    ax.add_patch(habitable_zone) # plots annalus of goldilocks zone
 
-    plt.plot(0, 0, marker="o", markersize=5, markerfacecolor="yellow")
+    plt.plot(0, 0, marker="o", markersize=5, markerfacecolor="yellow") # creates and plots graph 
     plt.title(system_name + " System")
     plt.xlabel("X (AU)")
     plt.ylabel("Y (AU)")
