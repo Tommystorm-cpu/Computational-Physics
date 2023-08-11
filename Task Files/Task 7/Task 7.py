@@ -8,26 +8,6 @@ import PlanetData as Pd
 import Theta_Function
 
 
-fig = plt.figure()
-ax = fig.add_subplot()
-ax.set_aspect('equal', adjustable='box')
-
-planet_system = Pd.GJ_system
-if planet_system == Pd.inner_planets:
-    title = "Inner Planets"
-    x = 25    
-elif planet_system == Pd.outer_planets:
-    title = "Outer Planets"
-    x=10
-elif planet_system == Pd.GJ_system:
-    title = "GJ 1061 System"
-    x=40
-elif planet_system == Pd.solar_system:
-    title = "The Solar System"
-    x =5
-
-
-
 def task7(planet_system, planet):
     run_time = int(round(-1 * math.log10(float(planet_system[len(planet_system)-1][1])) * 13 + 31))
     for i in range(len(planet_system)):
@@ -66,15 +46,25 @@ def task7(planet_system, planet):
         sun_y_coords.append(sun_y)
     plt.plot(sun_x_coords, sun_y_coords, color="y", label="Sun")
 
+# Create figure
+fig = plt.figure()
+ax = fig.add_subplot()
+ax.set_aspect('equal', adjustable='box')
 
-planet_system = Pd.system_list["Inner Solar"]
-planet = 2
+# Choose system and planet
+system_name = "Inner Solar"
+planet = 2 # Starts at 0, the innermost planet
 
+# Plot spirograph
+planet_system = Pd.system_list[system_name]
 task7(planet_system, planet)
 
-plt.title(title)
+# Format graph
+plt.title(system_name + " System")
 plt.xlabel("X (AU)")
 plt.ylabel("Y (AU)")
 plt.legend(loc="upper right")
 plt.savefig("task7preview3.png", bbox_inches = "tight")
+
+# Display graph
 plt.show()
