@@ -22,7 +22,7 @@ theta0 = math.pi/4
 M1 = 3
 M2 = 2
 #Initial vy velocity multiplier from mutually circular of stars
-k = 1.5
+k = 1
 #determines which star the planet orbits
 star_orbit = 1
 
@@ -140,10 +140,4 @@ ax.set_xlim(-1.1* a, 1.1* a)
 ax.set_ylim(-1.1* a, 1.1* a)
 plt.legend(loc="upper right")
 plt.title("Binary Star System Simulation")
-plt.savefig("Binarypreview3.png", bbox_inches = "tight")
 plt.show()
-
-    
-              
-    
-    

@@ -43,4 +43,4 @@ def plot_orbit(system_name):
     plt.savefig("Goldilockspreview3.png", bbox_inches = "tight")
     plt.show()
 
-plot_orbit("Kepler-106")
+plot_orbit("Inner Solar")
