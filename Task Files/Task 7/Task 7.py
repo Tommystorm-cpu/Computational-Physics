@@ -27,12 +27,14 @@ elif planet_system == Pd.solar_system:
     x =5
 
 
-def task7(a,b):
+
+def task7(planet_system, planet):
+    run_time = int(round(-1 * math.log10(float(planet_system[len(planet_system)-1][1])) * 13 + 31))
     for i in range(len(planet_system)):
         x_coords = []
         y_coords = []
         p = int(len(planet_system)) - 1
-        for t in np.arange(0, b*float(planet_system[i][6]), 0.01*float(planet_system[i][6])):
+        for t in np.arange(0, run_time*float(planet_system[i][6]), 0.01*float(planet_system[i][6])):
             theta = Theta_Function.get_angle(planet_system[i], t)
             semi_major = float(planet_system[i][1])
             eccen = float(planet_system[i][2])
@@ -40,9 +42,9 @@ def task7(a,b):
             x = radius * math.cos(theta)
             y = radius * math.sin(theta)
                                                      
-            centre_theta = Theta_Function.get_angle(planet_system[a], t)
-            centre_semi_major = float(planet_system[a][1])
-            centre_eccen = float(planet_system[a][2])
+            centre_theta = Theta_Function.get_angle(planet_system[planet], t)
+            centre_semi_major = float(planet_system[planet][1])
+            centre_eccen = float(planet_system[planet][2])
             centre_radius = (centre_semi_major*(1-(centre_eccen*centre_eccen)))/(1-centre_eccen*math.cos(centre_theta))
             centre_x = centre_radius *math.cos(centre_theta)
             centre_y = centre_radius *math.sin(centre_theta)
@@ -65,9 +67,10 @@ def task7(a,b):
     plt.plot(sun_x_coords, sun_y_coords, color="y", label="Sun")
 
 
-    
+planet_system = Pd.system_list["Inner Solar"]
+planet = 2
 
-task7(2,x)
+task7(planet_system, planet)
 
 plt.title(title)
 plt.xlabel("X (AU)")
