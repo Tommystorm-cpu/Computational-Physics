@@ -92,10 +92,7 @@
     const mobileBool = window.mobileCheck();
     if (mobileBool) {
       const pdfCard = document.getElementById("pdf-card");
-      pdfCard.style.visibility = "hidden";
-      pdfCard.style.position = "absolute";
-      pdfCard.style.zIndex = "-5";
-      pdfCard.style.height = "0rem";
+      pdfCard.remove();
       const theButton = document.getElementById("theButton");
       theButton.innerHTML = "View paper"
     }
