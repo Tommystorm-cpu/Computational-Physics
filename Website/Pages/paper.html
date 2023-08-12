@@ -72,12 +72,12 @@
 
   <div class="mx-auto mt-5 mb-5 card task-content">
     <p class="px-4 mt-2 mx-auto">This is our technical report. It details the computational processes used to create all of our models, and some of our thinking process while doing so.</p>
-    <a href="../Graphics/bhpo_2023_techincal_report.pdf" download type="button" class="w-75 mb-2 mx-auto btn btn-primary btn-lg" style="min-width: 20%;">
+    <a href="../Graphics/bhpo_2023_techincal_report.pdf" type="button" class="w-75 mb-2 mx-auto btn btn-primary btn-lg" style="min-width: 20%;">
       Download paper
     </a>
   </div>
 
-  <object class="mx-auto mb-5 card task-content" id="pdf-card" style="height: 50rem;" data="../Graphics/bhpo_2023_techincal_report.pdf" type="application/pdf" frameborder="0" width="100%" height="600px" style="padding: 20px;">
+  <object class="mx-auto mb-5 card task-content" id="pdf-card" style="height: 100rem;" data="../Graphics/bhpo_2023_techincal_report.pdf" type="application/pdf" frameborder="0" width="100%" height="600px" style="padding: 20px;">
     <embed src="https://drive.google.com/file/d/1js0Mck7dWBNvudS1qXpnZSQ-fCHDGAPt/preview?usp=sharing" width="100%" height="600px"/> 
   </object>
 
@@ -93,7 +93,7 @@
     const mobileBool = window.mobileCheck();
     if (mobileBool) {
       const pdfCard = document.getElementById("pdf-card");
-      pdfCard.style.height = "100%";
+      pdfCard.style.height = "";
     }
   </script>
 
