@@ -72,12 +72,12 @@
 
   <div class="mx-auto mt-5 mb-5 card task-content">
     <p class="px-4 mt-2 mx-auto">This is our technical report. It details the computational processes used to create all of our models, and some of our thinking process while doing so.</p>
-    <a id="theButton" href="../Graphics/bhpo_2023_techincal_report.pdf" type="button" class="w-75 mb-2 mx-auto btn btn-primary btn-lg" style="min-width: 20%;">
+    <a id="theButton" href="../Embeds/bhpo_2023_techincal_report.pdf" type="button" class="w-75 mb-2 mx-auto btn btn-primary btn-lg" style="min-width: 20%;">
       Download paper
     </a>
   </div>
 
-  <object class="mx-auto mb-5 card task-content" id="pdf-card" style="height: 100rem;" data="../Graphics/bhpo_2023_techincal_report.pdf" type="application/pdf" frameborder="0" width="100%" height="600px" style="padding: 20px;">
+  <object class="mx-auto mb-5 card task-content" id="pdf-card" style="height: 100rem;" data="../Embeds/bhpo_2023_techincal_report.pdf" type="application/pdf" frameborder="0" width="100%" height="600px" style="padding: 20px;">
   </object>
 
 
@@ -95,6 +95,7 @@
       pdfCard.style.visibility = "hidden";
       pdfCard.style.position = "absolute";
       pdfCard.style.zIndex = "-5";
+      pdfCard.style.height = "0rem";
       const theButton = document.getElementById("theButton");
       theButton.innerHTML = "View paper"
     }
