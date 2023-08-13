@@ -5,9 +5,18 @@ import PlanetData as Pd
 import Theta_Function
 
 def task_7(system, planet):
+
     planet_system = Pd.system_list[system]
     a = planet
-    b = int(round(-1 * math.log10(float(planet_system[len(planet_system)-1][1])) * 13 + 31))
+
+    # Gets the furthest orbit of the system
+    max_semi_major = 0
+    for planet_index in planet_system:
+        temp_planet = planet_system[planet_index]
+        if float(temp_planet[1]) > max_semi_major:
+            max_semi_major = float(temp_planet[1])
+
+    b = int(round(-1 * math.log10(max_semi_major) * 13 + 31))
     if b <= 1:
         b = 1
 

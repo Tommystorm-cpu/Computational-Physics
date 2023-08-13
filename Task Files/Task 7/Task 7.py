@@ -9,8 +9,16 @@ import Theta_Function
 
 
 def task7(planet_system, planet):
-    # Calculates time to run the simulation for
-    run_time = int(round(-1 * math.log10(float(planet_system[len(planet_system)-1][1])) * 13 + 31))
+
+    # Gets the furthest orbit of the system
+    max_semi_major = 0
+    for planet_index in planet_system:
+        temp_planet = planet_system[planet_index]
+        if float(temp_planet[1]) > max_semi_major:
+            max_semi_major = float(temp_planet[1])
+
+    # Calculates number of orbits to run the simulation for
+    orbit_number = int(round(-1 * math.log10(max_semi_major) * 13 + 31))
 
     # Loops through planets
     for i in range(len(planet_system)):
@@ -18,7 +26,7 @@ def task7(planet_system, planet):
         y_coords = []
 
         # Loop through time, scaled by planet period
-        for t in np.arange(0, run_time*float(planet_system[i][6]), 0.01*float(planet_system[i][6])):
+        for t in np.arange(0, orbit_number*float(planet_system[i][6]), 0.01*float(planet_system[i][6])):
             # Calculates position of planet
             theta = Theta_Function.get_angle(planet_system[i], t)
             semi_major = float(planet_system[i][1])
