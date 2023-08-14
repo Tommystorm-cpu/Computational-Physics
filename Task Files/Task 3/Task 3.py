@@ -30,8 +30,8 @@ class Planet:
 
         self.plot_orbit()
         self.create_animation_list()
-
-        self.planet_patch = Circle((self.xArray[0], self.yArray[0]), radius=max_semi_major/20, color=self.colour, alpha=1)
+    #20
+        self.planet_patch = Circle((self.xArray[0], self.yArray[0]), radius=max_semi_major/15, color=self.colour, alpha=1)
         ax.add_patch(self.planet_patch)
 
     def plot_orbit(self):
@@ -45,7 +45,7 @@ class Planet:
             y = radius * math.sin(theta)
             x_coords.append(x)
             y_coords.append(y)
-        line = plt.plot(x_coords, y_coords, label=self.name)
+        line = plt.plot(x_coords, y_coords, label=self.name, linewidth=8)
         self.colour = line[0].get_color()
 
     def create_animation_list(self):
@@ -121,9 +121,9 @@ def create_video(planet_system_name):
         plan_class = Planet(planet_system[planet], count, ax, max_period, max_semi_major)
         planet_list.append(plan_class)
 
-    anim = FuncAnimation(fig, animate_func, init_func=animation_init, frames=len(planet_list[0].xArray), interval=0.1, blit=True, repeat=True)
+    anim = FuncAnimation(fig, animate_func, init_func=animation_init, frames=len(planet_list[0].xArray), interval=0.1, blit=False, repeat=True)
 
-    plt.legend(loc="upper right")
+    #plt.legend(loc="upper right")
     plt.title(title)
 
     #writervideo = animation.FFMpegWriter(fps=60)
@@ -136,4 +136,4 @@ def create_video(planet_system_name):
         create_video(planet_system_name)
 """
 
-create_video("GJ 1061")
+create_video("Inner Solar")

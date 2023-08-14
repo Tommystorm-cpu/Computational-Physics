@@ -9,7 +9,6 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(
 
 import math
 
-"""dr french's stupid arbitrary values"""
 #semi-major axis of mutual star orbit in AU
 a = 3
 #planet (initial) circular orbit radius about star 1
