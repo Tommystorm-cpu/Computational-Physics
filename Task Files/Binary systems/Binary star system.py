@@ -9,6 +9,8 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(
 
 import math
 
+"""Input values"""
+
 #semi-major axis of mutual star orbit in AU
 a = 3
 #planet (initial) circular orbit radius about star 1
@@ -80,7 +82,7 @@ ax2, ay2 = gravity( x[0],y[0], X2[0], Y2[0], M2 )
 ax = ax1 + ax2
 ay = ay1 + ay2
 
-"""dr french's silly verlet method computing"""
+"""verlet method computing"""
 
 n = 0
 #number of orbital periods
